@@ -4,11 +4,16 @@ using System.Windows;
 using System.Windows.Media;
 using SharpDX.XInput;
 using System.Windows.Input;
+using System.Windows.Documents;
+using System.Collections.Generic;
+using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace lightlauncher
 {
     public partial class MainWindow : Window
     {
+        public static List<Game> games = new List<Game>();
         //Object Of Controller
         private Controller usersController;
         //Instance Of Thread
@@ -22,24 +27,24 @@ namespace lightlauncher
             InitializeComponent();
             //Map the controller index to Port 1
             usersController = new Controller(UserIndex.One);
-            
+
             if (!usersController.IsConnected)
             {
-                MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
-                Application.Current.Shutdown();
+                System.Windows.MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                System.Windows.Application.Current.Shutdown();
                 return;
             }
             // Start the thread for polling controller state
             controllerThread = new Thread(pollControllerState);
             //Make sure the program will still read input when the window is not in focus
-            controllerThread.IsBackground = true; 
+            controllerThread.IsBackground = true;
             controllerThread.Start();
         }
 
         private void pollControllerState()
         {
             while (running)
-            {
+            { 
                 //Get state of controller 
                 State state = usersController.GetState();
                 if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X))
@@ -49,8 +54,13 @@ namespace lightlauncher
                     //from a non-UI thread
                     Dispatcher.Invoke(ChangeBackgroundColor);
                 }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+                    {
+                        Dispatcher.Invoke(showAddGameWindow);
+                    }
+
                 //This means that there will be a 150ms gap until another button press is registered
-                Thread.Sleep(150); 
+                Thread.Sleep(150);
             }
         }
 
@@ -58,7 +68,7 @@ namespace lightlauncher
         {
             var random = new Random();
             var color = Color.FromRgb((byte)random.Next(255), (byte)random.Next(255), (byte)random.Next(255));
-            Background = new SolidColorBrush(color);
+            testCentreCircleUI.Fill = new SolidColorBrush(color);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -66,6 +76,15 @@ namespace lightlauncher
             running = false; // Indicate that the thread should no longer run.
             controllerThread.Join(); // Wait for the thread to finish executing to avoid any potential issues.
             base.OnClosed(e);
+        }
+
+        private void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            showAddGameWindow();
+        }
+        public static void showAddGameWindow() {
+            AddGameForm addGameForm = new AddGameForm();
+            addGameForm.Show();
         }
     }
 }

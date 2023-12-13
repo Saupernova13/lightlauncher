@@ -5,8 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lightlauncher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Light Launcher"
+        Height="720"
+        Width="1080"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None">
+    <Grid x:Name="parentGrid"
+          Background="Transparent">
+        <Grid x:Name="selectRightMenu"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center">
+            <Image Source="/Image_Resources/Plus_Sign.png"
+                   Height="300"
+                   Width="300"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Margin="500,0,0,0" />
+        </Grid>
+        <Grid x:Name="centreCircleGrid"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center">
+            <Ellipse x:Name="testCentreCircleUI"
+                     Width="100"
+                     Height="100"
+                     Fill="Blue"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center" />
+            <Image x:Name="addGameIcon"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Source="/Image_Resources/Plus_Sign.png"
+                   Height="70"
+                   Width="70"
+                   PreviewMouseLeftButtonDown="addGameIcon_PreviewMouseLeftButtonDown" />
+        </Grid>
     </Grid>
 </Window>
