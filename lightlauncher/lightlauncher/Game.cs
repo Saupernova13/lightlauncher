@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.ComponentModel.DataAnnotations;
 
 namespace lightlauncher
 {
     public class Game
     {
+        [Key]
         public int ID { get; set; }
         public string name { get; set; }
         public string executablePath { get; set; }
         public string imagePath { get; set; }
-        //public Image image { get; set; }
         public Game(int ID, int number, string name, string executablePath, string imagePath)
         {
             this.ID = ID;

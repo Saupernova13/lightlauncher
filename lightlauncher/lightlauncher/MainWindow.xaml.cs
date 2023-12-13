@@ -25,6 +25,7 @@ namespace lightlauncher
         public MainWindow()
         {
             InitializeComponent();
+            this.Hide();
             //Map the controller index to Port 1
             usersController = new Controller(UserIndex.One);
 
@@ -47,6 +48,18 @@ namespace lightlauncher
             { 
                 //Get state of controller 
                 State state = usersController.GetState();
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
+                {
+                    Dispatcher.Invoke(this.Show);
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
+                {
+                    Dispatcher.Invoke(moveCursorLeft);
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
+                {
+                    Dispatcher.Invoke(moveCursorRight);
+                }
                 if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X))
                 {
                     //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
@@ -68,7 +81,7 @@ namespace lightlauncher
         {
             var random = new Random();
             var color = Color.FromRgb((byte)random.Next(255), (byte)random.Next(255), (byte)random.Next(255));
-            testCentreCircleUI.Fill = new SolidColorBrush(color);
+            //testCentreCircleUI.Fill = new SolidColorBrush(color);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -86,5 +99,23 @@ namespace lightlauncher
             AddGameForm addGameForm = new AddGameForm();
             addGameForm.Show();
         }
+        private void moveCursorLeft()
+        {
+            if (gameListBox.SelectedIndex > 0)
+            {
+                gameListBox.SelectedIndex = gameListBox.SelectedIndex - 1;
+                gameListBox.ScrollIntoView(gameListBox.SelectedItem);
+            }
+        }
+
+        private void moveCursorRight()
+        {
+            if (gameListBox.SelectedIndex < gameListBox.Items.Count - 1)
+            {
+                gameListBox.SelectedIndex = gameListBox.SelectedIndex + 1;
+                gameListBox.ScrollIntoView(gameListBox.SelectedItem);
+            }
+        }
+
     }
 }

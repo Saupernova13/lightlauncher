@@ -7,40 +7,95 @@
         mc:Ignorable="d"
         Title="Light Launcher"
         Height="720"
-        Width="1080"
+        Width="720"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="Transparent"
         AllowsTransparency="True"
-        WindowStyle="None">
+        WindowStyle="None"
+        ShowInTaskbar="False">
     <Grid x:Name="parentGrid"
           Background="Transparent">
-        <Grid x:Name="selectRightMenu"
-              VerticalAlignment="Center"
-              HorizontalAlignment="Center">
-            <Image Source="/Image_Resources/Plus_Sign.png"
-                   Height="300"
-                   Width="300"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="500,0,0,0" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="75" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0"
+                Grid.Row="0"
+                Background="#012644"
+                CornerRadius="25,25,25,25"
+                Grid.RowSpan="2">
+        </Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="75" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Image Source="/Images/Nav_Left.png"
+                   Grid.Column="0"
+                   Grid.Row="0" />
+            <Image Source="/Images/Nav_Right.png"
+                   Grid.Column="2"
+                   Grid.Row="0" />
+            <ListBox  x:Name="gameListBox"
+                Grid.Column="1"
+                      Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    x:Name="gamesStackPanel" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <Viewbox Margin="50">
+                    <Grid Height="900"
+                          Width="600">
+                        <Image Source="/Images/Test_Game_001.jpg" />
+                    </Grid>
+                </Viewbox>
+                <Viewbox Margin="50">
+                    <Grid Height="900"
+                          Width="600">
+                        <Image Source="/Images/Test_Game_002.jpg" />
+                    </Grid>
+                </Viewbox>
+                      <Viewbox Margin="50">
+          <Grid Height="900"
+                Width="600">
+              <Image Source="/Images/Test_Game_003.jpg" />
+          </Grid>
+      </Viewbox>
+            </ListBox>
         </Grid>
-        <Grid x:Name="centreCircleGrid"
-              VerticalAlignment="Center"
-              HorizontalAlignment="Center">
-            <Ellipse x:Name="testCentreCircleUI"
-                     Width="100"
-                     Height="100"
-                     Fill="Blue"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center" />
-            <Image x:Name="addGameIcon"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Source="/Image_Resources/Plus_Sign.png"
-                   Height="70"
-                   Width="70"
-                   PreviewMouseLeftButtonDown="addGameIcon_PreviewMouseLeftButtonDown" />
+        <Border Grid.Column="0"
+                Grid.Row="2"
+                Background="#011A2E"
+                CornerRadius="25,25,25,25">
+        </Border>
+        <Grid Grid.Row="2"
+              Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="*"/>
+                <ColumnDefinition  Width="75" />
+                <ColumnDefinition  Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border CornerRadius="10"
+                    Background="#044275"
+                    Margin="7"
+                    Grid.Column="1"
+                    Grid.Row="0">
+                <Image Source="/Images/Plus_Sign.png" Margin="5" />
+
+            </Border>
         </Grid>
     </Grid>
 </Window>
