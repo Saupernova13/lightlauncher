@@ -44,33 +44,49 @@
             <Image Source="/Images/Nav_Right.png"
                    Grid.Column="2"
                    Grid.Row="0" />
+
+            <TextBlock FontSize="32"
+                   Foreground="White"
+                   Text="Danganronpa V3: Kiling Harmony"
+                   Panel.ZIndex="1"
+                   Margin="15"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center" Grid.Row="0"  Grid.Column="1"></TextBlock>
             <ListBox  x:Name="gameListBox"
-                Grid.Column="1"
-                      Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" BorderThickness="0">
+                      Grid.Column="1"
+                      Grid.Row="0"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      ScrollViewer.CanContentScroll="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      Margin="0,20,0,20">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
                                     x:Name="gamesStackPanel" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-                <Viewbox Margin="50">
-                    <Grid Height="900"
-                          Width="600">
-                        <Image Source="/Images/Test_Game_001.jpg" />
+                <Viewbox Margin="20,20,20,50">
+                    <Grid>
+                        <Image Height="900"
+                               Width="600"
+                               Source="/Images/Test_Game_001.jpg" />
+                        
                     </Grid>
                 </Viewbox>
-                <Viewbox Margin="50">
-                    <Grid Height="900"
-                          Width="600">
-                        <Image Source="/Images/Test_Game_002.jpg" />
+                <Viewbox Margin="20,20,20,50">
+                    <Grid >
+                        <Image Height="900"
+                          Width="600" Source="/Images/Test_Game_002.jpg" />
                     </Grid>
                 </Viewbox>
-                      <Viewbox Margin="50">
-          <Grid Height="900"
-                Width="600">
-              <Image Source="/Images/Test_Game_003.jpg" />
-          </Grid>
-      </Viewbox>
+                <Viewbox Margin="20,20,20,50">
+                    <Grid >
+                        <Image Height="900"
+                          Width="600" Source="/Images/Test_Game_003.jpg" />
+                    </Grid>
+                </Viewbox>
             </ListBox>
         </Grid>
         <Border Grid.Column="0"
@@ -81,7 +97,7 @@
         <Grid Grid.Row="2"
               Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="*"/>
+                <ColumnDefinition  Width="*" />
                 <ColumnDefinition  Width="75" />
                 <ColumnDefinition  Width="*" />
             </Grid.ColumnDefinitions>
@@ -93,7 +109,8 @@
                     Margin="7"
                     Grid.Column="1"
                     Grid.Row="0">
-                <Image Source="/Images/Plus_Sign.png" Margin="5" />
+                <Image Source="/Images/Plus_Sign.png"
+                       Margin="5" />
 
             </Border>
         </Grid>

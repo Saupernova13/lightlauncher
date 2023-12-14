@@ -8,12 +8,16 @@ using System.Windows.Documents;
 using System.Collections.Generic;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using System.Windows.Controls;
+using System.IO;
 
 namespace lightlauncher
 {
     public partial class MainWindow : Window
     {
         public static List<Game> games = new List<Game>();
+        public static string folderPath;
+        public static int currentGameID;
         //Object Of Controller
         private Controller usersController;
         //Instance Of Thread
@@ -24,7 +28,22 @@ namespace lightlauncher
 
         public MainWindow()
         {
+            string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string newFolderName = "GameCovers";
+            folderPath = Path.Combine(programDirectory, newFolderName);
+            try
+            {
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"An error occurred: {ex.Message}");
+            }
             InitializeComponent();
+            populateGameList();
             this.Hide();
             //Map the controller index to Port 1
             usersController = new Controller(UserIndex.One);
@@ -73,7 +92,7 @@ namespace lightlauncher
                     }
 
                 //This means that there will be a 150ms gap until another button press is registered
-                Thread.Sleep(150);
+                Thread.Sleep(125);
             }
         }
 
@@ -116,6 +135,7 @@ namespace lightlauncher
                 gameListBox.ScrollIntoView(gameListBox.SelectedItem);
             }
         }
-
+        private void populateGameList() {
+        }
     }
 }
