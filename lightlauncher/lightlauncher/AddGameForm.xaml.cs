@@ -1,22 +1,11 @@
 ﻿using SharpDX.XInput;
-using System.Data;
 using System.Data.SqlClient;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.IO;
 using System;
+using System.Security.Cryptography;
 
 namespace lightlauncher
 {
@@ -60,14 +49,12 @@ namespace lightlauncher
                 } Thread.Sleep(150);
             }
         }
-
         private void gameAddButton_Click(object sender, RoutedEventArgs e)
         {
             newGame.name = gameNameTextBox.Text;
-            string coverArtFileName = newGame.ID+"";
+            string coverArtFileName = newGame.ID + System.IO.Path.GetExtension(newGame.imagePath);
             File.Copy(newGame.imagePath, System.IO.Path.Combine(MainWindow.folderPath, newGame.ID + System.IO.Path.GetExtension(newGame.imagePath)), true);
             newGame.imagePath = coverArtFileName;
-
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
             SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games ON", sqlConnection);
@@ -81,8 +68,12 @@ namespace lightlauncher
             identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
             identityInsertCommand.ExecuteNonQuery();
             sqlConnection.Close();
-
             MainWindow.games.Add(newGame);
+            MainWindow.loadGamesFromDB();
+            //foreach (Game game in MainWindow.games)
+            //{
+            //    MainWindow.populateGameList(game);
+            //}
             this.Close();
         }
 
@@ -122,7 +113,6 @@ namespace lightlauncher
             {
                 newGame.imagePath = dialog.FileName;
             }
-
         }
     }
 }
