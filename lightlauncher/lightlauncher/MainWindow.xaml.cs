@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
-using System.Windows.Media;
 using SharpDX.XInput;
 using System.Windows.Input;
 using System.Diagnostics;
-using System.Windows.Documents;
 using System.Collections.Generic;
-using Microsoft.Win32;
-using System.Windows.Forms;
 using System.Windows.Controls;
 using System.IO;
 using System.Windows.Media.Imaging;
-using System.Linq;
 using System.Data.SqlClient;
 
 namespace lightlauncher
 {
     public partial class MainWindow : Window
-    {
+    {   //BUG: MAKE IT SO THAT THE PROGRAM DOES NOT RESPOND TO SUMMON BUTTONS WHEN LAUNCHED PROGRAM IS RURNNING
         //List Of Games To Be Displayed
         public static List<Game> games = new List<Game>();
         //Name of currently highlighted game
@@ -53,7 +48,7 @@ namespace lightlauncher
             gameTitleTextBlock.Text = games[0].name;
             foreach (Game game in games)
             {
-                populateGameList(game);
+                populateGameList( this,game);
             }
             this.Hide();
             //Map the controller index to Port 1
@@ -77,61 +72,72 @@ namespace lightlauncher
             while (running)
             {
                 //Get state of controller 
+                //BUG CONTROLLER DISCONNECT KILLS
                 State state = usersController.GetState();
                 if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
                 {
                     //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
                     //do this is because the thread is not the same as the UI thread, and we cannot modify UI elements
                     //from a non-UI thread
-                    Dispatcher.Invoke(this.Show);
-                }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
-                {
-                    Dispatcher.Invoke(moveCursorLeft);
-                }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
-                {
-                    Dispatcher.Invoke(moveCursorRight);
-                }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
-                {
-                    Dispatcher.Invoke(showAddGameWindow);
-                }
-                int id = 0;
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
-                {
-                    for (int i = 0; i < games.Count; i++)
-                    {
-                        if (games[i].name.Equals(currentGameName))
-                        {
-                            id = games[i].ID;
-                        }
-                    }
-                    launchGame(id);
+                    Dispatcher.Invoke(() => this.Show());
                 }
                 if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
                 {
+                    Dispatcher.Invoke(() => this.Hide());
+                }
+                if (this.IsVisible)
+                {
+
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
+                    {
+                        Dispatcher.Invoke(moveCursorLeft);
+                    }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
+                    {
+                        Dispatcher.Invoke(moveCursorRight);
+                    }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+                    {
+                        Dispatcher.Invoke(showAddGameWindow);
+                    }
+                    int id = 0;
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+                    {
+                        for (int i = 0; i < games.Count; i++)
+                        {
+                            if (games[i].name.Equals(currentGameName))
+                            {
+                                id = games[i].ID;
+                            }
+                        }
+                        launchGame(id);
+                        Dispatcher.Invoke(() => this.Hide());
+                    }
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                {
                     killProgram();
                 }
-                //This means that there will be a 150ms gap until another button press is registered
+                //This means that there will be a 125ms gap until another button press is registered
                 Thread.Sleep(125);
             }
         }
         protected override void OnClosed(EventArgs e)
         {
-            running = false; // Indicate that the thread should no longer run.
-            controllerThread.Join(); // Wait for the thread to finish executing to avoid any potential issues.
+            // Indicate that the thread should no longer run.
+            running = false;
+            // Wait for the thread to finish executing to avoid any potential issues.
+            controllerThread.Join(); 
             base.OnClosed(e);
         }
-
         private void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             showAddGameWindow();
         }
         //Window used to add new games to program
-        public static void showAddGameWindow()
+        private void showAddGameWindow()
         {
-            AddGameForm addGameForm = new AddGameForm();
+            AddGameForm addGameForm = new AddGameForm(this);
             addGameForm.Show();
         }
         private void moveCursorLeft()
@@ -151,7 +157,7 @@ namespace lightlauncher
             }
         }
         //Populates the UI  Layout
-        private void populateGameList(Game game)
+        public static void populateGameList(MainWindow mainWindow, Game game)
         {
             Viewbox viewbox = new Viewbox()
             {
@@ -173,10 +179,10 @@ namespace lightlauncher
             image.PreviewMouseLeftButtonDown += (sender, e) => launchGame(game.ID);
             grid.Children.Add(image);
             viewbox.Child = grid;
-            gameListBox.Items.Add(viewbox);
+            mainWindow.gameListBox.Items.Add(viewbox);
         }
         //Intakes gameID and launches game with said ID
-        private void launchGame(int gameID)
+        public static void launchGame(int gameID)
         {
             int index = 0;
             for (int i = 0; i < games.Count; i++)
@@ -217,6 +223,7 @@ namespace lightlauncher
         }
         private void gameListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //BUG index out of range error when selecting last game in list after adding new game in same session
             gameTitleTextBlock.Text = games[gameListBox.SelectedIndex].name;
             currentGameName = gameTitleTextBlock.Text;
         }
@@ -228,14 +235,16 @@ namespace lightlauncher
         {
             moveCursorLeft();
         }
-
         private void addGameImage_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             showAddGameWindow();
         }
         public static void killProgram()
         {
-            System.Windows.Application.Current.Shutdown();
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                System.Windows.Application.Current.Shutdown();
+            });
         }
     }
 }

@@ -5,19 +5,19 @@ using System.Windows;
 using System.Windows.Forms;
 using System.IO;
 using System;
-using System.Security.Cryptography;
 
 namespace lightlauncher
 {
     public partial class AddGameForm : Window
     {
         public Game newGame = new Game();
+        public MainWindow mainWindow;
         int gameCount;
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
 
-        public AddGameForm()
+        public AddGameForm(MainWindow mw)
         {
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
@@ -33,6 +33,7 @@ namespace lightlauncher
                 newGame.ID = gameCount + 1;
             }
             InitializeComponent();
+            mainWindow = mw;
             usersController = new Controller(UserIndex.One);
             controllerThread = new Thread(pollControllerState);
             controllerThread.IsBackground = true;
@@ -68,12 +69,11 @@ namespace lightlauncher
             identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
             identityInsertCommand.ExecuteNonQuery();
             sqlConnection.Close();
-            MainWindow.games.Add(newGame);
             MainWindow.loadGamesFromDB();
-            //foreach (Game game in MainWindow.games)
-            //{
-            //    MainWindow.populateGameList(game);
-            //}
+            foreach (Game game in MainWindow.games)
+            {
+                MainWindow.populateGameList(mainWindow, game);
+            }
             this.Close();
         }
 
