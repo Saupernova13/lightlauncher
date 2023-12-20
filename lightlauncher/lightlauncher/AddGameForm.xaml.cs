@@ -52,9 +52,10 @@ namespace lightlauncher
         }
         private void gameAddButton_Click(object sender, RoutedEventArgs e)
         {
+            mainWindow.gameListBox.SelectedIndex = 0;
             newGame.name = gameNameTextBox.Text;
-            string coverArtFileName = newGame.ID + System.IO.Path.GetExtension(newGame.imagePath);
-            File.Copy(newGame.imagePath, System.IO.Path.Combine(MainWindow.folderPath, newGame.ID + System.IO.Path.GetExtension(newGame.imagePath)), true);
+            string coverArtFileName = newGame.ID + Path.GetExtension(newGame.imagePath);
+            File.Copy(newGame.imagePath, Path.Combine(MainWindow.folderPath, newGame.ID + Path.GetExtension(newGame.imagePath)), true);
             newGame.imagePath = coverArtFileName;
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
@@ -69,11 +70,8 @@ namespace lightlauncher
             identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
             identityInsertCommand.ExecuteNonQuery();
             sqlConnection.Close();
-            MainWindow.loadGamesFromDB();
-            foreach (Game game in MainWindow.games)
-            {
-                MainWindow.populateGameList(mainWindow, game);
-            }
+            mainWindow.gameListBox.SelectedIndex = 0;
+            mainWindow.loadGamesFromDB();
             this.Close();
         }
 

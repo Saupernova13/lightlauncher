@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Data.SqlClient;
+using System.ComponentModel;
+using System.Xml.Linq;
 
 namespace lightlauncher
 {
@@ -18,6 +20,8 @@ namespace lightlauncher
         public static List<Game> games = new List<Game>();
         //Name of currently highlighted game
         public static string currentGameName = "";
+        //Name of currently running game or process
+        public static string currentRunningProcess = "";
         //Path to folder containing game art
         public static string folderPath = "";
         //Object Of Controller
@@ -45,19 +49,13 @@ namespace lightlauncher
             }
             InitializeComponent();
             loadGamesFromDB();
-            gameTitleTextBlock.Text = games[0].name;
-            foreach (Game game in games)
-            {
-                populateGameList( this,game);
-            }
             this.Hide();
             //Map the controller index to Port 1
             usersController = new Controller(UserIndex.One);
-
             if (!usersController.IsConnected)
             {
-                System.Windows.MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
-                System.Windows.Application.Current.Shutdown();
+                MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                killProgram();
                 return;
             }
             // Start the thread for polling controller state
@@ -67,59 +65,76 @@ namespace lightlauncher
             controllerThread.Start();
         }
 
-        private void pollControllerState()
+        public void pollControllerState()
         {
-            while (running)
+            Process[] processes = Process.GetProcessesByName(getFileNameFromPath(currentRunningProcess));
+            if (processes.Length > 0)
             {
-                //Get state of controller 
-                //BUG CONTROLLER DISCONNECT KILLS
-                State state = usersController.GetState();
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
+                Dispatcher.Invoke(() => this.Hide());
+            }
+            else 
+            {
+                while (running)
                 {
-                    //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
-                    //do this is because the thread is not the same as the UI thread, and we cannot modify UI elements
-                    //from a non-UI thread
-                    Dispatcher.Invoke(() => this.Show());
-                }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
-                {
-                    Dispatcher.Invoke(() => this.Hide());
-                }
-                if (this.IsVisible)
-                {
-
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
+                    if (!usersController.IsConnected)
                     {
-                        Dispatcher.Invoke(moveCursorLeft);
+                        MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                        killProgram();
+                        return;
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
+                    else
                     {
-                        Dispatcher.Invoke(moveCursorRight);
-                    }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
-                    {
-                        Dispatcher.Invoke(showAddGameWindow);
-                    }
-                    int id = 0;
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
-                    {
-                        for (int i = 0; i < games.Count; i++)
+                        //Get state of controller
+                        State state = usersController.GetState();
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb))
                         {
-                            if (games[i].name.Equals(currentGameName))
+                            //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
+                            //do this is because the thread is not the same as the UI thread, and we cannot modify UI elements
+                            //from a non-UI thread
+                            Dispatcher.Invoke(() => this.Show());
+                        }
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                        {
+                            Dispatcher.Invoke(() => this.Hide());
+                        }
+                        if (this.IsVisible)
+                        {
+
+                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
                             {
-                                id = games[i].ID;
+                                Dispatcher.Invoke(moveCursorLeft);
+                            }
+                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
+                            {
+                                Dispatcher.Invoke(moveCursorRight);
+                            }
+                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+                            {
+                                Dispatcher.Invoke(showAddGameWindow);
+                            }
+                            int id = 0;
+                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+                            {
+                                for (int i = 0; i < games.Count; i++)
+                                {
+                                    if (games[i].name.Equals(currentGameName))
+                                    {
+                                        id = games[i].ID;
+                                        currentRunningProcess = games[i].executablePath;
+                                    }
+                                }
+                                launchGame(id);
+                                Dispatcher.Invoke(() => this.Hide());
                             }
                         }
-                        launchGame(id);
-                        Dispatcher.Invoke(() => this.Hide());
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                        {
+                            killProgram();
+                        }
+                        //This means that there will be a 125ms gap until another button press is registered
+                        Thread.Sleep(125);
                     }
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
-                {
-                    killProgram();
-                }
-                //This means that there will be a 125ms gap until another button press is registered
-                Thread.Sleep(125);
             }
         }
         protected override void OnClosed(EventArgs e)
@@ -130,17 +145,17 @@ namespace lightlauncher
             controllerThread.Join(); 
             base.OnClosed(e);
         }
-        private void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             showAddGameWindow();
         }
         //Window used to add new games to program
-        private void showAddGameWindow()
+        public void showAddGameWindow()
         {
             AddGameForm addGameForm = new AddGameForm(this);
             addGameForm.Show();
         }
-        private void moveCursorLeft()
+        public void moveCursorLeft()
         {
             if (gameListBox.SelectedIndex > 0)
             {
@@ -148,7 +163,7 @@ namespace lightlauncher
                 gameListBox.ScrollIntoView(gameListBox.SelectedItem);
             }
         }
-        private void moveCursorRight()
+        public void moveCursorRight()
         {
             if (gameListBox.SelectedIndex < gameListBox.Items.Count - 1)
             {
@@ -157,7 +172,7 @@ namespace lightlauncher
             }
         }
         //Populates the UI  Layout
-        public static void populateGameList(MainWindow mainWindow, Game game)
+        public void populateGameList(MainWindow mainWindow, Game game)
         {
             Viewbox viewbox = new Viewbox()
             {
@@ -182,27 +197,41 @@ namespace lightlauncher
             mainWindow.gameListBox.Items.Add(viewbox);
         }
         //Intakes gameID and launches game with said ID
-        public static void launchGame(int gameID)
+        public void launchGame(int gameID)
         {
-            int index = 0;
+            bool gameFound = false;
             for (int i = 0; i < games.Count; i++)
             {
                 if (games[i].ID == gameID)
                 {
-                    index = i;
-                    //dies if user deny admin rights, must fix
-                    Process.Start(games[index].executablePath);
+                    try
+                    {
+                        gameFound = true;
+                        Process.Start(games[i].executablePath);
+                        break;
+                    }
+                    catch (Win32Exception ex)
+                    {
+                        MessageBox.Show($"Failed to start the game. {ex.Message}");
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"An error occurred: {ex.Message}");
+                        break;
+                    }
                 }
-                if (games.Count == i)
-                {
-                    System.Windows.Forms.MessageBox.Show("No Game File Was Found");
-                }
+            }
+            if (!gameFound)
+            {
+                MessageBox.Show("No Game File Was Found");
             }
         }
         //Loads games from database into memory for program to use
-        public static void loadGamesFromDB()
+        public void loadGamesFromDB()
         {
             games.Clear();
+            gameListBox.Items.Clear();
             Game currentGame = null;
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
@@ -217,15 +246,24 @@ namespace lightlauncher
                 currentGame.executablePath = sqlDataReader["executablePath"].ToString();
                 games.Add(currentGame);
             }
-        }
-        private void AddGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e, string executableDirectory)
-        {
+            gameTitleTextBlock.Text = games[0].name;
+            foreach (Game game in games)
+            {
+                populateGameList(this, game);
+            }
         }
         private void gameListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //BUG index out of range error when selecting last game in list after adding new game in same session
-            gameTitleTextBlock.Text = games[gameListBox.SelectedIndex].name;
-            currentGameName = gameTitleTextBlock.Text;
+            if (gameListBox.SelectedIndex >= 0 && gameListBox.SelectedIndex < games.Count)
+            {
+                gameTitleTextBlock.Text = games[gameListBox.SelectedIndex].name;
+                currentGameName = gameTitleTextBlock.Text;
+            }
+            else
+            {
+                gameTitleTextBlock.Text = "";
+                currentGameName = "";
+            }
         }
         private void rightNav_Image_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -239,12 +277,16 @@ namespace lightlauncher
         {
             showAddGameWindow();
         }
-        public static void killProgram()
+        public void killProgram()
         {
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                System.Windows.Application.Current.Shutdown();
+                Application.Current.Shutdown();
             });
+        }
+        public string getFileNameFromPath(string path)
+        {
+                return Path.GetFileName(path);
         }
     }
 }

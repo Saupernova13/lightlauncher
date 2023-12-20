@@ -15,7 +15,7 @@ namespace lightlauncher
         public string name { get; set; }
         public string executablePath { get; set; }
         public string imagePath { get; set; }
-        public Game(int ID, int number, string name, string executablePath, string imagePath)
+        public Game(int ID, string name, string executablePath, string imagePath)
         {
             this.ID = ID;
             this.name = name;
