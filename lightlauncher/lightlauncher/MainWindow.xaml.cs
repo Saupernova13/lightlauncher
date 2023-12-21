@@ -15,8 +15,7 @@ using System.Xml.Linq;
 namespace lightlauncher
 {
     public partial class MainWindow : Window
-    {   //BUG: MAKE IT SO THAT THE PROGRAM DOES NOT RESPOND TO SUMMON BUTTONS WHEN LAUNCHED PROGRAM IS RURNNING
-        //List Of Games To Be Displayed
+    {   //List Of Games To Be Displayed
         public static List<Game> games = new List<Game>();
         //Name of currently highlighted game
         public static string currentGameName = "";
@@ -28,11 +27,23 @@ namespace lightlauncher
         private Controller usersController;
         //Instance Of Thread
         private Thread controllerThread;
+        public customMessageBox csm;
         //Boolean To Check If Thread Is Running
         //Note: Volatile keyword ensures that field may be modified by multiple threads at the same time
         private volatile bool running = true;
         public MainWindow()
         {
+            try
+            {
+                using (var context = new DBContext()) 
+                {
+                    context.Database.CreateIfNotExists();
+                }
+            }
+            catch (Exception ex)
+            {
+                csm = new customMessageBox(this, "Error","An error occurred: " + ex.Message);
+            }
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string newFolderName = "GameCovers";
             folderPath = Path.Combine(programDirectory, newFolderName);
@@ -72,7 +83,7 @@ namespace lightlauncher
             {
                 Dispatcher.Invoke(() => this.Hide());
             }
-            else 
+            else
             {
                 while (running)
                 {
@@ -110,7 +121,9 @@ namespace lightlauncher
                             }
                             if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
                             {
-                                Dispatcher.Invoke(showAddGameWindow);
+
+                                Dispatcher.Invoke(() => this.Hide());
+                                Dispatcher.Invoke(showAddGameWindow); 
                             }
                             int id = 0;
                             if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
@@ -142,7 +155,7 @@ namespace lightlauncher
             // Indicate that the thread should no longer run.
             running = false;
             // Wait for the thread to finish executing to avoid any potential issues.
-            controllerThread.Join(); 
+            controllerThread.Join();
             base.OnClosed(e);
         }
         public void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -286,7 +299,7 @@ namespace lightlauncher
         }
         public string getFileNameFromPath(string path)
         {
-                return Path.GetFileName(path);
+            return Path.GetFileName(path);
         }
     }
 }

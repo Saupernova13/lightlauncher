@@ -5,50 +5,129 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lightlauncher"
         mc:Ignorable="d"
-        Title="AddGameForm" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="None">
-    <Grid>
-        <Grid x:Name="gameForm">
-            <StackPanel>
-                <Label  Margin="10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left">Game Name</Label>
-                <TextBox x:Name="gameNameTextBox"
-                         Width="200"
-                         Height="30"
-                         Margin="10"
-                         VerticalAlignment="Center"
-                         HorizontalAlignment="Left" />
-                <Label  Margin="10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left">Game Executable Location</Label>
-                <Button x:Name="gameExecutablePickButton"
-                        Content="Pick Game Location"
-                        Height="30"
-                        Width="150"
-                        Margin="10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Click="gameExecutablePickButton_Click"></Button>
-                <Label  Margin="10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left">Game Cover Location</Label>
-                <Button x:Name="gameCoverPickButton"
-                        Content="Pick Cover Location"
-                        Height="30"
-                        Width="150"
-                        Margin="10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Click="gameCoverPickButton_Click"></Button>
-                <Button x:Name="gameAddButton"
-                        Content="Add New Game"
-                        Height="45"
-                        Width="200"
-                        Margin="10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Click="gameAddButton_Click"></Button>
-            </StackPanel>
-        </Grid>
-    </Grid>
+        Title="AddGameForm"
+        Height="400"
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+    <Border CornerRadius="10"
+            Background="#012644">
+        <Border Margin="2"
+                Background="#044275"
+                CornerRadius="10">
+    <Border CornerRadius="10"
+            Background="#012644" Margin="4">
+                <Grid x:Name="gameForm">
+                    <ListBox  x:Name="optionsListBox"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              ScrollViewer.CanContentScroll="False"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              Height="360"
+                              Margin="10"
+                              SelectionChanged="optionsListBox_SelectionChanged">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"
+                                            x:Name="optionsStackPanel" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="355">
+
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Height="80">
+                                    <TextBox x:Name="gameNameTextBox"
+                                             Width="200"
+                                             Height="30"
+                                             Margin="0,25,0,0" />
+                                </StackPanel>
+                            </ListBoxItem>
+                        </Border>
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="355">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Height="80">
+                                    <Button x:Name="gameExecutablePickButton"
+                                            Content="Pick Game Location"
+                                            Height="30"
+                                            Width="150"
+                                            Margin="0,25,0,0"
+                                            Click="gameExecutablePickButton_Click"></Button>
+                                    <Label  Margin="0"
+                                            FontSize="8"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">Game Executable Location</Label>
+                                </StackPanel>
+                            </ListBoxItem>
+                        </Border>
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="355">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <StackPanel Grid.Row="2"
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Height="80">
+                                    <Button x:Name="gameCoverPickButton"
+                                            Content="Pick Cover Location"
+                                            Height="30"
+                                            Width="150"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,25,0,0"
+                                            Click="gameCoverPickButton_Click"></Button>
+                                    <Label FontSize="8"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">Game Cover Location</Label>
+                                </StackPanel>
+                            </ListBoxItem>
+                        </Border>
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="355">
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <StackPanel Grid.Row="3"
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Height="80">
+                                    <Button x:Name="gameAddButton"
+                                            Content="Add New Game"
+                                            Height="45"
+                                            Width="200"
+                                            Margin="0,20,0,0"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Click="gameAddButton_Click"></Button>
+                                </StackPanel>
+                            </ListBoxItem>
+                        </Border>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Border>
+    </Border>
 </Window>

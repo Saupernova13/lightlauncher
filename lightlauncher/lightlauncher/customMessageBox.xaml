@@ -9,103 +9,123 @@
         Height="320"
         Width="600" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
-    <Border x:Name="outerBorder" CornerRadius="10"
-            Background="#012644">
-        <Border x:Name="innerBorder"
-            CornerRadius="10"
-                Background="#044275"
-                Margin="2">
-            <Grid x:Name="csmMainGrid">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="450"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="50"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Border x:Name="backgroundBorder_Title"
-                        CornerRadius="10,100,0,10"
-                        Background="#012644" Margin="2" Grid.Column="0" Grid.Row="0">
-                    </Border>
-                <Border x:Name="backgroundBorder_Content"
-                        CornerRadius="10"
-                        Background="#012644"
-                        Margin="2"
-                        Grid.Column="0"
-                        Grid.Row="1"
-                        Grid.ColumnSpan="3" Grid.RowSpan="2">
-                </Border>
-                <Border x:Name="backgroundBorder_Close"
-                        CornerRadius="10"
-                        Background="#012644"
-                        Margin="2"
-                        Grid.Column="2"
-                        Grid.Row="0">
-                </Border>
-                <Label x:Name="csmWindowTitle"
-                       Content="Label: Custom Show Message Window"
-                       Grid.Column="0"
-                       Grid.Row="0"
-                       Foreground="White"
-                       FontSize="18"
-                       VerticalAlignment="Center"
-                       Margin="10,0,0,0"></Label>
-                <TextBlock x:Name="csmMessageContent"
-                       Text="TextBox: Custom Show Message Window"
-                           Height="200"
-                           Width="570"
-                       TextWrapping="Wrap"
-                       Grid.Column="0"
-                       Grid.Row="1"
-                       Foreground="White"
-                       FontSize="18"
-                       VerticalAlignment="Top"
-                           HorizontalAlignment="Center"
-                       Margin="10,15,10,0" Grid.ColumnSpan="3" Grid.RowSpan="3"></TextBlock>
-<Image x:Name="imageCloseButton" Grid.Column="2" Grid.Row="0"  Source="/Images/Plus_Sign.png"
-                       RenderTransformOrigin="0.5,0.5" Margin="2">
-                    <Image.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform />
-                            <SkewTransform />
-                            <RotateTransform Angle="45" />
-                            <TranslateTransform />
-                        </TransformGroup>
-                    </Image.RenderTransform>
-                </Image>
-                <Grid x:Name="buttonGrid" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+    <Viewbox Width="450">
+        <Border x:Name="outerBorder"
+                CornerRadius="10"
+                Background="#012644">
+            <Border x:Name="innerBorder"
+                    CornerRadius="10"
+                    Background="#044275"
+                    Margin="2">
+                <Grid x:Name="csmMainGrid">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="450"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Border Grid.Column="1"
-                            Grid.Row="0"
+                    <Border x:Name="backgroundBorder_Title"
+                            CornerRadius="10,100,0,10"
+                            Background="#012644"
+                            Margin="2"
+                            Grid.Column="0"
+                            Grid.Row="0">
+                    </Border>
+                    <Border x:Name="backgroundBorder_Content"
                             CornerRadius="10"
-                            Margin="5"
-                            Background="#044275" Height="40" Width="120">
+                            Background="#012644"
+                            Margin="2"
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            Grid.RowSpan="2">
+                    </Border>
+                    <Label x:Name="csmWindowTitle"
+                           Content="Label: Custom Show Message Window"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           Margin="10,0,0,0"></Label>
+                    <TextBlock x:Name="csmMessageContent"
+                               Text="TextBox: Custom Show Message Window"
+                               Height="200"
+                               Width="570"
+                               TextWrapping="Wrap"
+                               Grid.Column="0"
+                               Grid.Row="1"
+                               Foreground="White"
+                               FontSize="18"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Center"
+                               Margin="10,15,10,0"
+                               Grid.ColumnSpan="3"
+                               Grid.RowSpan="3"></TextBlock>
+                    <Grid x:Name="buttonGrid"
+                          Grid.Column="0"
+                          Grid.Row="2"
+                          Grid.ColumnSpan="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
                         <Border Grid.Column="1"
                                 Grid.Row="0"
                                 CornerRadius="10"
-                                Margin="2"
-                                Background="#012644">
-                            <Button x:Name="confirmButton" BorderThickness="0"
-                                    BorderBrush="Transparent"
-                                    Margin="4"
-                                    Content="Confirm"
-                                    Foreground="White"
-                                    Background="#012644"></Button>
-                            
+                                Margin="5"
+                                Background="#044275"
+                                Height="40"
+                                Width="120">
+                            <Border Grid.Column="1"
+                                    Grid.Row="0"
+                                    CornerRadius="10"
+                                    Margin="2"
+                                    Background="#012644">
+                                <Button x:Name="confirmButton"
+                                        BorderThickness="0"
+                                        BorderBrush="Transparent"
+                                        Margin="4"
+                                        Content="Confirm"
+                                        Foreground="White"
+                                        Background="#012644"
+                                        Click="confirmButton_Click"></Button>
+                            </Border>
                         </Border>
-                    </Border>
+                        <Border Grid.Column="2"
+                                Grid.Row="0"
+                                CornerRadius="10"
+                                Margin="5"
+                                Background="#044275"
+                                Height="40"
+                                Width="120">
+                            <Border Grid.Column="2"
+                                    Grid.Row="0"
+                                    CornerRadius="10"
+                                    Margin="2"
+                                    Background="#012644">
+                                <Button x:Name="closeButton"
+                                        BorderThickness="0"
+                                        BorderBrush="Transparent"
+                                        Margin="4"
+                                        Content="Close"
+                                        Foreground="White"
+                                        Background="#012644"
+                                        Click="closeButton_Click"></Button>
+                            </Border>
+                        </Border>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Border>
         </Border>
-    </Border>
+    </Viewbox>
 </Window>

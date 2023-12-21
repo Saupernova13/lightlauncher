@@ -16,6 +16,8 @@ namespace lightlauncher
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
+        public  bool[] isCompleted = new bool[3];
+        customMessageBox csm;
 
         public AddGameForm(MainWindow mw)
         {
@@ -47,6 +49,7 @@ namespace lightlauncher
                 if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
                 {
                     Dispatcher.Invoke(this.Close);
+                    Dispatcher.Invoke(() => mainWindow.Show());
                 } Thread.Sleep(150);
             }
         }
@@ -54,6 +57,7 @@ namespace lightlauncher
         {
             mainWindow.gameListBox.SelectedIndex = 0;
             newGame.name = gameNameTextBox.Text;
+            isCompleted[0] = true;
             string coverArtFileName = newGame.ID + Path.GetExtension(newGame.imagePath);
             File.Copy(newGame.imagePath, Path.Combine(MainWindow.folderPath, newGame.ID + Path.GetExtension(newGame.imagePath)), true);
             newGame.imagePath = coverArtFileName;
@@ -72,12 +76,14 @@ namespace lightlauncher
             sqlConnection.Close();
             mainWindow.gameListBox.SelectedIndex = 0;
             mainWindow.loadGamesFromDB();
+            csm = new customMessageBox(mainWindow, "Game Successfully Added!", $"{newGame.name} has been added to your library!");
+            csm.ShowDialog();
             this.Close();
         }
 
         private void gameExecutablePickButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
             dialog.Title = "Select a Game Executable File";
             dialog.Filter = "Executable Files (*.exe)|*.exe";
             dialog.FilterIndex = 1;
@@ -86,12 +92,16 @@ namespace lightlauncher
             DialogResult result = dialog.ShowDialog();
             if (!result.HasFlag(System.Windows.Forms.DialogResult.OK))
             {
-                System.Windows.MessageBox.Show("No new game was added");
+                csm = new customMessageBox(mainWindow, "Executable Not Found", $"No File Was Selected!");
+                csm.ShowDialog();
             }
             else
             {
                 newGame.executablePath = dialog.FileName;
             }
+            csm = new customMessageBox(mainWindow,"Executable Found", $"The path '{newGame.executablePath}' has been found!");
+            isCompleted[1] = true;
+            csm.ShowDialog();
         }
 
         private void gameCoverPickButton_Click(object sender, RoutedEventArgs e)
@@ -105,12 +115,21 @@ namespace lightlauncher
             DialogResult result = dialog.ShowDialog();
             if (!result.HasFlag(System.Windows.Forms.DialogResult.OK))
             {
-                System.Windows.MessageBox.Show("No cover art was added");
+                csm = new customMessageBox(mainWindow, "File Not Found", $"No Image Was Added!");
+                csm.ShowDialog();
             }
             else
             {
                 newGame.imagePath = dialog.FileName;
             }
+            csm = new customMessageBox(mainWindow, "Image Found", $"Your Game Cover Image Is Accepted!");
+            isCompleted[2] = true;
+            csm.ShowDialog();
+        }
+
+        private void optionsListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
