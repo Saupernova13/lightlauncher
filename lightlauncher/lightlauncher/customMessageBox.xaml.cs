@@ -56,8 +56,9 @@ namespace lightlauncher
         }
         public void closeAndContinue()
         {
-            mainWindow.Show();
             this.Close();
+            mainWindow.Show();
+          
         }
         public void show()
         {

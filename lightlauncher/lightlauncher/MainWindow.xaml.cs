@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Data.SqlClient;
 using System.ComponentModel;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace lightlauncher
 {
@@ -78,13 +79,13 @@ namespace lightlauncher
 
         public void pollControllerState()
         {
-            Process[] processes = Process.GetProcessesByName(getFileNameFromPath(currentRunningProcess));
-            if (processes.Length > 0)
-            {
-                Dispatcher.Invoke(() => this.Hide());
-            }
-            else
-            {
+            //Process[] processes = Process.GetProcessesByName(getFileNameFromPath(currentRunningProcess));
+            //if (processes.Length > 0)
+            //{
+            //    Dispatcher.Invoke(() => this.Hide());
+            //}
+            //else
+            //{
                 while (running)
                 {
                     if (!usersController.IsConnected)
@@ -133,7 +134,7 @@ namespace lightlauncher
                                     if (games[i].name.Equals(currentGameName))
                                     {
                                         id = games[i].ID;
-                                        currentRunningProcess = games[i].executablePath;
+                                        //currentRunningProcess = games[i].executablePath;
                                     }
                                 }
                                 launchGame(id);
@@ -148,7 +149,7 @@ namespace lightlauncher
                         Thread.Sleep(125);
                     }
                 }
-            }
+            //}
         }
         protected override void OnClosed(EventArgs e)
         {
@@ -259,7 +260,14 @@ namespace lightlauncher
                 currentGame.executablePath = sqlDataReader["executablePath"].ToString();
                 games.Add(currentGame);
             }
-            gameTitleTextBlock.Text = games[0].name;
+            if (games.Count.Equals(0))
+            {
+                gameTitleTextBlock.Text = "No games In library!";
+            }
+            else {
+
+                gameTitleTextBlock.Text = games[0].name;
+            }
             foreach (Game game in games)
             {
                 populateGameList(this, game);

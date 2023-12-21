@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="AddGameForm"
         Height="400"
-        Width="400"
+        Width="300"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -23,10 +23,10 @@
                     <ListBox  x:Name="optionsListBox"
                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                               ScrollViewer.CanContentScroll="False"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               Background="Transparent"
                               BorderThickness="0"
-                              Height="360"
+                              Height="340"
                               Margin="10"
                               SelectionChanged="optionsListBox_SelectionChanged">
                         <ListBox.ItemsPanel>
@@ -35,96 +35,104 @@
                                             x:Name="optionsStackPanel" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
-                        <Border CornerRadius="10"
-                                Background="#044275"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Width="355">
 
-                            <ListBoxItem HorizontalAlignment="Center">
+                        <ListBoxItem HorizontalAlignment="Center">
+                            <Border CornerRadius="10"
+                                    Background="#044275"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Width="255">
                                 <StackPanel Grid.Row="0"
                                             Grid.Column="0"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center"
                                             Height="80">
                                     <TextBox x:Name="gameNameTextBox"
-                                             Width="200"
+                                             Width="150"
                                              Height="30"
-                                             Margin="0,25,0,0" />
+                                             Background="#012644"
+                                             Margin="0,25,0,0" Style="{StaticResource RoundedTextBox}"/>
                                 </StackPanel>
-                            </ListBoxItem>
-                        </Border>
-                        <Border CornerRadius="10"
+                            </Border>
+                        </ListBoxItem>
+                        <ListBoxItem HorizontalAlignment="Center"> <Border CornerRadius="10"
                                 Background="#044275"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
-                                Width="355">
-                            <ListBoxItem HorizontalAlignment="Center">
+                                    Width="255">
                                 <StackPanel Grid.Row="1"
                                             Grid.Column="0"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center"
                                             Height="80">
-                                    <Button x:Name="gameExecutablePickButton"
-                                            Content="Pick Game Location"
+                                    <TextBox x:Name="gameExecutablePickButton"
+                                            Text="   Pick Game Location"
                                             Height="30"
                                             Width="150"
-                                            Margin="0,25,0,0"
-                                            Click="gameExecutablePickButton_Click"></Button>
-                                    <Label  Margin="0"
-                                            FontSize="8"
+                                             IsReadOnly="True"
+                                             Margin="0,25,0,0"
+                                             Background="#012644"
+                                             Style="{StaticResource RoundedTextBox}"></TextBox>
+                                    <Label  x:Name="gameLocationLabel"
+                                        Margin="0"
+                                            FontSize="9"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center">Game Executable Location</Label>
                                 </StackPanel>
-                            </ListBoxItem>
-                        </Border>
-                        <Border CornerRadius="10"
+                             </Border>    </ListBoxItem>
+                   
+                       
+                            <ListBoxItem HorizontalAlignment="Center"> <Border CornerRadius="10"
                                 Background="#044275"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
-                                Width="355">
-                            <ListBoxItem HorizontalAlignment="Center">
+                                    Width="255">
                                 <StackPanel Grid.Row="2"
                                             Grid.Column="0"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center"
                                             Height="80">
-                                    <Button x:Name="gameCoverPickButton"
-                                            Content="Pick Cover Location"
+                                    <TextBox x:Name="gameCoverPickButton"
+                                            Text="   Pick Cover Location"
                                             Height="30"
                                             Width="150"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left"
-                                            Margin="0,25,0,0"
-                                            Click="gameCoverPickButton_Click"></Button>
-                                    <Label FontSize="8"
+                                             IsReadOnly="True"
+                                             Margin="0,25,0,0"
+                                             Background="#012644"
+                                             Style="{StaticResource RoundedTextBox}"></TextBox>
+                                    <Label x:Name="gameCoverLabel"
+                                           FontSize="9"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center">Game Cover Location</Label>
                                 </StackPanel>
-                            </ListBoxItem>
-                        </Border>
-                        <Border CornerRadius="10"
+                            </Border>       </ListBoxItem>
+                 
+                      
+                            <ListBoxItem HorizontalAlignment="Center">
+                                <Border CornerRadius="10"
                                 Background="#044275"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
-                                Width="355">
-                            <ListBoxItem HorizontalAlignment="Center">
-                                <StackPanel Grid.Row="3"
+                                    Width="255">  <StackPanel Grid.Row="3"
                                             Grid.Column="0"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center"
                                             Height="80">
-                                    <Button x:Name="gameAddButton"
-                                            Content="Add New Game"
-                                            Height="45"
-                                            Width="200"
-                                            Margin="0,20,0,0"
+                                    <TextBox x:Name="gameAddButton"
+                                            Text="      Add New Game"
+                                            Height="50"
+                                            Width="150"
                                             VerticalAlignment="Center"
-                                            HorizontalAlignment="Center"
-                                            Click="gameAddButton_Click"></Button>
+                                             HorizontalAlignment="Center"
+                                             IsReadOnly="True"
+                                             Margin="0,15,0,0"
+                                             Background="#012644"
+                                             Style="{StaticResource RoundedTextBox}"></TextBox>
                                 </StackPanel>
-                            </ListBoxItem>
-                        </Border>
+                         
+                        </Border>   </ListBoxItem>
                     </ListBox>
                 </Grid>
             </Border>
