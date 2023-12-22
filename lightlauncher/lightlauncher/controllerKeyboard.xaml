@@ -1,0 +1,885 @@
+﻿<Window x:Class="lightlauncher.controllerKeyboard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lightlauncher"
+        mc:Ignorable="d"
+        Title="controllerKeyboard"
+        Height="450"
+        Width="900"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="Transparent">
+
+    <Border CornerRadius="10"
+            Background="#012644"
+            Margin="2">
+        <Border CornerRadius="10"
+                Background="#044275"
+                Margin="2">
+            <Border CornerRadius="10"
+                    Background="#012644"
+                    Margin="2">
+                <Viewbox>
+                    <Grid Margin="10"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ListBox  x:Name="keyboardListBox_Row_1"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  SelectionChanged="keyboardListBox_Row_1_SelectionChanged"
+                                  Grid.Column="0"
+                                  Grid.Row="0">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="optionsStackPanel" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_q">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="Q"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_w">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="W"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_e">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="E"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_r">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="R"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_t">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="T"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_y">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="Y"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_u">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="U"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_i">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="I"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_o">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="O"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_p">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="P"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox  x:Name="keyboardListBox_Row_2"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  SelectionChanged="keyboardListBox_Row_2_SelectionChanged"
+                                  Grid.Column="0"
+                                  Grid.Row="1">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="optionsStackPanel" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_a">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="A"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_s">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="S"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_d">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="D"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_f">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="F"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_g">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="G"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_h">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="H"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_j">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="J"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_k">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="K"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_l">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="L"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_apostrophe">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="'"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox  x:Name="keyboardListBox_Row_3"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  SelectionChanged="keyboardListBox_Row_3_SelectionChanged"
+                                  Grid.Column="0"
+                                  Grid.Row="2">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="optionsStackPanel" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_z">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="Z"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_x">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="X"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_c">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="C"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_v">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="V"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_b">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="B"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_n">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="N"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_m">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="M"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_comma">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content=","
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_period">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="."
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_question">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="?"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox  x:Name="keyboardListBox_Row_4"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  SelectionChanged="keyboardListBox_Row_4_SelectionChanged"
+                                  Grid.Column="0"
+                                  Grid.Row="3">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="optionsStackPanel" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_shft">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="^"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_specialChars">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="60"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="!@#"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_spacebar">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="405"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="_____________________________"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         x:Name="key_backspace">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="160"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="Backspace"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox  x:Name="keyboardListBox_Row_5"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  SelectionChanged="keyboardListBox_Row_5_SelectionChanged"
+                                  Grid.Column="0"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  Grid.Row="4">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="optionsStackPanel" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         x:Name="key_enter">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="120"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="Enter"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                            <ListBoxItem HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         x:Name="key_close">
+                                <Border CornerRadius="10"
+                                        Background="#044275"
+                                        Margin="2"
+                                        Height="60"
+                                        Width="120"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#012644"
+                                            Margin="4">
+                                        <Label Content="Close"
+                                               Foreground="White"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center"
+                                               FontSize="26"
+                                               Margin="0,0,0,5"></Label>
+                                    </Border>
+                                </Border>
+                            </ListBoxItem>
+                        </ListBox>
+                    </Grid>
+                </Viewbox>
+            </Border>
+        </Border>
+    </Border>
+</Window>

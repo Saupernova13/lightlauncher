@@ -58,7 +58,6 @@ namespace lightlauncher
         {
             this.Close();
             mainWindow.Show();
-          
         }
         public void show()
         {

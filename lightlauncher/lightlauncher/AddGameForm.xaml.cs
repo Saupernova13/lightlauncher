@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace lightlauncher
 {
@@ -18,6 +19,7 @@ namespace lightlauncher
         private Thread controllerThread;
         private volatile bool running = true;
         public bool[] isCompleted = new bool[3];
+        public controllerKeyboard onscreenKeyboard = new controllerKeyboard();
         customMessageBox csm;
         public AddGameForm(MainWindow mw)
         {
@@ -46,50 +48,59 @@ namespace lightlauncher
         {
             while (running)
             {
-                State state = usersController.GetState();
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
-                {
-                    Dispatcher.Invoke(moveCursorUp);
-                }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
-                {
-                    Dispatcher.Invoke(moveCursorDown);
-                }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
-                {
-                    switch (Dispatcher.Invoke(() => optionsListBox.SelectedIndex))
+                if (Dispatcher.Invoke(() => this.IsActive)) {
+
+                    State state = usersController.GetState();
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
                     {
-                        case 0:
-                            break;
-                        case 1:
-                            Dispatcher.Invoke(getGamePath);
-                            break;
-                        case 2:
-                            Dispatcher.Invoke(getGameCover);
-                            break;
-                        case 3:
-                            Dispatcher.Invoke(addGameToDB);
-                            break;
-                        default:
-                            break;
+                        Dispatcher.Invoke(moveCursorUp);
                     }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
+                    {
+                        Dispatcher.Invoke(moveCursorDown);
+                    }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+                    {
+                        switch (Dispatcher.Invoke(() => optionsListBox.SelectedIndex))
+                        {
+                            case 0:
+                                Dispatcher.Invoke(() => onscreenKeyboard.Show());
+                                break;
+                            case 1:
+                                Dispatcher.Invoke(getGamePath);
+                                break;
+                            case 2:
+                                Dispatcher.Invoke(getGameCover);
+                                break;
+                            case 3:
+                                Dispatcher.Invoke(addGameToDB);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                    {
+                        Dispatcher.Invoke(this.Close);
+                        Dispatcher.Invoke(() => mainWindow.Show());
+                    }
+                    Thread.Sleep(150);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
-                {
-                    Dispatcher.Invoke(this.Close);
-                    Dispatcher.Invoke(() => mainWindow.Show());
-                }
-                Thread.Sleep(150);
             }
         }
         public void moveCursorUp()
         {
-            optionsListBox.SelectedIndex = optionsListBox.SelectedIndex - 1;
+            if (optionsListBox.SelectedIndex > 0)
+            {
+                optionsListBox.SelectedIndex = optionsListBox.SelectedIndex - 1;
+            }
         }
-
         public void moveCursorDown()
         {
-            optionsListBox.SelectedIndex = optionsListBox.SelectedIndex + 1;
+            if (optionsListBox.SelectedIndex < optionsListBox.Items.Count - 1)
+            {
+                optionsListBox.SelectedIndex = optionsListBox.SelectedIndex + 1;
+            }
         }
         private void gameAddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -97,7 +108,6 @@ namespace lightlauncher
         }
         public void addGameToDB()
         {
-
             mainWindow.gameListBox.SelectedIndex = 0;
             newGame.name = gameNameTextBox.Text;
             isCompleted[0] = true;
@@ -175,11 +185,13 @@ namespace lightlauncher
             }
             isCompleted[2] = true;
         }
-
         private void optionsListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
         }
-
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left) this.DragMove();
+        }
     }
 }
