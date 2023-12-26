@@ -7,93 +7,120 @@
         mc:Ignorable="d"
         Title="Light Launcher"
         Height="720"
-        Width="720"
+        Width="850"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
         ShowInTaskbar="False">
-    <Grid x:Name="parentGrid"
-          Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="75" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Border Grid.Column="0"
-                Grid.Row="0"
-                Background="#012644"
-                CornerRadius="25,25,25,25"
-                Grid.RowSpan="2">
-        </Border>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="75" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Image Source="/Images/Nav_Left.png"
-                   Grid.Column="0"
-                   Grid.Row="0"
-                   PreviewMouseLeftButtonDown="leftNav_Image_PreviewMouseLeftButtonDown"/>
-            <Image Source="/Images/Nav_Right.png"
-                   Grid.Column="2"
-                   Grid.Row="0" PreviewMouseLeftButtonDown="rightNav_Image_PreviewMouseLeftButtonDown"/>
-
-            <TextBlock x:Name="gameTitleTextBlock" FontSize="32"
-                   Foreground="White"
-                   Panel.ZIndex="1"
-                   Margin="15"
-                   VerticalAlignment="Bottom"
-                   HorizontalAlignment="Center" Grid.Row="0"  Grid.Column="1"></TextBlock>
-            <ListBox  x:Name="gameListBox"
-                      Grid.Column="1"
-                      Grid.Row="0"
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      ScrollViewer.CanContentScroll="False"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      Background="Transparent"
-                      BorderThickness="0"
-                      Margin="0,20,0,70" SelectionChanged="gameListBox_SelectionChanged">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"
-                                    x:Name="gamesStackPanel" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                
-            </ListBox>
-        </Grid>
-        <Border Grid.Column="0"
-                Grid.Row="2"
-                Background="#011A2E"
-                CornerRadius="25,25,25,25">
-        </Border>
-        <Grid Grid.Row="2"
-              Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="*" />
-                <ColumnDefinition  Width="75" />
-                <ColumnDefinition  Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
+    <Border CornerRadius="10"
+            Background="#012644"
+            Margin="2">
+        <Border CornerRadius="10"
+                Background="#044275"
+                Margin="2">
             <Border CornerRadius="10"
-                    Background="#044275"
-                    Margin="7"
-                    Grid.Column="1"
-                    Grid.Row="0">
-                <Image Source="/Images/Plus_Sign.png"
-                       Margin="5" PreviewMouseLeftButtonDown="addGameImage_PreviewMouseLeftButtonDown" />
+                    Background="#012644"
+                    Margin="2">
+                <Grid x:Name="parentGrid"
+                      Background="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="75" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Grid.Row="0"
+                            Background="Transparent"
+                            Grid.RowSpan="2">
+                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="75" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Source="/Images/Nav_Left.png"
+                               Grid.Column="0"
+                               Grid.Row="0"
+                               PreviewMouseLeftButtonDown="leftNav_Image_PreviewMouseLeftButtonDown" />
+                        <Image Source="/Images/Nav_Right.png"
+                               Grid.Column="2"
+                               Grid.Row="0"
+                               PreviewMouseLeftButtonDown="rightNav_Image_PreviewMouseLeftButtonDown" />
 
+                        <TextBlock x:Name="gameTitleTextBlock"
+                                   FontSize="32"
+                                   Foreground="White"
+                                   Panel.ZIndex="1"
+                                   Margin="15"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Center"
+                                   Grid.Row="0"
+                                   Grid.Column="1"></TextBlock>
+                        <ListBox  x:Name="gameListBox"
+                                  Grid.Column="1"
+                                  Grid.Row="0"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Margin="0,20,0,70"
+                                  SelectionChanged="gameListBox_SelectionChanged">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="gamesStackPanel" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+
+                        </ListBox>
+                    </Grid>
+                    <Border Grid.Column="0"
+                            Grid.Row="2" Margin="5"
+                            Background="#011A2E"
+                            CornerRadius="10" >
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                Margin="2">
+                            <Border Grid.Column="0"
+                                    Grid.Row="2"
+                                    Margin="2"
+                                    Background="#011A2E"
+                                    CornerRadius="10">
+                                </Border>
+                            </Border>
+                    </Border>
+                    <Grid Grid.Row="2"
+                          Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  Width="*" />
+                            <ColumnDefinition  Width="75" />
+                            <ColumnDefinition  Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                Margin="14"
+                                Grid.Column="1"
+                                Grid.Row="0">
+                            <Image Source="/Images/Plus_Sign.png"
+                                   Margin="5"
+                                   PreviewMouseLeftButtonDown="addGameImage_PreviewMouseLeftButtonDown" />
+
+                        </Border>
+                    </Grid>
+                </Grid>
             </Border>
-        </Grid>
-    </Grid>
+        </Border>
+    </Border>
 </Window>

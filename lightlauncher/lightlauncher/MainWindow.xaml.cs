@@ -36,14 +36,14 @@ namespace lightlauncher
         {
             try
             {
-                using (var context = new DBContext()) 
+                using (var context = new DBContext())
                 {
                     context.Database.CreateIfNotExists();
                 }
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error","An error occurred: " + ex.Message);
+                csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
             }
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string newFolderName = "GameCovers";
@@ -86,69 +86,69 @@ namespace lightlauncher
             //}
             //else
             //{
-                while (running)
+            while (running)
+            {
+                if (!usersController.IsConnected)
                 {
-                    if (!usersController.IsConnected)
+                    MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                    killProgram();
+                    return;
+                }
+                else
+                {
+                    //Get state of controller
+                    State state = usersController.GetState();
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb))
                     {
-                        MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
-                        killProgram();
-                        return;
+                        //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
+                        //do this is because the thread is not the same as the UI thread, and we cannot modify UI elements
+                        //from a non-UI thread
+                        Dispatcher.Invoke(() => this.Show());
                     }
-                    else
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
                     {
-                        //Get state of controller
-                        State state = usersController.GetState();
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb))
+                        Dispatcher.Invoke(() => this.Hide());
+                    }
+                    if (this.IsVisible)
+                    {
+
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
                         {
-                            //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
-                            //do this is because the thread is not the same as the UI thread, and we cannot modify UI elements
-                            //from a non-UI thread
-                            Dispatcher.Invoke(() => this.Show());
+                            Dispatcher.Invoke(moveCursorLeft);
                         }
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
                         {
+                            Dispatcher.Invoke(moveCursorRight);
+                        }
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+                        {
+                            Dispatcher.Invoke(showAddGameWindow);
                             Dispatcher.Invoke(() => this.Hide());
                         }
-                        if (this.IsVisible)
+                        int id = 0;
+                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
                         {
-
-                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
+                            Thread.Sleep(2000);
+                            for (int i = 0; i < games.Count; i++)
                             {
-                                Dispatcher.Invoke(moveCursorLeft);
-                            }
-                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
-                            {
-                                Dispatcher.Invoke(moveCursorRight);
-                            }
-                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
-                            {
-
-                                Dispatcher.Invoke(() => this.Hide());
-                                Dispatcher.Invoke(showAddGameWindow); 
-                            }
-                            int id = 0;
-                            if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
-                            {
-                                for (int i = 0; i < games.Count; i++)
+                                if (games[i].name.Equals(currentGameName))
                                 {
-                                    if (games[i].name.Equals(currentGameName))
-                                    {
-                                        id = games[i].ID;
-                                        //currentRunningProcess = games[i].executablePath;
-                                    }
+                                    id = games[i].ID;
+                                    //currentRunningProcess = games[i].executablePath;
                                 }
-                                launchGame(id);
-                                Dispatcher.Invoke(() => this.Hide());
                             }
+                            launchGame(id);
+                            Dispatcher.Invoke(() => this.Hide());
                         }
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
-                        {
-                            killProgram();
-                        }
-                        //This means that there will be a 125ms gap until another button press is registered
-                        Thread.Sleep(125);
                     }
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                    {
+                        killProgram();
+                    }
+                    //This means that there will be a 125ms gap until another button press is registered
+                    Thread.Sleep(125);
                 }
+            }
             //}
         }
         protected override void OnClosed(EventArgs e)
@@ -264,7 +264,8 @@ namespace lightlauncher
             {
                 gameTitleTextBlock.Text = "No games In library!";
             }
-            else {
+            else
+            {
 
                 gameTitleTextBlock.Text = games[0].name;
             }

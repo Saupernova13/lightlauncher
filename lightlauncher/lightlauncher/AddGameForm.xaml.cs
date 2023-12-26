@@ -19,10 +19,11 @@ namespace lightlauncher
         private Thread controllerThread;
         private volatile bool running = true;
         public bool[] isCompleted = new bool[3];
-        public controllerKeyboard onscreenKeyboard = new controllerKeyboard();
+        public controllerKeyboard onscreenKeyboard;
         customMessageBox csm;
         public AddGameForm(MainWindow mw)
         {
+           onscreenKeyboard = new controllerKeyboard(this);
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
             SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM Games", sqlConnection);
@@ -64,7 +65,8 @@ namespace lightlauncher
                         switch (Dispatcher.Invoke(() => optionsListBox.SelectedIndex))
                         {
                             case 0:
-                                Dispatcher.Invoke(() => onscreenKeyboard.Show());
+                                Dispatcher.Invoke(() => new controllerKeyboard(this).Show());
+                                Thread.Sleep(300);
                                 break;
                             case 1:
                                 Dispatcher.Invoke(getGamePath);
