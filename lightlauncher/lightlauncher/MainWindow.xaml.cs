@@ -10,13 +10,15 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Data.SqlClient;
 using System.ComponentModel;
-using System.Xml.Linq;
-using System.Linq;
+using System.Reflection;
+
 
 namespace lightlauncher
 {
     public partial class MainWindow : Window
-    {   //List Of Games To Be Displayed
+    {
+        public readonly string programName = "light_launcher";
+        //List Of Games To Be Displayed
         public static List<Game> games = new List<Game>();
         //Name of currently highlighted game
         public static string currentGameName = "";
@@ -34,6 +36,16 @@ namespace lightlauncher
         private volatile bool running = true;
         public MainWindow()
         {
+            try
+            {
+                string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{programName}.lnk");
+                string executablePath = Assembly.GetExecutingAssembly().Location;
+                CreateShortcut(startupFolderPath, executablePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
             try
             {
                 using (var context = new DBContext())
@@ -76,7 +88,15 @@ namespace lightlauncher
             controllerThread.IsBackground = true;
             controllerThread.Start();
         }
-
+        private static void CreateShortcut(string shortcutPath, string targetPath)
+        {
+            IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
+            IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcutPath);
+            shortcut.TargetPath = targetPath;
+            shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
+            shortcut.Description = "StartUp shortcut for LightLauncher By Saupernova_13";
+            shortcut.Save();
+        }
         public void pollControllerState()
         {
             //Process[] processes = Process.GetProcessesByName(getFileNameFromPath(currentRunningProcess));
