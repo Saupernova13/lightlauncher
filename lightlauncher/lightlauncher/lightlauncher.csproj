@@ -197,6 +197,9 @@
   <ItemGroup>
     <Resource Include="Images\Light_Launcher_Temp_Logo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Folder_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

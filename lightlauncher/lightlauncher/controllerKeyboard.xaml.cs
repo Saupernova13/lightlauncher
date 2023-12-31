@@ -16,6 +16,8 @@ namespace lightlauncher
         private int currentColumn = 0;
         public AddGameForm publicAGF;
         public bool isCaps = true;
+        public ListBoxItem activeItem;
+
         public controllerKeyboard(AddGameForm agf)
         {
             InitializeComponent();
@@ -28,14 +30,16 @@ namespace lightlauncher
             windowMovementThread.Start();
             controllerThread.IsBackground = true;
             controllerThread.Start();
-            focusKey(currentRow, currentColumn);
+            activeItem = focusKey(currentRow, currentColumn);
         }
-        private void focusKey(int row, int column)
+        private ListBoxItem focusKey(int row, int column)
         {
             clearAllListBoxSelections();
             ListBox currentListBox = getListBoxForRow(row);
-            ((ListBoxItem)currentListBox.Items[column]).Focus();
+            ListBoxItem temp = ((ListBoxItem)currentListBox.Items[column]);
+            temp.Focus();
             currentListBox.SelectedIndex = column;
+            return (temp);
         }
         private void pollControllerState()
         {
@@ -77,7 +81,7 @@ namespace lightlauncher
                     Dispatcher.Invoke(backspaceChar);
                     Thread.Sleep(400);
                 }
-                Thread.Sleep(180);
+                Thread.Sleep(300);
             }
         }
         private void clearAllListBoxSelections()
@@ -108,119 +112,119 @@ namespace lightlauncher
         }
         public void PerformKeyPress(int row, int column)
         {
-            ListBox currentListBox = getListBoxForRow(row);
-                ListBoxItem currentListBoxItem = (ListBoxItem)currentListBox.Items[column];
-                string currentKey = currentListBoxItem.Name.ToString();
-                switch (currentKey)
-                {
-                    case "key_shift":
-                        key_shift_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_q":
-                        key_q_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_w":
-                        key_w_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_e":
-                        key_e_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_r":
-                        key_r_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_t":
-                        key_t_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_y":
-                        key_y_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_u":
-                        key_u_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_i":
-                        key_i_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_o":
-                        key_o_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_p":
-                        key_p_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_a":
-                        key_a_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_s":
-                        key_s_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_d":
-                        key_d_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_f":
-                        key_f_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_g":
-                        key_g_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_h":
-                        key_h_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_j":
-                        key_j_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_k":
-                        key_k_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_l":
-                        key_l_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_z":
-                        key_z_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_x":
-                        key_x_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_c":
-                        key_c_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_v":
-                        key_v_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_b":
-                        key_b_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_n":
-                        key_n_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_m":
-                        key_m_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_apostrophe":
-                        key_apostrophe_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_comma":
-                        key_comma_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_period":
-                        key_period_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_space":
-                        key_spacebar_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_question":
-                        key_question_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_clear":
-                        key_clear_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_enter":
-                        key_enter_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    case "key_backspace":
-                        key_backspace_PreviewMouseLeftButtonDown(null, null);
-                        break;
-                    default:
-                        break;
-                }
+            //    ListBox currentListBox = getListBoxForRow(row);
+            //        ListBoxItem currentListBoxItem = (ListBoxItem)currentListBox.Items[column];
+            //        string currentKey = currentListBoxItem.Name.ToString();
+            switch (activeItem.Name.ToString())
+            {
+                case "key_shift":
+                    key_shift_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_q":
+                    key_q_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_w":
+                    key_w_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_e":
+                    key_e_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_r":
+                    key_r_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_t":
+                    key_t_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_y":
+                    key_y_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_u":
+                    key_u_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_i":
+                    key_i_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_o":
+                    key_o_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_p":
+                    key_p_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_a":
+                    key_a_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_s":
+                    key_s_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_d":
+                    key_d_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_f":
+                    key_f_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_g":
+                    key_g_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_h":
+                    key_h_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_j":
+                    key_j_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_k":
+                    key_k_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_l":
+                    key_l_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_z":
+                    key_z_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_x":
+                    key_x_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_c":
+                    key_c_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_v":
+                    key_v_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_b":
+                    key_b_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_n":
+                    key_n_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_m":
+                    key_m_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_apostrophe":
+                    key_apostrophe_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_comma":
+                    key_comma_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_period":
+                    key_period_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_space":
+                    key_spacebar_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_question":
+                    key_question_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_clear":
+                    key_clear_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_enter":
+                    key_enter_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_backspace":
+                    key_backspace_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void backspaceChar()
@@ -230,38 +234,40 @@ namespace lightlauncher
                 publicAGF.gameNameTextBox.Text = publicAGF.gameNameTextBox.Text.Substring(0, publicAGF.gameNameTextBox.Text.Length - 1);
             }
         }
+
+
         public void moveCursorUp()
         {
             if (currentRow > 0)
             {
                 currentRow--;
+                activeItem = focusKey(currentRow, currentColumn);
             }
-            focusKey(currentRow, currentColumn);
         }
         public void moveCursorDown()
         {
             if (currentRow < 4)
             {
                 currentRow++;
+                activeItem = focusKey(currentRow, currentColumn);
             }
-                focusKey(currentRow, currentColumn);
         }
         public void moveCursorLeft()
         {
             if (currentColumn > 0)
             {
                 currentColumn--;
+                activeItem = focusKey(currentRow, currentColumn);
             }
-                focusKey(currentRow, currentColumn);
         }
         public void moveCursorRight()
         {
             ListBox currentListBox = getListBoxForRow(currentRow);
-            if (currentColumn < currentListBox.Items.Count - 1)
+            if (currentListBox != null && currentColumn < currentListBox.Items.Count - 1)
             {
                 currentColumn++;
+                activeItem = focusKey(currentRow, currentColumn);
             }
-                focusKey(currentRow, currentColumn);
         }
         public void moveWindow()
         {

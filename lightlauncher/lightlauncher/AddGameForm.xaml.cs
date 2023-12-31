@@ -147,6 +147,8 @@ namespace lightlauncher
             dialog.FilterIndex = 1;
             dialog.Multiselect = false;
             dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            customFileDialog cfd = new customFileDialog();
+            cfd.Show();
             DialogResult result = dialog.ShowDialog();
             if (!result.HasFlag(System.Windows.Forms.DialogResult.OK))
             {

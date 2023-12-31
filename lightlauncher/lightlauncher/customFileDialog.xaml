@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:lightlauncher"
         mc:Ignorable="d"
         Title="customFileDialog"
-        Height="720"
-        Width="850"
+        Height="850"
+        Width="750"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="Transparent"
@@ -27,12 +27,79 @@
                       Background="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="750" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <ListBox  x:Name="fileDirectory_listBox"
+                              ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              ScrollViewer.CanContentScroll="False"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              Grid.Column="1"
+                              Grid.Row="0" Margin="20">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"
+                                            x:Name="optionsStackPanel" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBoxItem  Margin="10"
+                                      Height="220"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center" x:Name="fileDir_000_listBoxItem">
+                            <StackPanel x:Name="fileDir_000_stackPanel" Orientation="Horizontal" Width="670" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <Image x:Name="fileDir_000_image"
+                                       Source="/Images/Folder_Icon.png"
+                                       Height="200"
+                                       Width="200" Margin="10" />
+                                <Label x:Name="fileDir_000_label" Margin="10" Content="Program Files (X86)" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="36" Foreground="White"></Label>
+                            </StackPanel>
+
+                        </ListBoxItem>
+                    </ListBox>
+                    <Grid Grid.Row="2"
+                          Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="550" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="filePathURL_textBox"
+                                 Width="500"
+                                 Height="60"
+                                 Background="#044275"
+                                 Grid.Column="0"
+                                 Grid.Row="0"
+                                 Style="{StaticResource RoundedTextBox}" />
+
+                        <Border CornerRadius="10"
+                                Background="#044275"
+                                Margin="2"
+                                Height="60"
+                                Width="120"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Grid.Column="1">
+                            <Border CornerRadius="10"
+                                    Background="#012644"
+                                    Margin="4">
+                                <Label x:Name="selectFile_button"
+                                       Content="Select File"
+                                       Foreground="White"
+                                       HorizontalContentAlignment="Center"
+                                       VerticalContentAlignment="Center"
+                                       FontSize="23"
+                                       Margin="0,0,0,5"></Label>
+                            </Border>
+                        </Border>
+                    </Grid>
                 </Grid>
             </Border>
         </Border>
