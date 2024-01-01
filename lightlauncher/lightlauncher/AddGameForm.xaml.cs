@@ -21,9 +21,11 @@ namespace lightlauncher
         public bool[] isCompleted = new bool[3];
         public controllerKeyboard onscreenKeyboard;
         customMessageBox csm;
+        public static string gamePath;
+        public static string gameCoverPath;
         public AddGameForm(MainWindow mw)
         {
-           onscreenKeyboard = new controllerKeyboard(this);
+            onscreenKeyboard = new controllerKeyboard(this);
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
             SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM Games", sqlConnection);
@@ -49,7 +51,8 @@ namespace lightlauncher
         {
             while (running)
             {
-                if (Dispatcher.Invoke(() => this.IsActive)) {
+                if (Dispatcher.Invoke(() => this.IsActive))
+                {
 
                     State state = usersController.GetState();
                     if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
@@ -65,7 +68,7 @@ namespace lightlauncher
                         switch (Dispatcher.Invoke(() => optionsListBox.SelectedIndex))
                         {
                             case 0:
-                                Dispatcher.Invoke(() => new controllerKeyboard(this).Show());
+                                Dispatcher.Invoke(() => new controllerKeyboard(this).ShowDialog());
                                 Thread.Sleep(300);
                                 break;
                             case 1:
@@ -84,7 +87,7 @@ namespace lightlauncher
                     if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
                     {
                         Dispatcher.Invoke(this.Close);
-                        Dispatcher.Invoke(() => mainWindow.Show());
+                        Dispatcher.Invoke(() => mainWindow.ShowDialog());
                     }
                     Thread.Sleep(150);
                 }
@@ -133,6 +136,7 @@ namespace lightlauncher
             mainWindow.loadGamesFromDB();
             this.Close();
             csm = new customMessageBox(mainWindow, "Game Successfully Added!", $"{newGame.name} has been added to your library!");
+            mainWindow.Show();
             csm.ShowDialog();
         }
         private void gameExecutablePickButton_Click(object sender, RoutedEventArgs e)
@@ -141,23 +145,16 @@ namespace lightlauncher
         }
         public void getGamePath()
         {
-            OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
-            dialog.Title = "Select a Game Executable File";
-            dialog.Filter = "Executable Files (*.exe)|*.exe";
-            dialog.FilterIndex = 1;
-            dialog.Multiselect = false;
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            customFileDialog cfd = new customFileDialog();
-            cfd.Show();
-            DialogResult result = dialog.ShowDialog();
-            if (!result.HasFlag(System.Windows.Forms.DialogResult.OK))
+            customFileDialog cfd = new customFileDialog(mainWindow);
+            cfd.ShowDialog();
+            newGame.executablePath = cfd.getSelectedItem();
+            if (newGame.executablePath.Equals(String.Empty))
             {
                 gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
                 gameLocationLabel.Content = $"No file was selected!";
             }
             else
             {
-                newGame.executablePath = dialog.FileName;
                 gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
                 gameLocationLabel.Content = $"The path '{newGame.executablePath}' has been found!";
             }

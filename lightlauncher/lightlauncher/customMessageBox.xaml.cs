@@ -39,7 +39,7 @@ namespace lightlauncher
                     {
                             Dispatcher.Invoke(() => closeAndContinue());
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X))
                     {
                             Dispatcher.Invoke(() => closeAndContinue());
                     }
@@ -57,7 +57,7 @@ namespace lightlauncher
         public void closeAndContinue()
         {
             this.Close();
-            mainWindow.Show();
+            //mainWindow.Show();
         }
         public void show()
         {

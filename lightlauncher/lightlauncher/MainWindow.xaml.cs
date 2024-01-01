@@ -69,7 +69,8 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"An error occurred: {ex.Message}");
+                csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                csm.ShowDialog();
             }
             InitializeComponent();
             loadGamesFromDB();
@@ -78,7 +79,8 @@ namespace lightlauncher
             usersController = new Controller(UserIndex.One);
             if (!usersController.IsConnected)
             {
-                MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                csm = new customMessageBox(this, "Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                csm.ShowDialog();
                 killProgram();
                 return;
             }
@@ -110,7 +112,8 @@ namespace lightlauncher
             {
                 if (!usersController.IsConnected)
                 {
-                    MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                    csm = new customMessageBox(this, "Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                    csm.ShowDialog();
                     killProgram();
                     return;
                 }
@@ -142,8 +145,8 @@ namespace lightlauncher
                         }
                         if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
                         {
+                            Dispatcher.Invoke(() => this.Hide()); 
                             Dispatcher.Invoke(showAddGameWindow);
-                            Dispatcher.Invoke(() => this.Hide());
                         }
                         int id = 0;
                         if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
@@ -187,7 +190,7 @@ namespace lightlauncher
         public void showAddGameWindow()
         {
             AddGameForm addGameForm = new AddGameForm(this);
-            addGameForm.Show();
+            addGameForm.ShowDialog();
         }
         public void moveCursorLeft()
         {
@@ -246,19 +249,22 @@ namespace lightlauncher
                     }
                     catch (Win32Exception ex)
                     {
-                        MessageBox.Show($"Failed to start the game. {ex.Message}");
+                        csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                        csm.ShowDialog();
                         break;
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"An error occurred: {ex.Message}");
+                        csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                        csm.ShowDialog();
                         break;
                     }
                 }
             }
             if (!gameFound)
             {
-                MessageBox.Show("No Game File Was Found");
+                csm = new customMessageBox(this, "Error", "An error occurred: Game not found");
+                csm.ShowDialog();
             }
         }
         //Loads games from database into memory for program to use
