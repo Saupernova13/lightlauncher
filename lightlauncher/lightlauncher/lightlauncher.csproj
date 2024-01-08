@@ -171,13 +171,6 @@
     <Resource Include="Images\Nav_Right.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Test_Game_001.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Test_Game_003.jpg" />
-    <Resource Include="Images\Test_Game_002.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
       <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
       <VersionMajor>1</VersionMajor>

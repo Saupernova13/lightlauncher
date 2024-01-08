@@ -34,6 +34,16 @@ namespace lightlauncher
         //Boolean To Check If Thread Is Running
         //Note: Volatile keyword ensures that field may be modified by multiple threads at the same time
         private volatile bool running = true;
+        private bool previousLeftShoulder = false;
+        private bool previousRightShoulder = false;
+        private bool previousLeftThumb = false;
+        private bool previousRightThumb = false;
+        private bool previousB = false;
+        private bool previousA = false;
+        private bool previousDPadLeft = false;
+        private bool previousDPadRight = false;
+        private bool previousY = false;
+        private bool previousComboKill = false;
         public MainWindow()
         {
             try
@@ -44,7 +54,8 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                csm.ShowDialog();
             }
             try
             {
@@ -56,6 +67,7 @@ namespace lightlauncher
             catch (Exception ex)
             {
                 csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                csm.ShowDialog();
             }
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string newFolderName = "GameCovers";
@@ -101,78 +113,104 @@ namespace lightlauncher
         }
         public void pollControllerState()
         {
-            //Process[] processes = Process.GetProcessesByName(getFileNameFromPath(currentRunningProcess));
-            //if (processes.Length > 0)
-            //{
-            //    Dispatcher.Invoke(() => this.Hide());
-            //}
-            //else
-            //{
             while (running)
             {
                 if (!usersController.IsConnected)
                 {
-                    csm = new customMessageBox(this, "Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
-                    csm.ShowDialog();
+                    Dispatcher.Invoke(() =>
+                    {
+                        var csm = new customMessageBox(this, "Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                        csm.ShowDialog();
+                    });
                     killProgram();
                     return;
                 }
-                else
+
+                //Get the state of the controller
+                var state = usersController.GetState();
+
+                // Debounced button checks
+                bool leftShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder);
+                bool rightShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder);
+                bool leftThumb = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb);
+                bool rightThumb = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb);
+                bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+                bool aPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+                bool dPadLeft = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft);
+                bool dPadRight = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
+                bool yPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+                bool comboKill = rightShoulder && bPressed;
+
+                // Check the combo for showing the window
+                if ((leftShoulder && !previousLeftShoulder) && (rightShoulder && !previousRightShoulder) && (leftThumb && !previousLeftThumb) && (rightThumb && !previousRightThumb))
                 {
-                    //Get state of controller
-                    State state = usersController.GetState();
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightThumb))
+                    Dispatcher.Invoke(() => this.Show());
+                }
+
+                // Check for hiding the window
+                if (bPressed && !previousB)
+                {
+                    Dispatcher.Invoke(() => this.Hide());
+                }
+
+                if (this.IsVisible)
+                {
+                    // Handle dPadLeft
+                    if (dPadLeft && !previousDPadLeft)
                     {
-                        //If button is pressed, call the method, but do it safely via the dispatcher. The reason we
-                        //do this is because the thread is not the same as the UI thread, and we cannot modify UI elements
-                        //from a non-UI thread
-                        Dispatcher.Invoke(() => this.Show());
+                        Dispatcher.Invoke(moveCursorLeft);
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                    // Handle dPadRight
+                    if (dPadRight && !previousDPadRight)
+                    {
+                        Dispatcher.Invoke(moveCursorRight);
+                    }
+                    // Check for Y to launch addGameWindow
+                    if (yPressed && !previousY)
                     {
                         Dispatcher.Invoke(() => this.Hide());
+                        Dispatcher.Invoke(showAddGameWindow);
                     }
-                    if (this.IsVisible)
+                    // Check for A to launch a game
+                    if (aPressed && !previousA)
                     {
-
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft))
+                        Dispatcher.Invoke(() =>
                         {
-                            Dispatcher.Invoke(moveCursorLeft);
-                        }
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight))
-                        {
-                            Dispatcher.Invoke(moveCursorRight);
-                        }
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
-                        {
-                            Dispatcher.Invoke(() => this.Hide()); 
-                            Dispatcher.Invoke(showAddGameWindow);
-                        }
-                        int id = 0;
-                        if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
-                        {
-                            Thread.Sleep(2000);
+                            int id = 0;
                             for (int i = 0; i < games.Count; i++)
                             {
                                 if (games[i].name.Equals(currentGameName))
                                 {
                                     id = games[i].ID;
-                                    //currentRunningProcess = games[i].executablePath;
                                 }
                             }
                             launchGame(id);
-                            Dispatcher.Invoke(() => this.Hide());
-                        }
+                            this.Hide();
+                        });
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
-                    {
-                        killProgram();
-                    }
-                    //This means that there will be a 125ms gap until another button press is registered
-                    Thread.Sleep(125);
                 }
+
+                // Check the combo for killing the program
+                if (comboKill && !previousComboKill)
+                {
+                    killProgram();
+                }
+
+                // Remember button states for the next poll
+                previousLeftShoulder = leftShoulder;
+                previousRightShoulder = rightShoulder;
+                previousLeftThumb = leftThumb;
+                previousRightThumb = rightThumb;
+                previousB = bPressed;
+                previousA = aPressed;
+                previousDPadLeft = dPadLeft;
+                previousDPadRight = dPadRight;
+                previousY = yPressed;
+                previousComboKill = comboKill;
+
+                // Wait briefly to avoid high CPU load
+                Thread.Sleep(125);
             }
-            //}
         }
         protected override void OnClosed(EventArgs e)
         {

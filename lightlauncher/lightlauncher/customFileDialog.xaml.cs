@@ -1,20 +1,14 @@
-﻿using SharpDX.Multimedia;
-using SharpDX.XInput;
+﻿using SharpDX.XInput;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 namespace lightlauncher
 {
     public partial class customFileDialog : Window
@@ -27,11 +21,13 @@ namespace lightlauncher
         public string currentDir = string.Empty;
         public string previousDir = string.Empty;
         public static MainWindow mainWindow;
-        public static string selectedItem = string.Empty;
-        //public bool isCoverArt;
-        public string getSelectedItem() { 
-            return selectedItem;
-        }
+        public string selectedItem = string.Empty;
+        private bool previousShouldersPressed = false;
+        private bool previousDPadLeftOrUp = false;
+        private bool previousDPadRightOrDown = false;
+        private bool previousY = false;
+        private bool previousB = false;
+        private bool previousRightShoulder = false;
         public customFileDialog(MainWindow mw)
         {
             InitializeComponent();
@@ -40,6 +36,7 @@ namespace lightlauncher
             controllerThread.IsBackground = true;
             controllerThread.Start();
             fileDirectory_listBox.SelectedIndex = 0;
+            filePathURL_textBox.Text = "C:\\Users\\Sauraav\\Desktop";
             mainWindow = mw;
             loadCurrentDirItems();
         }
@@ -49,48 +46,80 @@ namespace lightlauncher
             {
                 if (!usersController.IsConnected)
                 {
-                    customMessageBox csm = new customMessageBox(mainWindow, "Error", "No controller is not detected! Please make sure you are using an Xbox or XInput Compatible Controller.");
-                    csm.Show();
+                    Dispatcher.Invoke(() =>
+                    {
+                        customMessageBox csm = new customMessageBox(mainWindow, "Error", "Controller not detected! Please make sure you are using an Xbox or XInput Compatible Controller.");
+                        csm.ShowDialog();
+                        csm.Close();
+                    });
                     killProgram();
                     return;
                 }
-                else
+                State state = usersController.GetState();
+                // Debounced button checks
+                bool shouldersPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder);
+                if (shouldersPressed && !previousShouldersPressed)
                 {
-                    State state = usersController.GetState();
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
-                    {
-                        Dispatcher.Invoke(moveCursorUp);
-                    }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
-                    {
-                        Dispatcher.Invoke(moveCursorDown);
-                    }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
-                    {
-                        Dispatcher.Invoke(() => openPreviousDirectory());
-                    }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
-                    {
-                        Dispatcher.Invoke(() => selectOption());
-                    }
-                    Thread.Sleep(180);
+                    Dispatcher.Invoke(openKeyboard);
                 }
+                bool dPadLeftOrUp = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
+                if (dPadLeftOrUp && !previousDPadLeftOrUp)
+                {
+                    Dispatcher.Invoke(moveCursorUp);
+                }
+                bool dPadRightOrDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
+                if (dPadRightOrDown && !previousDPadRightOrDown)
+                {
+                    Dispatcher.Invoke(moveCursorDown);
+                }
+                bool yPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+                if (yPressed && !previousY)
+                {
+                    Dispatcher.Invoke(openPreviousDirectory);
+                }
+                bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+                if (bPressed && !previousB)
+                {
+                    Dispatcher.Invoke(() => this.Close());
+                }
+                bool rightShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+                if (rightShoulder && !previousRightShoulder)
+                {
+                    Dispatcher.Invoke(selectOption);
+                }
+                previousShouldersPressed = shouldersPressed;
+                previousDPadLeftOrUp = dPadLeftOrUp;
+                previousDPadRightOrDown = dPadRightOrDown;
+                previousY = yPressed;
+                previousB = bPressed;
+                previousRightShoulder = rightShoulder;
+                Thread.Sleep(120);
             }
         }
         public void openPreviousDirectory()
         {
             try
             {
+                // Use System.IO.Path and Directory classes to handle paths
+                var parentDir = System.IO.Directory.GetParent(filePathURL_textBox.Text);
+                if (parentDir != null) // Check if there is a parent directory
+                {
+                    previousDir = parentDir.FullName; // Get full path of parent directory
+                }
+                else
+                {
+                    // Maybe we are at a root directory, so no action needed or inform the user
+                    return;
+                }
 
-                previousDir = filePathURL_textBox.Text;
-                previousDir = previousDir.Substring(0, previousDir.LastIndexOf('\\'));
                 filePathURL_textBox.Text = previousDir;
                 loadCurrentDirItems();
             }
             catch (Exception)
             {
                 customMessageBox csm = new customMessageBox(mainWindow, "Error", "The current folder is not contained in another folder.");
-                csm.Show();
+                csm.ShowDialog();
+                csm.Close();
                 return;
             }
         }
@@ -112,46 +141,64 @@ namespace lightlauncher
         }
         public void selectOption()
         {
-            List<bool> isFolder = new List<bool>();
-            for (int i = 0; i < currentDirFolders.Count; i++)
-            {
-                isFolder.Add(true);
-            }
-            for (int i = 0; i < currentDirFiles.Count; i++)
-            {
-                isFolder.Add(false);
-            }
-            if (isFolder.Count == fileDirectory_listBox.Items.Count)
+            if (!(fileDirectory_listBox.SelectedIndex == -1))
             {
 
-                if (isFolder[fileDirectory_listBox.SelectedIndex])
+                selectedItem = string.Empty;
+                List<bool> isFolder = new List<bool>();
+                for (int i = 0; i < currentDirFolders.Count; i++)
                 {
-                    filePathURL_textBox.Text = currentDir + "\\" + currentDirFolders[fileDirectory_listBox.SelectedIndex];
-                    loadCurrentDirItems();
+                    isFolder.Add(true);
+                }
+                for (int i = 0; i < currentDirFiles.Count; i++)
+                {
+                    isFolder.Add(false);
+                }
+                if (isFolder.Count == fileDirectory_listBox.Items.Count)
+                {
+                    if (isFolder[fileDirectory_listBox.SelectedIndex])
+                    {
+                        // Use Path.Combine to construct the full path for the selected directory
+                        filePathURL_textBox.Text = Path.Combine(currentDir, currentDirFolders[fileDirectory_listBox.SelectedIndex]);
+                        loadCurrentDirItems();
+                    }
+                    else
+                    {
+                        // Use Path.Combine to construct the full path for the selected file
+                        selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
+                        customMessageBox csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
+                        if (selectedItem.EndsWith(".jpg") || selectedItem.EndsWith(".jpeg") || selectedItem.EndsWith(".png") || selectedItem.EndsWith(".bmp"))
+                        {
+                            AddGameForm.gameCoverPath = selectedItem;
+                        }
+                        else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
+                        {
+                            AddGameForm.gamePath = selectedItem;
+                        }
+                        else
+                        {
+                            csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
+                        }
+                        csm.ShowDialog();
+                        csm.Close();
+                        this.Close();
+                        this.running = false;
+                    }
+                    isFolder.Clear();
                 }
                 else
                 {
-                    selectedItem = currentDir + "\\" + currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count];
-                    customMessageBox csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
-                    //if (isCoverArt)
-                    //{
-                    //    AddGameForm.gameCoverPath = selectedItem;
-                    //}
-                    //else
-                    //{
-                    //    AddGameForm.gamePath = selectedItem;
-                    //}
+                    customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
                     csm.ShowDialog();
+                    csm.Close();
                 }
-                isFolder.Clear();
-                this.Close();
             }
-            else
-            {
-                customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
-                csm.Show();
+            else {
+                customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
+                csm.ShowDialog();
+                csm.Close();
             }
-            fileDirectory_listBox.SelectedIndex = 0;
+            fileDirectory_listBox.SelectedIndex = -1;
         }
         public void killProgram()
         {
@@ -184,7 +231,8 @@ namespace lightlauncher
             catch (Exception)
             {
                 customMessageBox csm = new customMessageBox(mainWindow, "Error", "The Directory you entered does not exist. Please check for spelling errors.");
-                csm.Show();
+                csm.ShowDialog();
+                csm.Close();
                 return;
             }
         }
@@ -255,8 +303,18 @@ namespace lightlauncher
             fileDir_listBoxItem.Content = viewbox;
             fileDirectory_listBox.Items.Add(fileDir_listBoxItem);
         }
+        private void openKeyboard()
+        {
+            controllerKeyboard ck = new controllerKeyboard(filePathURL_textBox);
+            ck.ShowDialog();
+            ck.Close();
+        }
         private void filePathURL_textBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+        }
+        private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            filePathURL_textBox.Text = "D:\\Games\\";
             loadCurrentDirItems();
         }
     }

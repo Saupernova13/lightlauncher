@@ -23,9 +23,12 @@ namespace lightlauncher
         customMessageBox csm;
         public static string gamePath;
         public static string gameCoverPath;
+        private bool previousDPadLeftOrUp = false;
+        private bool previousDPadRightOrDown = false;
+        private bool previousA = false;
+        private bool previousB = false;
         public AddGameForm(MainWindow mw)
         {
-            onscreenKeyboard = new controllerKeyboard(this);
             SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
             sqlConnection.Open();
             SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM Games", sqlConnection);
@@ -53,43 +56,67 @@ namespace lightlauncher
             {
                 if (Dispatcher.Invoke(() => this.IsActive))
                 {
-
                     State state = usersController.GetState();
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp))
+
+                    // Debounced button checks
+                    bool dPadLeftOrUp = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
+                    if (dPadLeftOrUp && !previousDPadLeftOrUp)
                     {
                         Dispatcher.Invoke(moveCursorUp);
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown))
+
+                    bool dPadRightOrDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
+                    if (dPadRightOrDown && !previousDPadRightOrDown)
                     {
                         Dispatcher.Invoke(moveCursorDown);
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+
+                    bool aPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+                    if (aPressed && !previousA)
                     {
-                        switch (Dispatcher.Invoke(() => optionsListBox.SelectedIndex))
+                        int selectedIndex = Dispatcher.Invoke(() => optionsListBox.SelectedIndex);
+                        Dispatcher.Invoke(() =>
                         {
-                            case 0:
-                                Dispatcher.Invoke(() => new controllerKeyboard(this).ShowDialog());
-                                Thread.Sleep(300);
-                                break;
-                            case 1:
-                                Dispatcher.Invoke(getGamePath);
-                                break;
-                            case 2:
-                                Dispatcher.Invoke(getGameCover);
-                                break;
-                            case 3:
-                                Dispatcher.Invoke(addGameToDB);
-                                break;
-                            default:
-                                break;
-                        }
+                            // Consider moving these outside the polling method and using events/signals to trigger actions
+                            switch (selectedIndex)
+                            {
+                                case 0:
+                                    onscreenKeyboard = new controllerKeyboard(gameNameTextBox);
+                                    onscreenKeyboard.ShowDialog();
+                                    onscreenKeyboard.Close();
+                                    break;
+                                case 1:
+                                    getGamePath();
+                                    break;
+                                case 2:
+                                    getGameCover();
+                                    break;
+                                case 3:
+                                    addGameToDB();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
+                        // Thread.Sleep here may cause input lag
+                        // Consider using a different mechanism to delay subsequent inputs for this option if necessary
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+
+                    bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+                    if (bPressed && !previousB)
                     {
                         Dispatcher.Invoke(this.Close);
                         Dispatcher.Invoke(() => mainWindow.ShowDialog());
                     }
-                    Thread.Sleep(150);
+
+                    // Remember button states for the next poll
+                    previousDPadLeftOrUp = dPadLeftOrUp;
+                    previousDPadRightOrDown = dPadRightOrDown;
+                    previousA = aPressed;
+                    previousB = bPressed;
+
+                    // Sleep to avoid high CPU load
+                    Thread.Sleep(120);
                 }
             }
         }
@@ -145,20 +172,39 @@ namespace lightlauncher
         }
         public void getGamePath()
         {
+            gamePath=string.Empty;
             customFileDialog cfd = new customFileDialog(mainWindow);
             cfd.ShowDialog();
-            newGame.executablePath = cfd.getSelectedItem();
-            if (newGame.executablePath.Equals(String.Empty))
+            if (gamePath==null)
             {
-                gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
-                gameLocationLabel.Content = $"No file was selected!";
+                csm = new customMessageBox(mainWindow, "Error!", "No executable path was selected!");
+                csm.ShowDialog();
+                return;
             }
             else
             {
-                gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
-                gameLocationLabel.Content = $"The path '{newGame.executablePath}' has been found!";
+                newGame.executablePath = gamePath;
+                try
+                {
+                    if (newGame.executablePath.Equals(String.Empty))
+                    {
+                        gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
+                        gameLocationLabel.Content = $"No file was selected!";
+                    }
+                    else
+                    {
+                        gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
+                        gameLocationLabel.Content = $"The path '{newGame.executablePath}' has been found!";
+                    }
+                }
+                catch (Exception)
+                {
+                    csm = new customMessageBox(mainWindow, "Error!", "An error occured while trying to get the game's executable path!");
+                    csm.ShowDialog();
+                }
+                isCompleted[1] = true;
             }
-            isCompleted[1] = true;
+            cfd.Close();
         }
         private void gameCoverPickButton_Click(object sender, RoutedEventArgs e)
         {
@@ -166,25 +212,39 @@ namespace lightlauncher
         }
         public void getGameCover()
         {
-            OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
-            dialog.Title = "Select a Game Cover Art File";
-            dialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp|JPEG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg|PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|All Files (*.*)|*.*";
-            dialog.FilterIndex = 1;
-            dialog.Multiselect = false;
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            DialogResult result = dialog.ShowDialog();
-            if (!result.HasFlag(System.Windows.Forms.DialogResult.OK))
+            customFileDialog cfd = new customFileDialog(mainWindow);
+            cfd.ShowDialog();
+            if (gameCoverPath == null)
             {
-                gameCoverLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
-                gameCoverLabel.Content = $"No image was added!";
+                csm = new customMessageBox(mainWindow, "Error!", "No image was selected!");
+                csm.ShowDialog();
+                return;
             }
             else
             {
-                newGame.imagePath = dialog.FileName;
-                gameCoverLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
-                gameCoverLabel.Content = $"The cover image has been found!";
+
+                newGame.imagePath = gameCoverPath;
+                try
+                {
+                    if (newGame.imagePath.Equals(String.Empty))
+                    {
+                        gameCoverLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
+                        gameCoverLabel.Content = $"No image was selected!";
+                    }
+                    else
+                    {
+                        gameCoverLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
+                        gameCoverLabel.Content = $"An image has been found!";
+                    }
+                }
+                catch (Exception)
+                {
+                    csm = new customMessageBox(mainWindow, "Error!", "An error occured while trying to get the selected image!");
+                    csm.ShowDialog();
+                }
+                isCompleted[2] = true;
             }
-            isCompleted[2] = true;
+            cfd.Close();
         }
         private void optionsListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

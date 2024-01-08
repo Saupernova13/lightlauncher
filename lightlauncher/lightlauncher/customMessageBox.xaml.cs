@@ -10,6 +10,8 @@ namespace lightlauncher
         private Thread controllerThread;
         private volatile bool running = true;
         public static MainWindow mainWindow;
+        private bool previousB = false;
+        private bool previousX = false;
         public customMessageBox(MainWindow mw, string csmTitle, string csmContent)
         {
             InitializeComponent();
@@ -20,7 +22,7 @@ namespace lightlauncher
             controllerThread.Start();
             csmWindowTitle.Content = csmTitle;
             csmMessageContent.Text = csmContent;
-            Topmost = true;
+            this.Topmost = true;
         }
         public void pollControllerState()
         {
@@ -28,21 +30,35 @@ namespace lightlauncher
             {
                 if (!usersController.IsConnected)
                 {
-                    MessageBox.Show("No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                    // Instead of showing a MessageBox, which could block the controller thread,
+                    // you might opt to handle this in a way that is better integrated with your application's UI.
                     killProgram();
                     return;
                 }
                 else
                 {
                     State state = usersController.GetState();
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+
+                    // Get current button states
+                    bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+                    bool xPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+
+                    // Check for state transitions from not-pressed to pressed
+                    if (bPressed && !previousB)
                     {
-                            Dispatcher.Invoke(() => closeAndContinue());
+                        Dispatcher.Invoke(() => closeAndContinue());
                     }
-                    if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X))
+
+                    if (xPressed && !previousX)
                     {
-                            Dispatcher.Invoke(() => closeAndContinue());
+                        Dispatcher.Invoke(() => closeAndContinue());
                     }
+
+                    // Remember button states for the next poll
+                    previousB = bPressed;
+                    previousX = xPressed;
+
+                    // Sleep to avoid high CPU load
                     Thread.Sleep(125);
                 }
             }

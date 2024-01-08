@@ -3,7 +3,6 @@ using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-
 namespace lightlauncher
 {
     public partial class controllerKeyboard : Window
@@ -14,14 +13,20 @@ namespace lightlauncher
         private volatile bool running = true;
         private int currentRow = 0;
         private int currentColumn = 0;
-        public AddGameForm publicAGF;
+        public TextBox publicTextBox;
         public bool isCaps = true;
         public ListBoxItem activeItem;
-
-        public controllerKeyboard(AddGameForm agf)
+        private bool previousDPadLeft = false;
+        private bool previousDPadRight = false;
+        private bool previousDPadUp = false;
+        private bool previousDPadDown = false;
+        private bool previousA = false;
+        private bool previousB = false;
+        private bool previousX = false;
+        public controllerKeyboard(TextBox textBox)
         {
             InitializeComponent();
-            publicAGF = agf;
+            publicTextBox = textBox;
             usersController = new Controller(UserIndex.One);
             controllerThread = new Thread(pollControllerState);
             Thread.Sleep(200);
@@ -45,43 +50,54 @@ namespace lightlauncher
         {
             while (running)
             {
-                SharpDX.XInput.State state = usersController.GetState();
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.LeftThumbX < -9000)
+                State state = usersController.GetState();
+                //Debouncing logic to ensure only one keypress per button press
+                bool dPadLeft = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.LeftThumbX < -9000;
+                bool dPadRight = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.LeftThumbX > 9000;
+                bool dPadUp = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp) || state.Gamepad.LeftThumbY > 9000;
+                bool dPadDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown) || state.Gamepad.LeftThumbY < -9000;
+                bool aPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+                bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
+                bool xPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+                if (dPadLeft && !previousDPadLeft)
                 {
                     Dispatcher.Invoke(moveCursorLeft);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.LeftThumbX > 9000)
+                if (dPadRight && !previousDPadRight)
                 {
                     Dispatcher.Invoke(moveCursorRight);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp) || state.Gamepad.LeftThumbY > 9000)
+                if (dPadUp && !previousDPadUp)
                 {
                     Dispatcher.Invoke(moveCursorUp);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown) || state.Gamepad.LeftThumbY < -9000)
+                if (dPadDown && !previousDPadDown)
                 {
                     Dispatcher.Invoke(moveCursorDown);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A))
+                if (aPressed && !previousA)
                 {
                     Dispatcher.Invoke(() =>
                     {
                         PerformKeyPress(currentRow, currentColumn);
                     });
-
-                    Thread.Sleep(200);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B))
+                if (bPressed && !previousB)
                 {
                     Dispatcher.Invoke(this.Close);
-                    Thread.Sleep(500);
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X))
+                if (xPressed && !previousX)
                 {
                     Dispatcher.Invoke(backspaceChar);
-                    Thread.Sleep(400);
                 }
-                Thread.Sleep(300);
+                previousDPadLeft = dPadLeft;
+                previousDPadRight = dPadRight;
+                previousDPadUp = dPadUp;
+                previousDPadDown = dPadDown;
+                previousA = aPressed;
+                previousB = bPressed;
+                previousX = xPressed;
+                Thread.Sleep(120);
             }
         }
         private void clearAllListBoxSelections()
@@ -112,9 +128,6 @@ namespace lightlauncher
         }
         public void PerformKeyPress(int row, int column)
         {
-            //    ListBox currentListBox = getListBoxForRow(row);
-            //        ListBoxItem currentListBoxItem = (ListBoxItem)currentListBox.Items[column];
-            //        string currentKey = currentListBoxItem.Name.ToString();
             switch (activeItem.Name.ToString())
             {
                 case "key_shift":
@@ -226,16 +239,13 @@ namespace lightlauncher
                     break;
             }
         }
-
         public void backspaceChar()
         {
-            if (publicAGF.gameNameTextBox.Text.Length > 0)
+            if (publicTextBox.Text.Length > 0)
             {
-                publicAGF.gameNameTextBox.Text = publicAGF.gameNameTextBox.Text.Substring(0, publicAGF.gameNameTextBox.Text.Length - 1);
+                publicTextBox.Text = publicTextBox.Text.Substring(0, publicTextBox.Text.Length - 1);
             }
         }
-
-
         public void moveCursorUp()
         {
             if (currentRow > 0)
@@ -291,339 +301,308 @@ namespace lightlauncher
                 Thread.Sleep(10);
             }
         }
-
         private void key_q_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "Q";
+                publicTextBox.Text += "Q";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "q";
+                publicTextBox.Text += "q";
             }
         }
-
         private void key_w_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "W";
+                publicTextBox.Text += "W";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "w";
+                publicTextBox.Text += "w";
             }
         }
-
         private void key_e_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "E";
+                publicTextBox.Text += "E";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "e";
+                publicTextBox.Text += "e";
             }
         }
-
         private void key_r_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "R";
+                publicTextBox.Text += "R";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "r";
+                publicTextBox.Text += "r";
             }
         }
-
         private void key_t_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "T";
+                publicTextBox.Text += "T";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "t";
+                publicTextBox.Text += "t";
             }
         }
-
         private void key_y_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "Y";
+                publicTextBox.Text += "Y";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "y";
+                publicTextBox.Text += "y";
             }
         }
-
         private void key_u_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "U";
+                publicTextBox.Text += "U";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "u";
+                publicTextBox.Text += "u";
             }
         }
-
         private void key_i_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "I";
+                publicTextBox.Text += "I";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "i";
+                publicTextBox.Text += "i";
             }
         }
-
         private void key_o_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "O";
+                publicTextBox.Text += "O";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "o";
+                publicTextBox.Text += "o";
             }
         }
-
         private void key_p_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "P";
+                publicTextBox.Text += "P";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "p";
+                publicTextBox.Text += "p";
             }
         }
-
         private void key_a_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "A";
+                publicTextBox.Text += "A";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "a";
+                publicTextBox.Text += "a";
             }
         }
-
         private void key_s_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "S";
+                publicTextBox.Text += "S";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "s";
+                publicTextBox.Text += "s";
             }
         }
-
         private void key_d_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "D";
+                publicTextBox.Text += "D";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "d";
+                publicTextBox.Text += "d";
             }
         }
-
         private void key_f_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "F";
+                publicTextBox.Text += "F";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "f";
+                publicTextBox.Text += "f";
             }
         }
-
         private void key_g_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "G";
+                publicTextBox.Text += "G";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "g";
+                publicTextBox.Text += "g";
             }
         }
-
         private void key_h_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "H";
+                publicTextBox.Text += "H";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "h";
+                publicTextBox.Text += "h";
             }
         }
-
         private void key_j_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "J";
+                publicTextBox.Text += "J";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "j";
+                publicTextBox.Text += "j";
             }
         }
-
         private void key_k_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "K";
+                publicTextBox.Text += "K";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "k";
+                publicTextBox.Text += "k";
             }
         }
-
         private void key_l_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "L";
+                publicTextBox.Text += "L";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "l";
+                publicTextBox.Text += "l";
             }
         }
-
         private void key_apostrophe_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            publicAGF.gameNameTextBox.Text += "'";
+            publicTextBox.Text += "'";
         }
-
         private void key_z_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "Z";
+                publicTextBox.Text += "Z";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "z";
+                publicTextBox.Text += "z";
             }
         }
-
         private void key_x_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "X";
+                publicTextBox.Text += "X";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "x";
+                publicTextBox.Text += "x";
             }
         }
-
         private void key_c_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "C";
+                publicTextBox.Text += "C";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "c";
+                publicTextBox.Text += "c";
             }
         }
-
         private void key_v_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "V";
+                publicTextBox.Text += "V";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "v";
+                publicTextBox.Text += "v";
             }
         }
-
         private void key_b_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "B";
+                publicTextBox.Text += "B";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "b";
+                publicTextBox.Text += "b";
             }
         }
-
         private void key_n_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "N";
+                publicTextBox.Text += "N";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "n";
+                publicTextBox.Text += "n";
             }
         }
-
         private void key_m_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
             {
-                publicAGF.gameNameTextBox.Text += "M";
+                publicTextBox.Text += "M";
             }
             else
             {
-                publicAGF.gameNameTextBox.Text += "m";
+                publicTextBox.Text += "m";
             }
         }
-
         private void key_comma_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            publicAGF.gameNameTextBox.Text += ",";
+            publicTextBox.Text += ",";
         }
-
         private void key_period_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            publicAGF.gameNameTextBox.Text += ".";
+            publicTextBox.Text += ".";
         }
-
         private void key_question_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            publicAGF.gameNameTextBox.Text += "?";
+            publicTextBox.Text += "?";
         }
-
         private void key_shift_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (isCaps)
@@ -687,35 +666,30 @@ namespace lightlauncher
                 label_key_m.Content = "M";
             }
         }
-
         private void key_specialChars_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 
             Dispatcher.Invoke(this.Close);
             Thread.Sleep(500);
         }
-
         private void key_spacebar_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            publicAGF.gameNameTextBox.Text += " ";
+            publicTextBox.Text += " ";
         }
-
         private void key_backspace_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (publicAGF.gameNameTextBox.Text.Length > 0)
+            if (publicTextBox.Text.Length > 0)
             {
-                publicAGF.gameNameTextBox.Text = publicAGF.gameNameTextBox.Text.Remove(publicAGF.gameNameTextBox.Text.Length - 1);
+                publicTextBox.Text = publicTextBox.Text.Remove(publicTextBox.Text.Length - 1);
             }
         }
-
         private void key_enter_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 
         }
-
         private void key_clear_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            publicAGF.gameNameTextBox.Text = string.Empty;
+            publicTextBox.Text = string.Empty;
         }
     }
 }
