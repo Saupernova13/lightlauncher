@@ -56,7 +56,6 @@ namespace lightlauncher
                     return;
                 }
                 State state = usersController.GetState();
-                // Debounced button checks
                 bool shouldersPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder);
                 if (shouldersPressed && !previousShouldersPressed)
                 {
@@ -100,18 +99,15 @@ namespace lightlauncher
         {
             try
             {
-                // Use System.IO.Path and Directory classes to handle paths
-                var parentDir = System.IO.Directory.GetParent(filePathURL_textBox.Text);
-                if (parentDir != null) // Check if there is a parent directory
+                var parentDir = Directory.GetParent(filePathURL_textBox.Text);
+                if (parentDir != null)
                 {
-                    previousDir = parentDir.FullName; // Get full path of parent directory
+                    previousDir = parentDir.FullName;
                 }
                 else
                 {
-                    // Maybe we are at a root directory, so no action needed or inform the user
                     return;
                 }
-
                 filePathURL_textBox.Text = previousDir;
                 loadCurrentDirItems();
             }
@@ -143,7 +139,6 @@ namespace lightlauncher
         {
             if (!(fileDirectory_listBox.SelectedIndex == -1))
             {
-
                 selectedItem = string.Empty;
                 List<bool> isFolder = new List<bool>();
                 for (int i = 0; i < currentDirFolders.Count; i++)
@@ -158,13 +153,11 @@ namespace lightlauncher
                 {
                     if (isFolder[fileDirectory_listBox.SelectedIndex])
                     {
-                        // Use Path.Combine to construct the full path for the selected directory
                         filePathURL_textBox.Text = Path.Combine(currentDir, currentDirFolders[fileDirectory_listBox.SelectedIndex]);
                         loadCurrentDirItems();
                     }
                     else
                     {
-                        // Use Path.Combine to construct the full path for the selected file
                         selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
                         customMessageBox csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
                         if (selectedItem.EndsWith(".jpg") || selectedItem.EndsWith(".jpeg") || selectedItem.EndsWith(".png") || selectedItem.EndsWith(".bmp"))

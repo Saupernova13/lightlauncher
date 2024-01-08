@@ -15,6 +15,7 @@ namespace lightlauncher
         private int currentColumn = 0;
         public TextBox publicTextBox;
         public bool isCaps = true;
+        public bool isSpecialChars = false;
         public ListBoxItem activeItem;
         private bool previousDPadLeft = false;
         private bool previousDPadRight = false;
@@ -41,10 +42,19 @@ namespace lightlauncher
         {
             clearAllListBoxSelections();
             ListBox currentListBox = getListBoxForRow(row);
+            if (column < 0)
+            {
+                column = 0;
+            }
+            else if (column >= currentListBox.Items.Count)
+            {
+                column = currentListBox.Items.Count - 1;
+            }
+
             ListBoxItem temp = ((ListBoxItem)currentListBox.Items[column]);
             temp.Focus();
             currentListBox.SelectedIndex = column;
-            return (temp);
+            return temp;
         }
         private void pollControllerState()
         {
@@ -220,7 +230,7 @@ namespace lightlauncher
                 case "key_period":
                     key_period_PreviewMouseLeftButtonDown(null, null);
                     break;
-                case "key_space":
+                case "key_spacebar":
                     key_spacebar_PreviewMouseLeftButtonDown(null, null);
                     break;
                 case "key_question":
@@ -234,6 +244,9 @@ namespace lightlauncher
                     break;
                 case "key_backspace":
                     key_backspace_PreviewMouseLeftButtonDown(null, null);
+                    break;
+                case "key_specialChars":
+                    key_specialChars_PreviewMouseLeftButtonDown(null, null);
                     break;
                 default:
                     break;
@@ -251,14 +264,18 @@ namespace lightlauncher
             if (currentRow > 0)
             {
                 currentRow--;
+                currentColumn = Math.Min(currentColumn, getListBoxForRow(currentRow).Items.Count - 1);
                 activeItem = focusKey(currentRow, currentColumn);
             }
         }
+
         public void moveCursorDown()
         {
             if (currentRow < 4)
             {
-                currentRow++;
+                int nextRow = currentRow + 1;
+                currentColumn = Math.Min(currentColumn, getListBoxForRow(nextRow).Items.Count - 1);
+                currentRow = nextRow;
                 activeItem = focusKey(currentRow, currentColumn);
             }
         }
@@ -303,212 +320,79 @@ namespace lightlauncher
         }
         private void key_q_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "Q";
-            }
-            else
-            {
-                publicTextBox.Text += "q";
-            }
+            publicTextBox.Text += label_key_q.Content;
         }
         private void key_w_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "W";
-            }
-            else
-            {
-                publicTextBox.Text += "w";
-            }
+            publicTextBox.Text += label_key_w.Content;
         }
         private void key_e_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "E";
-            }
-            else
-            {
-                publicTextBox.Text += "e";
-            }
+            publicTextBox.Text += label_key_e.Content;
         }
         private void key_r_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "R";
-            }
-            else
-            {
-                publicTextBox.Text += "r";
-            }
+            publicTextBox.Text += label_key_r.Content;
         }
         private void key_t_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "T";
-            }
-            else
-            {
-                publicTextBox.Text += "t";
-            }
+            publicTextBox.Text += label_key_t.Content;
         }
         private void key_y_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "Y";
-            }
-            else
-            {
-                publicTextBox.Text += "y";
-            }
+            publicTextBox.Text += label_key_y.Content;
         }
         private void key_u_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "U";
-            }
-            else
-            {
-                publicTextBox.Text += "u";
-            }
+            publicTextBox.Text += label_key_u.Content;
         }
         private void key_i_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "I";
-            }
-            else
-            {
-                publicTextBox.Text += "i";
-            }
+            publicTextBox.Text += label_key_i.Content;
         }
         private void key_o_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "O";
-            }
-            else
-            {
-                publicTextBox.Text += "o";
-            }
+            publicTextBox.Text += label_key_o.Content;
         }
         private void key_p_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "P";
-            }
-            else
-            {
-                publicTextBox.Text += "p";
-            }
+            publicTextBox.Text += label_key_p.Content;
         }
         private void key_a_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "A";
-            }
-            else
-            {
-                publicTextBox.Text += "a";
-            }
+            publicTextBox.Text += label_key_a.Content;
         }
         private void key_s_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "S";
-            }
-            else
-            {
-                publicTextBox.Text += "s";
-            }
+            publicTextBox.Text += label_key_s.Content;
         }
         private void key_d_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "D";
-            }
-            else
-            {
-                publicTextBox.Text += "d";
-            }
+            publicTextBox.Text += label_key_d.Content;
         }
         private void key_f_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "F";
-            }
-            else
-            {
-                publicTextBox.Text += "f";
-            }
+            publicTextBox.Text += label_key_f.Content;
         }
         private void key_g_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "G";
-            }
-            else
-            {
-                publicTextBox.Text += "g";
-            }
+            publicTextBox.Text += label_key_g.Content;
         }
         private void key_h_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "H";
-            }
-            else
-            {
-                publicTextBox.Text += "h";
-            }
+            publicTextBox.Text += label_key_h.Content;
         }
         private void key_j_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "J";
-            }
-            else
-            {
-                publicTextBox.Text += "j";
-            }
+            publicTextBox.Text += label_key_j.Content;
         }
         private void key_k_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "K";
-            }
-            else
-            {
-                publicTextBox.Text += "k";
-            }
+            publicTextBox.Text += label_key_k.Content;
         }
         private void key_l_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "L";
-            }
-            else
-            {
-                publicTextBox.Text += "l";
-            }
+            publicTextBox.Text += label_key_l.Content;
         }
         private void key_apostrophe_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -516,80 +400,31 @@ namespace lightlauncher
         }
         private void key_z_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "Z";
-            }
-            else
-            {
-                publicTextBox.Text += "z";
-            }
+            publicTextBox.Text += label_key_z.Content;
         }
         private void key_x_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "X";
-            }
-            else
-            {
-                publicTextBox.Text += "x";
-            }
+            publicTextBox.Text += label_key_x.Content;
         }
         private void key_c_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "C";
-            }
-            else
-            {
-                publicTextBox.Text += "c";
-            }
+            publicTextBox.Text += label_key_c.Content;
         }
         private void key_v_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "V";
-            }
-            else
-            {
-                publicTextBox.Text += "v";
-            }
+            publicTextBox.Text += label_key_v.Content;
         }
         private void key_b_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "B";
-            }
-            else
-            {
-                publicTextBox.Text += "b";
-            }
+            publicTextBox.Text += label_key_b.Content;
         }
         private void key_n_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "N";
-            }
-            else
-            {
-                publicTextBox.Text += "n";
-            }
+            publicTextBox.Text += label_key_n.Content;
         }
         private void key_m_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (isCaps)
-            {
-                publicTextBox.Text += "M";
-            }
-            else
-            {
-                publicTextBox.Text += "m";
-            }
+            publicTextBox.Text += label_key_m.Content;
         }
         private void key_comma_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -668,9 +503,67 @@ namespace lightlauncher
         }
         private void key_specialChars_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
-            Dispatcher.Invoke(this.Close);
-            Thread.Sleep(500);
+            if (!isSpecialChars)
+            {
+                isSpecialChars = true;
+                label_key_q.Content = "1";
+                label_key_w.Content = "2";
+                label_key_e.Content = "3";
+                label_key_r.Content = "4";
+                label_key_t.Content = "5";
+                label_key_y.Content = "6";
+                label_key_u.Content = "7";
+                label_key_i.Content = "8";
+                label_key_o.Content = "9";
+                label_key_p.Content = "0";
+                label_key_a.Content = "!";
+                label_key_s.Content = "@";
+                label_key_d.Content = "#";
+                label_key_f.Content = "$";
+                label_key_g.Content = "%";
+                label_key_h.Content = "^";
+                label_key_j.Content = "&";
+                label_key_k.Content = "*";
+                label_key_l.Content = "(";
+                label_key_z.Content = ")";
+                label_key_x.Content = "-";
+                label_key_c.Content = "+";
+                label_key_v.Content = "[";
+                label_key_b.Content = "]";
+                label_key_n.Content = "{";
+                label_key_m.Content = "}";
+            }
+            else
+            {
+                isSpecialChars = false;
+                isCaps = false;
+                label_key_q.Content = "q";
+                label_key_w.Content = "w";
+                label_key_e.Content = "e";
+                label_key_r.Content = "r";
+                label_key_t.Content = "t";
+                label_key_y.Content = "y";
+                label_key_u.Content = "u";
+                label_key_i.Content = "i";
+                label_key_o.Content = "o";
+                label_key_p.Content = "p";
+                label_key_a.Content = "a";
+                label_key_s.Content = "s";
+                label_key_d.Content = "d";
+                label_key_f.Content = "f";
+                label_key_g.Content = "g";
+                label_key_h.Content = "h";
+                label_key_j.Content = "j";
+                label_key_k.Content = "k";
+                label_key_l.Content = "l";
+                label_key_z.Content = "z";
+                label_key_x.Content = "x";
+                label_key_c.Content = "c";
+                label_key_v.Content = "v";
+                label_key_b.Content = "b";
+                label_key_n.Content = "n";
+                label_key_m.Content = "m";
+            }
         }
         private void key_spacebar_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -685,7 +578,7 @@ namespace lightlauncher
         }
         private void key_enter_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            Dispatcher.Invoke(this.Close);
         }
         private void key_clear_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
