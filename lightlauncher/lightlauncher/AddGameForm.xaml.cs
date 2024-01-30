@@ -20,7 +20,7 @@ namespace lightlauncher
         private volatile bool running = true;
         public bool[] isCompleted = new bool[3];
         public controllerKeyboard onscreenKeyboard;
-        customMessageBox csm;
+        public customMessageBox csm;
         public static string gamePath;
         public static string gameCoverPath;
         private bool previousDPadLeftOrUp = false;
@@ -57,20 +57,17 @@ namespace lightlauncher
                 if (Dispatcher.Invoke(() => this.IsActive))
                 {
                     State state = usersController.GetState();
-
                     // Debounced button checks
                     bool dPadLeftOrUp = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp);
                     if (dPadLeftOrUp && !previousDPadLeftOrUp)
                     {
                         Dispatcher.Invoke(moveCursorUp);
                     }
-
                     bool dPadRightOrDown = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown);
                     if (dPadRightOrDown && !previousDPadRightOrDown)
                     {
                         Dispatcher.Invoke(moveCursorDown);
                     }
-
                     bool aPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
                     if (aPressed && !previousA)
                     {

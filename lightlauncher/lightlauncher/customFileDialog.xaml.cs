@@ -81,7 +81,7 @@ namespace lightlauncher
                 {
                     Dispatcher.Invoke(() => this.Close());
                 }
-                bool rightShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
+                bool rightShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
                 if (rightShoulder && !previousRightShoulder)
                 {
                     Dispatcher.Invoke(selectOption);
@@ -155,6 +155,7 @@ namespace lightlauncher
                     {
                         filePathURL_textBox.Text = Path.Combine(currentDir, currentDirFolders[fileDirectory_listBox.SelectedIndex]);
                         loadCurrentDirItems();
+                        fileDirectory_listBox.SelectedIndex = 0;
                     }
                     else
                     {
@@ -164,7 +165,11 @@ namespace lightlauncher
                         {
                             AddGameForm.gameCoverPath = selectedItem;
                         }
-                        else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
+                        else
+                        {
+                            csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
+                        }
+                        if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
                         {
                             AddGameForm.gamePath = selectedItem;
                         }
@@ -186,12 +191,13 @@ namespace lightlauncher
                     csm.Close();
                 }
             }
-            else {
+            else
+            {
                 customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
                 csm.ShowDialog();
                 csm.Close();
             }
-            fileDirectory_listBox.SelectedIndex = -1;
+            fileDirectory_listBox.SelectedIndex = 0;
         }
         public void killProgram()
         {
