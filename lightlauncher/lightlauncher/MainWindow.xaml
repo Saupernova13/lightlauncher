@@ -46,12 +46,15 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Image Source="/Images/Nav_Left.png"
+                        <Image Source="/Images/ControllerUI/Dpad/Button_Dpad_Left_Icon.png"
                                Grid.Column="0"
                                Grid.Row="0"
+                               Margin="5"
                                PreviewMouseLeftButtonDown="leftNav_Image_PreviewMouseLeftButtonDown" />
-                        <Image Source="/Images/Nav_Right.png"
+                        <Image 
+                               Source="/Images/ControllerUI/Dpad/Button_Dpad_Right_Icon.png"
                                Grid.Column="2"
+                               Margin="5"
                                Grid.Row="0"
                                PreviewMouseLeftButtonDown="rightNav_Image_PreviewMouseLeftButtonDown" />
 
@@ -83,21 +86,6 @@
 
                         </ListBox>
                     </Grid>
-                    <Border Grid.Column="0"
-                            Grid.Row="2" Margin="5"
-                            Background="#011A2E"
-                            CornerRadius="10" >
-                        <Border CornerRadius="10"
-                                Background="#044275"
-                                Margin="2">
-                            <Border Grid.Column="0"
-                                    Grid.Row="2"
-                                    Margin="2"
-                                    Background="#011A2E"
-                                    CornerRadius="10">
-                                </Border>
-                            </Border>
-                    </Border>
                     <Grid Grid.Row="2"
                           Grid.Column="0">
                         <Grid.ColumnDefinitions>
@@ -108,15 +96,54 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border CornerRadius="10"
-                                Background="#044275"
-                                Margin="14"
-                                Grid.Column="1"
-                                Grid.Row="0">
-                            <Image Source="/Images/Plus_Sign.png"
-                                   Margin="5"
-                                   PreviewMouseLeftButtonDown="addGameImage_PreviewMouseLeftButtonDown" />
-
+                        <Border Grid.Column="0"
+                                Margin="5 ,5 ,5, 10"
+                                Background="#011A2E"
+                                CornerRadius="10"
+                                Grid.ColumnSpan="3">
+                            <Border Grid.Column="0"
+                                    Grid.Row="2"
+                                    Margin="2"
+                                    Background="#011A2E"
+                                    CornerRadius="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Image Source="/Images/ControllerUI/Face/Button_Triangle_Icon.png" />
+                                        <Label Content=": Add Game"
+                                               FontSize="22"
+                                               Foreground="White" Height="34" Margin="0,0,0,10"></Label>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2"
+                                                Orientation="Horizontal"
+                                                VerticalAlignment="Center"
+                                                Margin="3"
+                                                HorizontalAlignment="Center">
+                                        <Image Source="/Images/ControllerUI/Face/Button_Cross_Icon.png" />
+                                        <Label Content=": Launch Game"
+                                               FontSize="22"
+                                               Foreground="White"
+                                               Height="34"
+                                               Margin="0,0,0,10"></Label>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Orientation="Horizontal"
+                                                Margin="3"
+                                                HorizontalAlignment="Center">
+                                        <Image Source="/Images/ControllerUI/Face/Button_Circle_Icon.png" />
+                                        <Label Content=": Close "
+                                               FontSize="22"
+                                               Foreground="White"
+                                               Height="34"
+                                               Margin="0,0,0,10"></Label>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
                         </Border>
                     </Grid>
                 </Grid>

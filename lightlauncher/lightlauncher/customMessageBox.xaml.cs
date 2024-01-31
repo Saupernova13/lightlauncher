@@ -11,7 +11,7 @@ namespace lightlauncher
         private volatile bool running = true;
         public static MainWindow mainWindow;
         private bool previousB = false;
-        private bool previousX = false;
+        private bool previousStart = false;
         public customMessageBox(MainWindow mw, string csmTitle, string csmContent)
         {
             InitializeComponent();
@@ -41,7 +41,7 @@ namespace lightlauncher
 
                     // Get current button states
                     bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
-                    bool xPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+                    bool startPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
 
                     // Check for state transitions from not-pressed to pressed
                     if (bPressed && !previousB)
@@ -49,14 +49,14 @@ namespace lightlauncher
                         Dispatcher.Invoke(() => closeAndContinue());
                     }
 
-                    if (xPressed && !previousX)
+                    if (startPressed && !previousStart)
                     {
                         Dispatcher.Invoke(() => closeAndContinue());
                     }
 
                     // Remember button states for the next poll
                     previousB = bPressed;
-                    previousX = xPressed;
+                    previousStart = startPressed;
 
                     // Sleep to avoid high CPU load
                     Thread.Sleep(125);
