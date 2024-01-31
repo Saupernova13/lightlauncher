@@ -208,6 +208,12 @@
     <Resource Include="Images\ControllerUI\Dpad\Button_Dpad_Right_Icon.png" />
     <Resource Include="Images\ControllerUI\Dpad\Button_Dpad_Up_Icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ControllerUI\Button_Start_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ControllerUI\Dpad\Button_Dpad_Up_AND_Down_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

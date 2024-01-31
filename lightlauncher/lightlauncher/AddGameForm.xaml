@@ -12,16 +12,21 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
-    <Viewbox  Height="600">
-        <Border CornerRadius="10"
-                Background="#012644">
-            <Border Margin="2"
-                    Background="#044275"
-                    CornerRadius="10">
-                <Border CornerRadius="10"
-                        Background="#012644"
-                        Margin="4">
-                    <Grid x:Name="gameForm">
+    <Border CornerRadius="10"
+            Background="#012644">
+        <Border Margin="2"
+                Background="#044275"
+                CornerRadius="10">
+            <Border CornerRadius="10"
+                    Background="#012644"
+                    Margin="4">
+                <Grid x:Name="gameForm"
+                      Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Viewbox>
                         <ListBox  x:Name="optionsListBox"
                                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                   ScrollViewer.CanContentScroll="False"
@@ -30,14 +35,14 @@
                                   BorderThickness="0"
                                   Height="340"
                                   Margin="10"
-                                  SelectionChanged="optionsListBox_SelectionChanged">
+                                  SelectionChanged="optionsListBox_SelectionChanged"
+                                  Grid.Row="0">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Vertical"
                                                 x:Name="optionsStackPanel" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
-
                             <ListBoxItem HorizontalAlignment="Center">
                                 <Border CornerRadius="10"
                                         Background="#044275"
@@ -85,8 +90,6 @@
                                     </StackPanel>
                                 </Border>
                             </ListBoxItem>
-
-
                             <ListBoxItem HorizontalAlignment="Center">
                                 <Border CornerRadius="10"
                                         Background="#044275"
@@ -139,13 +142,63 @@
                                                  Background="#012644"
                                                  Style="{StaticResource RoundedTextBox}"></TextBox>
                                     </StackPanel>
-
                                 </Border>
                             </ListBoxItem>
                         </ListBox>
-                    </Grid>
-                </Border>
+                    </Viewbox>
+                    <Border Grid.Row="1"
+                            Background="#011A2E" CornerRadius="10" Margin="5">
+                        <Grid Grid.Row="1" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="10"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Margin="3"
+                                        HorizontalAlignment="Center">
+                                <Image Source="/Images/ControllerUI/Dpad/Button_Dpad_Up_AND_Down_Icon.png" />
+
+                                <Label Content=": Seelct "
+                                       FontSize="22"
+                                       Foreground="White"
+                                       Height="34"
+                                       Margin="0,0,0,10"></Label>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Margin="3"
+                                        HorizontalAlignment="Center">
+                                <Image Source="/Images/ControllerUI/Face/Button_Cross_Icon.png" />
+                                <Label Content=": Seelct "
+                                       FontSize="22"
+                                       Foreground="White"
+                                       Height="34"
+                                       Margin="0,0,0,10"></Label>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Margin="3"
+                                        HorizontalAlignment="Center">
+                                <Image Source="/Images/ControllerUI/Face/Button_Circle_Icon.png" />
+                                <Label Content=": Close "
+                                       FontSize="22"
+                                       Foreground="White"
+                                       Height="34"
+                                       Margin="0,0,0,10"></Label>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+
             </Border>
         </Border>
-    </Viewbox>
+    </Border>
 </Window>
