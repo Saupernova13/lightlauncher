@@ -1,4 +1,5 @@
-﻿using SharpDX.XInput;
+﻿//By Sauraav Jayrajh
+using SharpDX.XInput;
 using System;
 using System.ComponentModel;
 using System.Threading;
@@ -25,6 +26,7 @@ namespace lightlauncher
         private bool previousA = false;
         private bool previousB = false;
         private bool previousX = false;
+        private bool previousY = false;
         public controllerKeyboard(TextBox textBox)
         {
             InitializeComponent();
@@ -70,6 +72,7 @@ namespace lightlauncher
                 bool aPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
                 bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
                 bool xPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+                bool yPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
                 if (dPadLeft && !previousDPadLeft)
                 {
                     Dispatcher.Invoke(moveCursorLeft);
@@ -115,7 +118,7 @@ namespace lightlauncher
                         key_specialChars_PreviewMouseLeftButtonDown(null, null);
                     });
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+                if (yPressed && !previousY)
                 {
                     Dispatcher.Invoke(() =>
                     {
@@ -150,6 +153,7 @@ namespace lightlauncher
                 previousA = aPressed;
                 previousB = bPressed;
                 previousX = xPressed;
+                previousY = yPressed;
                 Thread.Sleep(120);
             }
         }

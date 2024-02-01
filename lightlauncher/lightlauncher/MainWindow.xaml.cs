@@ -1,4 +1,5 @@
-﻿using System;
+﻿//By Sauraav Jayrajh
+using System;
 using System.Threading;
 using System.Windows;
 using SharpDX.XInput;
@@ -11,8 +12,6 @@ using System.Windows.Media.Imaging;
 using System.Data.SqlClient;
 using System.ComponentModel;
 using System.Reflection;
-
-
 namespace lightlauncher
 {
     public partial class MainWindow : Window
@@ -33,6 +32,7 @@ namespace lightlauncher
         public customMessageBox csm;
         //Boolean To Check If Thread Is Running
         //Note: Volatile keyword ensures that field may be modified by multiple threads at the same time
+        private string currentDir = string.Empty;
         private volatile bool running = true;
         private bool previousLeftShoulder = false;
         private bool previousRightShoulder = false;
@@ -44,6 +44,7 @@ namespace lightlauncher
         private bool previousDPadRight = false;
         private bool previousY = false;
         private bool previousComboKill = false;
+        private bool previousL2 = false;
         public MainWindow()
         {
             try
@@ -95,9 +96,7 @@ namespace lightlauncher
                 killProgram();
                 return;
             }
-            // Start the thread for polling controller state
             controllerThread = new Thread(pollControllerState);
-            //Make sure the program will still read input when the window is not in focus
             controllerThread.IsBackground = true;
             controllerThread.Start();
         }
@@ -124,11 +123,7 @@ namespace lightlauncher
                     killProgram();
                     return;
                 }
-
-                //Get the state of the controller
                 var state = usersController.GetState();
-
-                // Debounced button checks
                 bool leftShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder);
                 bool rightShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder);
                 bool leftThumb = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb);
@@ -139,14 +134,10 @@ namespace lightlauncher
                 bool dPadRight = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
                 bool yPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
                 bool comboKill = rightShoulder && bPressed;
-
-                // Check the combo for showing the window
                 if ((leftShoulder && !previousLeftShoulder) && (rightShoulder && !previousRightShoulder) && (leftThumb && !previousLeftThumb) && (rightThumb && !previousRightThumb))
                 {
                     Dispatcher.Invoke(() => this.Show());
                 }
-
-                // Check for hiding the window
                 if (bPressed && !previousB)
                 {
                     Dispatcher.Invoke(() => this.Hide());
@@ -154,23 +145,28 @@ namespace lightlauncher
 
                 if (this.IsVisible)
                 {
-                    // Handle dPadLeft
+                    bool L2Pressed = false;
+                    if (state.Gamepad.LeftTrigger == 255)
+                    {
+                        L2Pressed = true;
+                    }
+                    if (L2Pressed && !previousL2)
+                    {
+                        Dispatcher.Invoke(() => removeGame());
+                    }
                     if (dPadLeft && !previousDPadLeft)
                     {
                         Dispatcher.Invoke(moveCursorLeft);
                     }
-                    // Handle dPadRight
                     if (dPadRight && !previousDPadRight)
                     {
                         Dispatcher.Invoke(moveCursorRight);
                     }
-                    // Check for Y to launch addGameWindow
                     if (yPressed && !previousY)
                     {
                         Dispatcher.Invoke(() => this.Hide());
                         Dispatcher.Invoke(showAddGameWindow);
                     }
-                    // Check for A to launch a game
                     if (aPressed && !previousA)
                     {
                         Dispatcher.Invoke(() =>
@@ -186,15 +182,13 @@ namespace lightlauncher
                             launchGame(id);
                         });
                     }
-                }
 
-                // Check the combo for killing the program
+                    previousL2 = L2Pressed;
+                }
                 if (comboKill && !previousComboKill)
                 {
                     killProgram();
                 }
-
-                // Remember button states for the next poll
                 previousLeftShoulder = leftShoulder;
                 previousRightShoulder = rightShoulder;
                 previousLeftThumb = leftThumb;
@@ -205,10 +199,29 @@ namespace lightlauncher
                 previousDPadRight = dPadRight;
                 previousY = yPressed;
                 previousComboKill = comboKill;
-
-                // Wait briefly to avoid high CPU load
                 Thread.Sleep(125);
             }
+        }
+        public void removeGame()
+        {
+            for (int i = 0; i < games.Count; i++)
+            {
+                if (games[i].name.Equals(currentGameName))
+                {
+                    currentDir = games[i].executablePath;
+                    File.Delete(games[i].imagePath);
+                }
+            }
+            using (SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True"))
+            {
+                sqlConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("DELETE FROM Games WHERE executablePath=@executablePath", sqlConnection))
+                {
+                    sqlCommand.Parameters.AddWithValue("@executablePath", currentDir);
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+            loadGamesFromDB();
         }
         public void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

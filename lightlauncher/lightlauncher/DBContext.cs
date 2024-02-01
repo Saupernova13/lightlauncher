@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//By Sauraav Jayrajh
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace lightlauncher
 {
     public class DBContext : DbContext

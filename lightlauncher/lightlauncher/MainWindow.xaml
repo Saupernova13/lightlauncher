@@ -109,6 +109,7 @@
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <Image Source="/Images/ControllerUI/Face/Button_Triangle_Icon.png" />
@@ -135,6 +136,18 @@
                                                 HorizontalAlignment="Center">
                                         <Image Source="/Images/ControllerUI/Face/Button_Circle_Icon.png" />
                                         <Label Content=": Close "
+                                               FontSize="22"
+                                               Foreground="White"
+                                               Height="34"
+                                               Margin="0,0,0,10"></Label>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="3"
+                                                Orientation="Horizontal"
+                                                Margin="3"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"><Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
+
+                                        <Label Content=": Remove"
                                                FontSize="22"
                                                Foreground="White"
                                                Height="34"

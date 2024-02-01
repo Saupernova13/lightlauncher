@@ -1,4 +1,5 @@
-﻿using SharpDX.XInput;
+﻿//By Sauraav Jayrajh
+using SharpDX.XInput;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

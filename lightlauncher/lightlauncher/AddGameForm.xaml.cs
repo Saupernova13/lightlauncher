@@ -1,14 +1,13 @@
-﻿using SharpDX.XInput;
+﻿//By Sauraav Jayrajh
+using SharpDX.XInput;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
 using System.IO;
 using System;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.ComponentModel;
-
 namespace lightlauncher
 {
     public partial class AddGameForm : Window
@@ -167,13 +166,15 @@ namespace lightlauncher
         }
         public void getGamePath()
         {
-            gamePath=string.Empty;
+            gamePath = string.Empty;
             customFileDialog cfd = new customFileDialog(mainWindow);
             cfd.ShowDialog();
-            if (gamePath==null)
+            if (gamePath == null)
             {
                 csm = new customMessageBox(mainWindow, "Error!", "No executable path was selected!");
                 csm.ShowDialog();
+                gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
+                gameLocationLabel.Content = $"No file was selected!";
                 return;
             }
             else
@@ -213,6 +214,8 @@ namespace lightlauncher
             {
                 csm = new customMessageBox(mainWindow, "Error!", "No image was selected!");
                 csm.ShowDialog();
+                gameCoverLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
+                gameCoverLabel.Content = $"No image was selected!";
                 return;
             }
             else
