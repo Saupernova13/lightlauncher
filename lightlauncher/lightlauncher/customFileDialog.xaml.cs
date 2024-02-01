@@ -1,6 +1,7 @@
 ﻿using SharpDX.XInput;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -27,18 +28,29 @@ namespace lightlauncher
         private bool previousDPadRightOrDown = false;
         private bool previousY = false;
         private bool previousB = false;
-        private bool previousRightShoulder = false;
+        private bool previousX = false;
+        private bool previousR2 = false;
+        private bool previousL2 = false;
+        private string[] driveList;
+        private int driveIndex;
         public customFileDialog(MainWindow mw)
         {
             InitializeComponent();
+            InitializeDriveList();
             usersController = new Controller(UserIndex.One);
             controllerThread = new Thread(pollControllerState);
             controllerThread.IsBackground = true;
             controllerThread.Start();
             fileDirectory_listBox.SelectedIndex = 0;
-            filePathURL_textBox.Text = "C:\\Users\\Sauraav\\Desktop";
             mainWindow = mw;
             loadCurrentDirItems();
+        }
+        private void InitializeDriveList()
+        {
+            driveList = Directory.GetLogicalDrives();
+            Array.Sort(driveList, StringComparer.OrdinalIgnoreCase);
+            driveIndex = 0;
+            filePathURL_textBox.Text = driveList[driveIndex];
         }
         public void pollControllerState()
         {
@@ -81,18 +93,55 @@ namespace lightlauncher
                 {
                     Dispatcher.Invoke(() => this.Close());
                 }
-                bool rightShoulder = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
-                if (rightShoulder && !previousRightShoulder)
+                bool xPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.X);
+                if (xPressed && !previousX)
                 {
                     Dispatcher.Invoke(selectOption);
+                }
+                bool L2Pressed = false;
+                if (state.Gamepad.LeftTrigger == 255)
+                {
+                    L2Pressed = true;
+                }
+                if (L2Pressed && !previousL2)
+                {
+                    Dispatcher.Invoke(() => previousDrive());
+                }
+                bool R2Pressed = false;
+                if (state.Gamepad.RightTrigger == 255)
+                {
+                    R2Pressed = true;
+                }
+                if (R2Pressed && !previousR2)
+                {
+                    Dispatcher.Invoke(() => nextDrive());
                 }
                 previousShouldersPressed = shouldersPressed;
                 previousDPadLeftOrUp = dPadLeftOrUp;
                 previousDPadRightOrDown = dPadRightOrDown;
                 previousY = yPressed;
                 previousB = bPressed;
-                previousRightShoulder = rightShoulder;
+                previousX = xPressed;
+                previousL2 = L2Pressed;
+                previousR2 = R2Pressed;
                 Thread.Sleep(120);
+            }
+        }public void previousDrive()
+        {
+            if ((driveIndex>0))
+            {
+                driveIndex--;
+                filePathURL_textBox.Text = driveList[driveIndex];
+                loadCurrentDirItems();
+            }
+        }
+        public void nextDrive()
+        {
+            if (driveIndex < driveList.Count() - 1)
+            {
+                driveIndex++;
+                filePathURL_textBox.Text = driveList[driveIndex];
+                loadCurrentDirItems();
             }
         }
         public void openPreviousDirectory()
@@ -165,11 +214,7 @@ namespace lightlauncher
                         {
                             AddGameForm.gameCoverPath = selectedItem;
                         }
-                        else
-                        {
-                            csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
-                        }
-                        if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
+                        else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
                         {
                             AddGameForm.gamePath = selectedItem;
                         }
@@ -315,6 +360,11 @@ namespace lightlauncher
         {
             filePathURL_textBox.Text = "D:\\Games\\";
             loadCurrentDirItems();
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            running = false;
         }
     }
 }

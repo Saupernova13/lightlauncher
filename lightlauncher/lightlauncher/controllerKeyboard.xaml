@@ -52,7 +52,8 @@
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
                             <ListBoxItem HorizontalAlignment="Center"
-                                         x:Name="key_q" PreviewMouseLeftButtonDown="key_q_PreviewMouseLeftButtonDown">
+                                         x:Name="key_q"
+                                         PreviewMouseLeftButtonDown="key_q_PreviewMouseLeftButtonDown">
                                 <Border CornerRadius="10"
                                         Background="#044275"
                                         Margin="2"
@@ -64,7 +65,7 @@
                                             Background="#012644"
                                             Margin="4">
                                         <Label x:Name="label_key_q"
-                                            Content="Q"
+                                               Content="Q"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -74,7 +75,8 @@
                                 </Border>
                             </ListBoxItem>
                             <ListBoxItem HorizontalAlignment="Center"
-                                         x:Name="key_w" PreviewMouseLeftButtonDown="key_w_PreviewMouseLeftButtonDown">
+                                         x:Name="key_w"
+                                         PreviewMouseLeftButtonDown="key_w_PreviewMouseLeftButtonDown">
                                 <Border CornerRadius="10"
                                         Background="#044275"
                                         Margin="2"
@@ -133,7 +135,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_r" Content="R"
+                                        <Label x:Name="label_key_r"
+                                               Content="R"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -155,7 +158,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_t" Content="T"
+                                        <Label x:Name="label_key_t"
+                                               Content="T"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -330,8 +334,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_s" 
-                                            Content="S"
+                                        <Label x:Name="label_key_s"
+                                               Content="S"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -353,7 +357,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_d" Content="D"
+                                        <Label x:Name="label_key_d"
+                                               Content="D"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -375,7 +380,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_f" Content="F"
+                                        <Label x:Name="label_key_f"
+                                               Content="F"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -397,7 +403,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_g" Content="G"
+                                        <Label x:Name="label_key_g"
+                                               Content="G"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -419,7 +426,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_h" Content="H"
+                                        <Label x:Name="label_key_h"
+                                               Content="H"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -441,7 +449,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_j" Content="J"
+                                        <Label x:Name="label_key_j"
+                                               Content="J"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -510,7 +519,7 @@
                                             Background="#012644"
                                             Margin="4">
                                         <Label x:Name="label_key_apostrophe"
-                                            Content="'"
+                                               Content="'"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -548,7 +557,7 @@
                                             Background="#012644"
                                             Margin="4">
                                         <Label x:Name="label_key_z"
-                                            Content="Z"
+                                               Content="Z"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -639,7 +648,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_b" Content="B"
+                                        <Label x:Name="label_key_b"
+                                               Content="B"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -661,7 +671,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_n" Content="N"
+                                        <Label x:Name="label_key_n"
+                                               Content="N"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -683,7 +694,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_m" Content="M"
+                                        <Label x:Name="label_key_m"
+                                               Content="M"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -706,7 +718,7 @@
                                             Background="#012644"
                                             Margin="4">
                                         <Label x:Name="label_key_comma"
-                                            Content=","
+                                               Content=","
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -728,7 +740,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_period" Content="."
+                                        <Label x:Name="label_key_period"
+                                               Content="."
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -750,7 +763,8 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label x:Name="label_key_question" Content="?"
+                                        <Label x:Name="label_key_question"
+                                               Content="?"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
@@ -781,18 +795,24 @@
                                         Background="#044275"
                                         Margin="2"
                                         Height="60"
-                                        Width="60"
+                                        Width="80"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center">
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label Content="^"
-                                               Foreground="White"
-                                               HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               FontSize="26"
-                                               Margin="0,0,0,5"></Label>
+                                        <Grid>
+                                            <Viewbox Height="15"
+                                                     Margin="40,-35,0,0">
+                                                <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
+                                            </Viewbox>
+                                            <Label Content="Caps"
+                                                   Foreground="White"
+                                                   HorizontalContentAlignment="Center"
+                                                   VerticalContentAlignment="Center"
+                                                   FontSize="26"
+                                                   Margin="0,0,0,5"></Label>
+                                        </Grid>
                                     </Border>
                                 </Border>
                             </ListBoxItem>
@@ -803,18 +823,25 @@
                                         Background="#044275"
                                         Margin="2"
                                         Height="60"
-                                        Width="60"
+                                        Width="70"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center">
+
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label Content="!@#"
-                                               Foreground="White"
-                                               HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               FontSize="26"
-                                               Margin="0,0,0,5"></Label>
+                                        <Grid>
+                                            <Viewbox Height="15"
+                                                     Margin="34,-35,0,0">
+                                                <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_R2_Icon.png" />
+                                            </Viewbox>
+                                            <Label Content="!@#"
+                                                   Foreground="White"
+                                                   HorizontalContentAlignment="Center"
+                                                   VerticalContentAlignment="Center"
+                                                   FontSize="26"
+                                                   Margin="0,0,0,5"></Label>
+                                        </Grid>
                                     </Border>
                                 </Border>
                             </ListBoxItem>
@@ -825,18 +852,24 @@
                                         Background="#044275"
                                         Margin="2"
                                         Height="60"
-                                        Width="405"
+                                        Width="375"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center">
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label Content="_____________________________"
-                                               Foreground="White"
-                                               HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               FontSize="26"
-                                               Margin="0,0,0,5"></Label>
+                                        <Grid>
+                                            <Viewbox Height="15"
+                                                     Margin="335,-35,0,0">
+                                                <Image Source="/Images/ControllerUI/Face/Button_Triangle_Icon.png" />
+                                            </Viewbox>
+                                            <Label Content="_____________________________"
+                                                   Foreground="White"
+                                                   HorizontalContentAlignment="Center"
+                                                   VerticalContentAlignment="Center"
+                                                   FontSize="26"
+                                                   Margin="0,0,0,5"></Label>
+                                        </Grid>
                                     </Border>
                                 </Border>
                             </ListBoxItem>
@@ -853,13 +886,18 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label Content="Backspace"
+                                        <Grid>
+                                            <Viewbox Height="15"
+                                                     Margin="120,-35,0,0">
+                                                <Image Source="/Images/ControllerUI/Face/Button_Square_Icon.png" />
+                                            </Viewbox>
+                                            <Label Content="Backspace"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
                                                FontSize="26"
                                                Margin="0,0,0,5"></Label>
-                                    </Border>
+                                   </Grid> </Border>
                                 </Border>
                             </ListBoxItem>
                         </ListBox>
@@ -893,13 +931,19 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label Content="Enter"
+                                        <Grid>
+                                            <Viewbox Height="15"
+                                                     Margin="85,-35,0,0">
+                                                <Image Source="/Images/ControllerUI/Button_Start_Icon.png" />
+
+                                            </Viewbox>
+                                            <Label Content="Enter"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
                                                FontSize="26"
                                                Margin="0,0,0,5"></Label>
-                                    </Border>
+                                   </Grid> </Border>
                                 </Border>
                             </ListBoxItem>
                             <ListBoxItem HorizontalAlignment="Center"
@@ -916,13 +960,18 @@
                                     <Border CornerRadius="10"
                                             Background="#012644"
                                             Margin="4">
-                                        <Label Content="Clear"
+                                        <Grid>
+                                            <Viewbox Height="15"
+                                                     Margin="85,-35,0,0">
+                                                <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_R1_Icon.png" />
+                                            </Viewbox>
+                                            <Label Content="Clear"
                                                Foreground="White"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center"
                                                FontSize="26"
                                                Margin="0,0,0,5"></Label>
-                                    </Border>
+                                 </Grid>   </Border>
                                 </Border>
                             </ListBoxItem>
                         </ListBox>

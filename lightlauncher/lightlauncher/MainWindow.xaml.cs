@@ -54,7 +54,7 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                csm = new customMessageBox(this, "Error", "An error occurred creating a shortcut in the startup folder: " + ex.Message);
                 csm.ShowDialog();
             }
             try
@@ -66,7 +66,7 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                csm = new customMessageBox(this, "Error", "An error occurred creating a database on your system. You may not have\nSQL Server installed: " + ex.Message);
                 csm.ShowDialog();
             }
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -81,7 +81,7 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                csm = new customMessageBox(this, "Error", "An error occurred creating your game cover folder: " + ex.Message);
                 csm.ShowDialog();
             }
             InitializeComponent();
@@ -91,8 +91,7 @@ namespace lightlauncher
             usersController = new Controller(UserIndex.One);
             if (!usersController.IsConnected)
             {
-                csm = new customMessageBox(this, "Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
-                csm.ShowDialog();
+                MessageBox.Show("No controller was detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.", "Light Launcher - Error");
                 killProgram();
                 return;
             }
@@ -185,7 +184,6 @@ namespace lightlauncher
                                 }
                             }
                             launchGame(id);
-                            this.Hide();
                         });
                     }
                 }
@@ -211,14 +209,6 @@ namespace lightlauncher
                 // Wait briefly to avoid high CPU load
                 Thread.Sleep(125);
             }
-        }
-        protected override void OnClosed(EventArgs e)
-        {
-            // Indicate that the thread should no longer run.
-            running = false;
-            // Wait for the thread to finish executing to avoid any potential issues.
-            controllerThread.Join();
-            base.OnClosed(e);
         }
         public void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -283,6 +273,7 @@ namespace lightlauncher
                     {
                         gameFound = true;
                         Process.Start(games[i].executablePath);
+                        this.Hide();
                         break;
                     }
                     catch (Win32Exception ex)
@@ -373,6 +364,11 @@ namespace lightlauncher
         public string getFileNameFromPath(string path)
         {
             return Path.GetFileName(path);
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            running = false;
         }
     }
 }

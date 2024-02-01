@@ -1,5 +1,6 @@
 ﻿using SharpDX.XInput;
 using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -99,6 +100,48 @@ namespace lightlauncher
                 if (xPressed && !previousX)
                 {
                     Dispatcher.Invoke(backspaceChar);
+                }
+                if (state.Gamepad.LeftTrigger == 255)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        key_shift_PreviewMouseLeftButtonDown(null, null);
+                    });
+                }
+                if (state.Gamepad.RightTrigger == 255)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        key_specialChars_PreviewMouseLeftButtonDown(null, null);
+                    });
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        key_spacebar_PreviewMouseLeftButtonDown(null, null);
+                    });
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        key_spacebar_PreviewMouseLeftButtonDown(null, null);
+                    });
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        key_clear_PreviewMouseLeftButtonDown(null, null);
+                    });
+                }
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        key_enter_PreviewMouseLeftButtonDown(null, null);
+                    });
                 }
                 previousDPadLeft = dPadLeft;
                 previousDPadRight = dPadRight;
@@ -268,7 +311,6 @@ namespace lightlauncher
                 activeItem = focusKey(currentRow, currentColumn);
             }
         }
-
         public void moveCursorDown()
         {
             if (currentRow < 4)
@@ -578,11 +620,19 @@ namespace lightlauncher
         }
         private void key_enter_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Dispatcher.Invoke(this.Close);
+            Dispatcher.Invoke(() =>
+            {
+                this.Close();
+            });
         }
         private void key_clear_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             publicTextBox.Text = string.Empty;
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            running = false;
         }
     }
 }

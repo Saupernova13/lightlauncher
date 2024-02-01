@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using System.Windows.Media;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace lightlauncher
 {
@@ -74,7 +75,6 @@ namespace lightlauncher
                         int selectedIndex = Dispatcher.Invoke(() => optionsListBox.SelectedIndex);
                         Dispatcher.Invoke(() =>
                         {
-                            // Consider moving these outside the polling method and using events/signals to trigger actions
                             switch (selectedIndex)
                             {
                                 case 0:
@@ -95,8 +95,6 @@ namespace lightlauncher
                                     break;
                             }
                         });
-                        // Thread.Sleep here may cause input lag
-                        // Consider using a different mechanism to delay subsequent inputs for this option if necessary
                     }
 
                     bool bPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B);
@@ -219,7 +217,6 @@ namespace lightlauncher
             }
             else
             {
-
                 newGame.imagePath = gameCoverPath;
                 try
                 {
@@ -250,6 +247,11 @@ namespace lightlauncher
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left) this.DragMove();
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            running = false;
         }
     }
 }

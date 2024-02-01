@@ -6,14 +6,15 @@
         xmlns:local="clr-namespace:lightlauncher"
         mc:Ignorable="d"
         Title="customFileDialog"
-        Height="850"
+        Height="800"
         Width="750"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False" VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Viewbox  Stretch="Uniform" Height="650" Width="487.5" VerticalAlignment="Center" HorizontalAlignment="Center"> 
     <Border CornerRadius="10"
             Background="#012644"
             Margin="2">
@@ -29,21 +30,24 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="100" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="750" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ListBox  x:Name="fileDirectory_listBox"  
+                    <ListBox  x:Name="fileDirectory_listBox"
                               Grid.Column="1"
-                              Grid.Row="0" 
+                              Grid.Row="0"
                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                               ScrollViewer.CanContentScroll="False"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               Background="Transparent"
                               BorderThickness="0"
-                              Margin="20">
+                              Margin="20"
+                              Height="800"
+                              >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"
@@ -51,7 +55,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                     </ListBox>
-                    <Grid Grid.Row="2"
+                    <Grid Grid.Row="1"
                           Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -62,40 +66,34 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBox x:Name="filePathURL_textBox"
+                                 Margin="0,15,0,0"
                                  Width="540"
-                                 Height="60"
+                                 Height="70"
                                  Background="#044275"
                                  Grid.Column="1"
                                  Grid.Row="0"
                                  Text="C:\Users\Sauraav\Desktop"
                                  FontSize="23"
-                                 Style="{StaticResource RoundedTextBox}" PreviewMouseLeftButtonDown="filePathURL_textBox_PreviewMouseLeftButtonDown" />
-                        <Border CornerRadius="10"
-                                Background="#044275"
-                                Margin="10,2,0,2"
-                                Height="60"
+                                 Style="{StaticResource RoundedTextBox}"
+                                 PreviewMouseLeftButtonDown="filePathURL_textBox_PreviewMouseLeftButtonDown" />
+                        <Border CornerRadius="10,10,0,0"
+                                Background="#011A2E"
+                                Margin="10,2,0,-18"
+                                Height="80"
                                 Width="80"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="1"
-                                Panel.ZIndex="2">
-                            <Border CornerRadius="10"
-                                    Background="#012644"
-                                    Margin="4">
-                                <Label x:Name="changeDriveLeft_button"
-                                       Content="L2"
-                                       Foreground="White"
-                                       HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
-                                       FontSize="23"
-                                       Margin="0,0,0,0"></Label>
-                            </Border>
+                                Panel.ZIndex="3">
+                            <Viewbox Height="60">
+                                <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
+                            </Viewbox>
                         </Border>
-                        <Border CornerRadius="10"
-                                Background="#044275"
-                                Margin="0,2,10,2"
-                                Height="60"
+                        <Border CornerRadius="10,10,0,0"
+                                Background="#011A2E"
+                                Margin="0,2,10,-18"
+                                Height="80"
                                 Width="80"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -103,21 +101,83 @@
                                 Grid.ColumnSpan="1"
                                 Panel.ZIndex="2"
                                 PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown">
-                            <Border CornerRadius="10"
-                                    Background="#012644"
-                                    Margin="4">
-                                <Label x:Name="changeDriveRight_button"
-                                       Content="R2"
-                                       Foreground="White"
-                                       HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
-                                       FontSize="23"
-                                       Margin="0,0,0,0"></Label>
-                            </Border>
+                            <Viewbox Height="60">
+                                <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_R2_Icon.png" />
+                            </Viewbox>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Row="2"
+                          Grid.Column="1">
+                        <Border Grid.Row="1"
+                                Background="#011A2E"
+                                CornerRadius="0,0,10,10"
+                                Margin="15,0,15,10">
+                            <Grid Grid.Row="1"
+                                  Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="1.15*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="10"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="3"
+                                            HorizontalAlignment="Center">
+                                    <Image Source="/Images/ControllerUI/Dpad/Button_Dpad_Up_AND_Down_Icon.png" />
+
+                                    <Label Content=": Move"
+                                           FontSize="22"
+                                           Foreground="White"
+                                           Height="34"
+                                           Margin="0,0,0,10"></Label>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="3"
+                                            HorizontalAlignment="Center">
+                                    <Image Source="/Images/ControllerUI/Face/Button_Triangle_Icon.png" />
+                                    <Label Content=":Parent Dir"
+                                           FontSize="22"
+                                           Foreground="White"
+                                           Height="34"
+                                           Margin="0,0,0,10"></Label>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="3"
+                                            HorizontalAlignment="Center">
+                                    <Image Source="/Images/ControllerUI/Face/Button_Square_Icon.png" />
+                                    <Label Content=": Select "
+                                           FontSize="22"
+                                           Foreground="White"
+                                           Height="34"
+                                           Margin="0,0,0,10"></Label>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="3"
+                                            HorizontalAlignment="Center">
+                                    <Image Source="/Images/ControllerUI/Face/Button_Circle_Icon.png" />
+                                    <Label Content=": Close "
+                                           FontSize="22"
+                                           Foreground="White"
+                                           Height="34"
+                                           Margin="0,0,0,10"></Label>
+                                </StackPanel>
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>
             </Border>
         </Border>
     </Border>
+    </Viewbox>
 </Window>
