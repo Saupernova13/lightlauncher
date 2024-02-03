@@ -127,9 +127,10 @@ namespace lightlauncher
                 previousR2 = R2Pressed;
                 Thread.Sleep(120);
             }
-        }public void previousDrive()
+        }
+        public void previousDrive()
         {
-            if ((driveIndex>0))
+            if ((driveIndex > 0))
             {
                 driveIndex--;
                 filePathURL_textBox.Text = driveList[driveIndex];
@@ -210,7 +211,8 @@ namespace lightlauncher
                     else
                     {
                         selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
-                        customMessageBox csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
+                        customMessageBox csm = null;
+                        //csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
                         if (selectedItem.EndsWith(".jpg") || selectedItem.EndsWith(".jpeg") || selectedItem.EndsWith(".png") || selectedItem.EndsWith(".bmp"))
                         {
                             AddGameForm.gameCoverPath = selectedItem;
@@ -222,9 +224,9 @@ namespace lightlauncher
                         else
                         {
                             csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
+                            csm.ShowDialog();
+                            csm.Close();
                         }
-                        csm.ShowDialog();
-                        csm.Close();
                         this.Close();
                         this.running = false;
                     }
@@ -356,6 +358,7 @@ namespace lightlauncher
         }
         private void filePathURL_textBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            loadCurrentDirItems();
         }
         private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

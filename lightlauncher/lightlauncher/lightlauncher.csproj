@@ -115,6 +115,7 @@
       <DependentUpon>customMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="DBContext.cs" />
+    <Compile Include="Emulator.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -129,6 +130,14 @@
     <Compile Include="Migrations\202312131304179_initialMigration.cs" />
     <Compile Include="Migrations\202312131304179_initialMigration.designer.cs">
       <DependentUpon>202312131304179_initialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202402030021384_emulators.cs" />
+    <Compile Include="Migrations\202402030021384_emulators.designer.cs">
+      <DependentUpon>202402030021384_emulators.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202402030025136_emulators1.cs" />
+    <Compile Include="Migrations\202402030025136_emulators1.designer.cs">
+      <DependentUpon>202402030025136_emulators1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -146,6 +155,12 @@
     </Compile>
     <EmbeddedResource Include="Migrations\202312131304179_initialMigration.resx">
       <DependentUpon>202312131304179_initialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202402030021384_emulators.resx">
+      <DependentUpon>202402030021384_emulators.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202402030025136_emulators1.resx">
+      <DependentUpon>202402030025136_emulators1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

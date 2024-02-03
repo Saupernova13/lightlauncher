@@ -152,7 +152,22 @@ namespace lightlauncher
                     }
                     if (L2Pressed && !previousL2)
                     {
-                        Dispatcher.Invoke(() => removeGame());
+                        Dispatcher.Invoke(() =>
+                        {
+                            try
+                            {
+                                removeGame();
+                                customMessageBox csm = new customMessageBox(this, "Success", $"'{currentGameName}' has been removed from your library");
+                                csm.ShowDialog();
+                                csm.Close(); ;
+                            }
+                            catch (Exception)
+                            {
+                                customMessageBox csm = new customMessageBox(this, "Error", "You need to have a game in your library to remove.");
+                                csm.ShowDialog();
+                                csm.Close(); ;
+                            }
+                        });
                     }
                     if (dPadLeft && !previousDPadLeft)
                     {
@@ -268,7 +283,17 @@ namespace lightlauncher
                 Width = 600
             };
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameCovers", game.imagePath);
-            image.Source = new BitmapImage(new Uri(imagePath));
+            try
+            {
+
+                image.Source = new BitmapImage(new Uri(imagePath));
+            }
+            catch (Exception)
+            {
+                customMessageBox csm = new customMessageBox(this, "Error", "An error occurred: Game cover image not found");
+                csm.ShowDialog();
+                csm.Close();
+            }
             image.PreviewMouseLeftButtonDown += (sender, e) => launchGame(game.ID);
             grid.Children.Add(image);
             viewbox.Child = grid;

@@ -1,4 +1,5 @@
 ﻿//By Sauraav Jayrajh
+using System;
 using System.ComponentModel.DataAnnotations;
 namespace lightlauncher
 {
@@ -9,6 +10,7 @@ namespace lightlauncher
         public string name { get; set; }
         public string executablePath { get; set; }
         public string imagePath { get; set; }
+        public Boolean needsEmulator { get; set; }
         public Game(int ID, string name, string executablePath, string imagePath)
         {
             this.ID = ID;

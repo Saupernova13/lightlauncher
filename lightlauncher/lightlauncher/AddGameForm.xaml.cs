@@ -134,31 +134,47 @@ namespace lightlauncher
         }
         public void addGameToDB()
         {
-            mainWindow.gameListBox.SelectedIndex = 0;
-            newGame.name = gameNameTextBox.Text;
-            isCompleted[0] = true;
-            string coverArtFileName = newGame.ID + Path.GetExtension(newGame.imagePath);
-            File.Copy(newGame.imagePath, Path.Combine(MainWindow.folderPath, newGame.ID + Path.GetExtension(newGame.imagePath)), true);
-            newGame.imagePath = coverArtFileName;
-            SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
-            sqlConnection.Open();
-            SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games ON", sqlConnection);
-            identityInsertCommand.ExecuteNonQuery();
-            SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (ID, name, executablePath, imagePath) VALUES (@ID, @Name, @ExecutablePath, @ImagePath)", sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@ID", newGame.ID);
-            sqlCommand.Parameters.AddWithValue("@Name", newGame.name);
-            sqlCommand.Parameters.AddWithValue("@ExecutablePath", newGame.executablePath);
-            sqlCommand.Parameters.AddWithValue("@ImagePath", newGame.imagePath);
-            sqlCommand.ExecuteNonQuery();
-            identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
-            identityInsertCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-            mainWindow.gameListBox.SelectedIndex = 0;
-            mainWindow.loadGamesFromDB();
-            this.Close();
-            csm = new customMessageBox(mainWindow, "Game Successfully Added!", $"{newGame.name} has been added to your library!");
-            mainWindow.Show();
-            csm.ShowDialog();
+            if ((gameNameTextBox.Text.Equals(String.Empty) || (gamePath == null) || (gameCoverPath == null))) {
+                csm = new customMessageBox(mainWindow, "Error adding game", $"You have not completed all fields! Please make sure all fields have been populated.");
+                csm.ShowDialog();
+            }
+            else
+            {
+                try
+                {
+                    mainWindow.gameListBox.SelectedIndex = 0;
+                    newGame.name = gameNameTextBox.Text;
+                    isCompleted[0] = true;
+                    string coverArtFileName = newGame.ID + Path.GetExtension(newGame.imagePath);
+                    File.Copy(newGame.imagePath, Path.Combine(MainWindow.folderPath, newGame.ID + Path.GetExtension(newGame.imagePath)), true);
+                    newGame.imagePath = coverArtFileName;
+                    SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                    sqlConnection.Open();
+                    SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games ON", sqlConnection);
+                    identityInsertCommand.ExecuteNonQuery();
+                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (ID, name, executablePath, imagePath) VALUES (@ID, @Name, @ExecutablePath, @ImagePath)", sqlConnection);
+                    sqlCommand.Parameters.AddWithValue("@ID", newGame.ID);
+                    sqlCommand.Parameters.AddWithValue("@Name", newGame.name);
+                    sqlCommand.Parameters.AddWithValue("@ExecutablePath", newGame.executablePath);
+                    sqlCommand.Parameters.AddWithValue("@ImagePath", newGame.imagePath);
+                    sqlCommand.ExecuteNonQuery();
+                    identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
+                    identityInsertCommand.ExecuteNonQuery();
+                    sqlConnection.Close();
+                    mainWindow.gameListBox.SelectedIndex = 0;
+                    mainWindow.loadGamesFromDB();
+                    this.Close();
+                    csm = new customMessageBox(mainWindow, "Game Successfully Added!", $"{newGame.name} has been added to your library!");
+                    mainWindow.Show();
+                    csm.ShowDialog();
+                }
+                catch (Exception)
+                {
+                    csm = new customMessageBox(mainWindow, "Failed to add game", $"There was an error trying to add your game to the system. Please make sure no files are open in other processes, or are restricted by any admins, and try again.");
+                    mainWindow.Show();
+                    csm.ShowDialog();
+                }
+            }
         }
         private void gameExecutablePickButton_Click(object sender, RoutedEventArgs e)
         {
