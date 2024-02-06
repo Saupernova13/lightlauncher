@@ -34,7 +34,8 @@ namespace lightlauncher
         private bool previousL2 = false;
         private string[] driveList;
         private int driveIndex;
-        public customFileDialog(MainWindow mw)
+        private string instruction;
+        public customFileDialog(MainWindow mw, string instruction)
         {
             InitializeComponent();
             InitializeDriveList();
@@ -45,6 +46,7 @@ namespace lightlauncher
             fileDirectory_listBox.SelectedIndex = 0;
             mainWindow = mw;
             loadCurrentDirItems();
+            this.instruction = instruction;
         }
         private void InitializeDriveList()
         {
@@ -188,64 +190,127 @@ namespace lightlauncher
         }
         public void selectOption()
         {
-            if (!(fileDirectory_listBox.SelectedIndex == -1))
+            switch (instruction)
             {
-                selectedItem = string.Empty;
-                List<bool> isFolder = new List<bool>();
-                for (int i = 0; i < currentDirFolders.Count; i++)
-                {
-                    isFolder.Add(true);
-                }
-                for (int i = 0; i < currentDirFiles.Count; i++)
-                {
-                    isFolder.Add(false);
-                }
-                if (isFolder.Count == fileDirectory_listBox.Items.Count)
-                {
-                    if (isFolder[fileDirectory_listBox.SelectedIndex])
+                case "getGameDetails":
+                    if (!(fileDirectory_listBox.SelectedIndex == -1))
                     {
-                        filePathURL_textBox.Text = Path.Combine(currentDir, currentDirFolders[fileDirectory_listBox.SelectedIndex]);
-                        loadCurrentDirItems();
-                        fileDirectory_listBox.SelectedIndex = 0;
-                    }
-                    else
-                    {
-                        selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
-                        customMessageBox csm = null;
-                        //csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
-                        if (selectedItem.EndsWith(".jpg") || selectedItem.EndsWith(".jpeg") || selectedItem.EndsWith(".png") || selectedItem.EndsWith(".bmp"))
+                        selectedItem = string.Empty;
+                        List<bool> isFolder = new List<bool>();
+                        for (int i = 0; i < currentDirFolders.Count; i++)
                         {
-                            AddGameForm.gameCoverPath = selectedItem;
+                            isFolder.Add(true);
                         }
-                        else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk") || selectedItem.EndsWith(".iso") || selectedItem.EndsWith(".cso"))
+                        for (int i = 0; i < currentDirFiles.Count; i++)
                         {
-                            AddGameForm.gamePath = selectedItem;
+                            isFolder.Add(false);
+                        }
+                        if (isFolder.Count == fileDirectory_listBox.Items.Count)
+                        {
+                            if (isFolder[fileDirectory_listBox.SelectedIndex])
+                            {
+                                filePathURL_textBox.Text = Path.Combine(currentDir, currentDirFolders[fileDirectory_listBox.SelectedIndex]);
+                                loadCurrentDirItems();
+                                fileDirectory_listBox.SelectedIndex = 0;
+                            }
+                            else
+                            {
+                                selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
+                                customMessageBox csm = null;
+                                //csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
+                                if (selectedItem.EndsWith(".jpg") || selectedItem.EndsWith(".jpeg") || selectedItem.EndsWith(".png") || selectedItem.EndsWith(".bmp"))
+                                {
+                                    AddGameForm.gameCoverPath = selectedItem;
+                                }
+                                else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk") || selectedItem.EndsWith(".iso") || selectedItem.EndsWith(".cso"))
+                                {
+                                    AddGameForm.gamePath = selectedItem;
+                                }
+                                else
+                                {
+                                    csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
+                                    csm.ShowDialog();
+                                    csm.Close();
+                                }
+                                this.Close();
+                                this.running = false;
+                            }
+                            isFolder.Clear();
                         }
                         else
                         {
-                            csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
+                            customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
                             csm.ShowDialog();
                             csm.Close();
                         }
-                        this.Close();
-                        this.running = false;
                     }
-                    isFolder.Clear();
-                }
-                else
-                {
-                    customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
-                    csm.ShowDialog();
-                    csm.Close();
-                }
+                    else
+                    {
+                        customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
+                        csm.ShowDialog();
+                        csm.Close();
+                    }
+                    fileDirectory_listBox.SelectedIndex = 0;
+                    break;
+                case "getEmulatorDetails":
+                    if (!(fileDirectory_listBox.SelectedIndex == -1))
+                    {
+                        selectedItem = string.Empty;
+                        List<bool> isFolder = new List<bool>();
+                        for (int i = 0; i < currentDirFolders.Count; i++)
+                        {
+                            isFolder.Add(true);
+                        }
+                        for (int i = 0; i < currentDirFiles.Count; i++)
+                        {
+                            isFolder.Add(false);
+                        }
+                        if (isFolder.Count == fileDirectory_listBox.Items.Count)
+                        {
+                            if (isFolder[fileDirectory_listBox.SelectedIndex])
+                            {
+                                filePathURL_textBox.Text = Path.Combine(currentDir, currentDirFolders[fileDirectory_listBox.SelectedIndex]);
+                                loadCurrentDirItems();
+                                fileDirectory_listBox.SelectedIndex = 0;
+                            }
+                            else
+                            {
+                                selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
+                                customMessageBox csm = null;
+                                //csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
+                                if (selectedItem.EndsWith(".exe"))
+                                {
+                                    AddEmulatorForm.currentEmulator.executablePath = selectedItem;
+                                }
+                                else
+                                {
+                                    csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type. Please select an exe of an emulator program.");
+                                    csm.ShowDialog();
+                                    csm.Close();
+                                }
+                                this.Close();
+                                this.running = false;
+                            }
+                            isFolder.Clear();
+                        }
+                        else
+                        {
+                            customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
+                            csm.ShowDialog();
+                            csm.Close();
+                        }
+                    }
+                    else
+                    {
+                        customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
+                        csm.ShowDialog();
+                        csm.Close();
+                    }
+                    fileDirectory_listBox.SelectedIndex = 0;
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
-                csm.ShowDialog();
-                csm.Close();
-            }
-            fileDirectory_listBox.SelectedIndex = 0;
         }
         public void killProgram()
         {

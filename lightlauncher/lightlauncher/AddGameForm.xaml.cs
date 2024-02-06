@@ -206,7 +206,7 @@ namespace lightlauncher
         public void getGamePath()
         {
             gamePath = string.Empty;
-            customFileDialog cfd = new customFileDialog(mainWindow);
+            customFileDialog cfd = new customFileDialog(mainWindow, "getGameDetails");
             cfd.ShowDialog();
             if (gamePath == null)
             {
@@ -247,7 +247,7 @@ namespace lightlauncher
         }
         public void getGameCover()
         {
-            customFileDialog cfd = new customFileDialog(mainWindow);
+            customFileDialog cfd = new customFileDialog(mainWindow, "getGameDetails");
             cfd.ShowDialog();
             if (gameCoverPath == null)
             {

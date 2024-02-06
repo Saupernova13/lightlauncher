@@ -46,6 +46,16 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        <Grid    Grid.Column="2"
+                                 Grid.Row="0">
+                            <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_R2_Icon.png"
+                                   VerticalAlignment="Top"
+                                   Height="15"
+                                   Margin="45,5,0,0" />
+                            <Image Source="/Images/Settings_Gear.png"
+                                   VerticalAlignment="Top"
+                                   Margin="15" />
+                        </Grid>
                         <Image Source="/Images/ControllerUI/Dpad/Button_Dpad_Left_Icon.png"
                                Grid.Column="0"
                                Grid.Row="0"
@@ -145,8 +155,8 @@
                                                 Orientation="Horizontal"
                                                 Margin="3"
                                                 HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"><Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
-
+                                                VerticalAlignment="Center">
+                                        <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
                                         <Label Content=": Remove"
                                                FontSize="22"
                                                Foreground="White"

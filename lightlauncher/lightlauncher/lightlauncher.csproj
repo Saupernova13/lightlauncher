@@ -78,6 +78,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AddEmulatorForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddGameForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -102,6 +106,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AddEmulatorForm.xaml.cs">
+      <DependentUpon>AddEmulatorForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddGameForm.xaml.cs">
       <DependentUpon>AddGameForm.xaml</DependentUpon>
     </Compile>
@@ -246,6 +253,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Checkbox_Checkmark_Checked_Blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Settings_Gear.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

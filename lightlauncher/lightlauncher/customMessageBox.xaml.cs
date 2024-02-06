@@ -1,8 +1,8 @@
-﻿using SharpDX.XInput;
+﻿//By Sauraav Jayrajh
+using SharpDX.XInput;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
-
 namespace lightlauncher
 {
     public partial class customMessageBox : Window
@@ -11,7 +11,6 @@ namespace lightlauncher
         private Thread controllerThread;
         private volatile bool running = true;
         public static MainWindow mainWindow;
-        //private bool previousB = false;
         private bool previousStart = false;
         public customMessageBox(MainWindow mw, string csmTitle, string csmContent)
         {

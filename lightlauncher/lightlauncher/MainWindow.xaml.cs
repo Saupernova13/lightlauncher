@@ -45,6 +45,7 @@ namespace lightlauncher
         private bool previousY = false;
         private bool previousComboKill = false;
         private bool previousL2 = false;
+        private bool previousR2 = false;
         public MainWindow()
         {
             try
@@ -146,6 +147,7 @@ namespace lightlauncher
                 if (this.IsVisible)
                 {
                     bool L2Pressed = false;
+                    bool R2Pressed = false;
                     if (state.Gamepad.LeftTrigger == 255)
                     {
                         L2Pressed = true;
@@ -167,6 +169,19 @@ namespace lightlauncher
                                 csm.ShowDialog();
                                 csm.Close(); ;
                             }
+                        });
+                    }
+                    if (state.Gamepad.RightTrigger == 255)
+                    {
+                        R2Pressed = true;
+                    }
+                    if (R2Pressed && !previousR2)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            emulatorMenu em = new emulatorMenu(this);
+                            this.Hide();
+                            em.ShowDialog();
                         });
                     }
                     if (dPadLeft && !previousDPadLeft)
