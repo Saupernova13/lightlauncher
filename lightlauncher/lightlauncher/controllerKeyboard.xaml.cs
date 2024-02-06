@@ -30,6 +30,7 @@ namespace lightlauncher
         public controllerKeyboard(TextBox textBox)
         {
             InitializeComponent();
+            this.Topmost = true;
             publicTextBox = textBox;
             usersController = new Controller(UserIndex.One);
             controllerThread = new Thread(pollControllerState);

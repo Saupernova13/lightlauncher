@@ -35,8 +35,10 @@ namespace lightlauncher
         private string[] driveList;
         private int driveIndex;
         private string instruction;
-        public customFileDialog(MainWindow mw, string instruction)
+        public AddEmulatorForm addEmulatorForm;
+        public customFileDialog(MainWindow mw, string instruction, AddEmulatorForm aef=null)
         {
+            this.Topmost = true;
             InitializeComponent();
             InitializeDriveList();
             usersController = new Controller(UserIndex.One);
@@ -45,6 +47,7 @@ namespace lightlauncher
             controllerThread.Start();
             fileDirectory_listBox.SelectedIndex = 0;
             mainWindow = mw;
+            addEmulatorForm = aef;
             loadCurrentDirItems();
             this.instruction = instruction;
         }
@@ -63,7 +66,7 @@ namespace lightlauncher
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        customMessageBox csm = new customMessageBox(mainWindow, "Error", "Controller not detected! Please make sure you are using an Xbox or XInput Compatible Controller.");
+                        customMessageBox csm = new customMessageBox("Error", "Controller not detected! Please make sure you are using an Xbox or XInput Compatible Controller.");
                         csm.ShowDialog();
                         csm.Close();
                     });
@@ -166,7 +169,7 @@ namespace lightlauncher
             }
             catch (Exception)
             {
-                customMessageBox csm = new customMessageBox(mainWindow, "Error", "The current folder is not contained in another folder.");
+                customMessageBox csm = new customMessageBox("Error", "The current folder is not contained in another folder.");
                 csm.ShowDialog();
                 csm.Close();
                 return;
@@ -228,7 +231,7 @@ namespace lightlauncher
                                 }
                                 else
                                 {
-                                    csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type.");
+                                    csm = new customMessageBox("Error", "The file you selected was of an incompatiable type.");
                                     csm.ShowDialog();
                                     csm.Close();
                                 }
@@ -239,14 +242,14 @@ namespace lightlauncher
                         }
                         else
                         {
-                            customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
+                            customMessageBox csm = new customMessageBox("Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
                             csm.ShowDialog();
                             csm.Close();
                         }
                     }
                     else
                     {
-                        customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
+                        customMessageBox csm = new customMessageBox("Error", "No item was selected!");
                         csm.ShowDialog();
                         csm.Close();
                     }
@@ -278,13 +281,13 @@ namespace lightlauncher
                                 selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
                                 customMessageBox csm = null;
                                 //csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
-                                if (selectedItem.EndsWith(".exe"))
+                                if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
                                 {
-                                    AddEmulatorForm.currentEmulator.executablePath = selectedItem;
+                                    addEmulatorForm.emulatorPath = selectedItem;
                                 }
                                 else
                                 {
-                                    csm = new customMessageBox(mainWindow, "Error", "The file you selected was of an incompatiable type. Please select an exe of an emulator program.");
+                                    csm = new customMessageBox("Error", "The file you selected was of an incompatiable type. Please select an exe of an emulator program.");
                                     csm.ShowDialog();
                                     csm.Close();
                                 }
@@ -295,14 +298,14 @@ namespace lightlauncher
                         }
                         else
                         {
-                            customMessageBox csm = new customMessageBox(mainWindow, "Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
+                            customMessageBox csm = new customMessageBox("Error", "The number of items in the current directory does not match the number of items in the listbox. Please contact the developer.");
                             csm.ShowDialog();
                             csm.Close();
                         }
                     }
                     else
                     {
-                        customMessageBox csm = new customMessageBox(mainWindow, "Error", "No item was selected!");
+                        customMessageBox csm = new customMessageBox("Error", "No item was selected!");
                         csm.ShowDialog();
                         csm.Close();
                     }
@@ -342,7 +345,7 @@ namespace lightlauncher
             }
             catch (Exception)
             {
-                customMessageBox csm = new customMessageBox(mainWindow, "Error", "The Directory you entered does not exist. Please check for spelling errors.");
+                customMessageBox csm = new customMessageBox("Error", "The Directory you entered does not exist. Please check for spelling errors.");
                 csm.ShowDialog();
                 csm.Close();
                 return;

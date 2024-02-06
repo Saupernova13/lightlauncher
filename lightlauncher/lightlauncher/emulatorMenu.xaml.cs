@@ -1,5 +1,7 @@
 ﻿//By Sauraav Jayrajh
 using SharpDX.XInput;
+using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 
@@ -14,6 +16,7 @@ namespace lightlauncher
         private bool previousDPadRightOrDown = false;
         private bool previousA = false;
         private bool previousB = false;
+        private bool previousY = false;
         public MainWindow mainWindow;
         public emulatorMenu(MainWindow mw)
         {
@@ -73,14 +76,28 @@ namespace lightlauncher
                         Dispatcher.Invoke(this.Close);
                         Dispatcher.Invoke(() => mainWindow.ShowDialog());
                     }
+                    bool yPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+                    if (yPressed && !previousY)
+                    {
+                        Dispatcher.Invoke(() => this.Hide());
+                        Dispatcher.Invoke(showAddEmulatorWindow);
+                    }
                     previousDPadLeftOrUp = dPadLeftOrUp;
                     previousDPadRightOrDown = dPadRightOrDown;
                     previousA = aPressed;
                     previousB = bPressed;
+                    previousY = yPressed;
                     Thread.Sleep(120);
                 }
             }
         }
+
+        public void showAddEmulatorWindow()
+        {
+            AddEmulatorForm addEmulatorForm = new AddEmulatorForm(mainWindow, this);
+            addEmulatorForm.ShowDialog();
+        }
+
         public void moveCursorUp()
         {
             if (optionsListBox.SelectedIndex > 0)
@@ -98,6 +115,11 @@ namespace lightlauncher
         private void optionsListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            running = false;
         }
     }
 }

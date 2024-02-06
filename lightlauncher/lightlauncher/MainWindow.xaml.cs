@@ -56,7 +56,7 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred creating a shortcut in the startup folder: " + ex.Message);
+                csm = new customMessageBox("Error", "An error occurred creating a shortcut in the startup folder: " + ex.Message);
                 csm.ShowDialog();
             }
             try
@@ -68,7 +68,7 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred creating a database on your system. You may not have\nSQL Server installed: " + ex.Message);
+                csm = new customMessageBox("Error", "An error occurred creating a database on your system. You may not have\nSQL Server installed: " + ex.Message);
                 csm.ShowDialog();
             }
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -83,7 +83,7 @@ namespace lightlauncher
             }
             catch (Exception ex)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred creating your game cover folder: " + ex.Message);
+                csm = new customMessageBox("Error", "An error occurred creating your game cover folder: " + ex.Message);
                 csm.ShowDialog();
             }
             InitializeComponent();
@@ -118,7 +118,7 @@ namespace lightlauncher
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        var csm = new customMessageBox(this, "Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
+                        var csm = new customMessageBox("Error", "No controller is not detected!\nPlease make sure you are using an Xbox or XInput Compatible Controller.");
                         csm.ShowDialog();
                     });
                     killProgram();
@@ -159,13 +159,13 @@ namespace lightlauncher
                             try
                             {
                                 removeGame();
-                                customMessageBox csm = new customMessageBox(this, "Success", $"'{currentGameName}' has been removed from your library");
+                                customMessageBox csm = new customMessageBox("Success", $"'{currentGameName}' has been removed from your library");
                                 csm.ShowDialog();
                                 csm.Close(); ;
                             }
                             catch (Exception)
                             {
-                                customMessageBox csm = new customMessageBox(this, "Error", "You need to have a game in your library to remove.");
+                                customMessageBox csm = new customMessageBox("Error", "You need to have a game in your library to remove.");
                                 csm.ShowDialog();
                                 csm.Close(); ;
                             }
@@ -257,7 +257,6 @@ namespace lightlauncher
         {
             showAddGameWindow();
         }
-        //Window used to add new games to program
         public void showAddGameWindow()
         {
             AddGameForm addGameForm = new AddGameForm(this);
@@ -305,7 +304,7 @@ namespace lightlauncher
             }
             catch (Exception)
             {
-                customMessageBox csm = new customMessageBox(this, "Error", "An error occurred: Game cover image not found");
+                customMessageBox csm = new customMessageBox("Error", "An error occurred: Game cover image not found");
                 csm.ShowDialog();
                 csm.Close();
             }
@@ -331,13 +330,13 @@ namespace lightlauncher
                     }
                     catch (Win32Exception ex)
                     {
-                        csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                        csm = new customMessageBox("Error", "An error occurred: " + ex.Message);
                         csm.ShowDialog();
                         break;
                     }
                     catch (Exception ex)
                     {
-                        csm = new customMessageBox(this, "Error", "An error occurred: " + ex.Message);
+                        csm = new customMessageBox("Error", "An error occurred: " + ex.Message);
                         csm.ShowDialog();
                         break;
                     }
@@ -345,7 +344,7 @@ namespace lightlauncher
             }
             if (!gameFound)
             {
-                csm = new customMessageBox(this, "Error", "An error occurred: Game not found");
+                csm = new customMessageBox("Error", "An error occurred: Game not found");
                 csm.ShowDialog();
             }
         }

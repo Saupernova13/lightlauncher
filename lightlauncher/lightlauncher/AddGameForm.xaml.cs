@@ -156,7 +156,7 @@ namespace lightlauncher
         public void addGameToDB()
         {
             if ((gameNameTextBox.Text.Equals(String.Empty) || (gamePath == null) || (gameCoverPath == null))) {
-                csm = new customMessageBox(mainWindow, "Error adding game", $"You have not completed all fields! Please make sure all fields have been populated.");
+                csm = new customMessageBox("Error adding game", $"You have not completed all fields! Please make sure all fields have been populated.");
                 csm.ShowDialog();
             }
             else
@@ -187,13 +187,13 @@ namespace lightlauncher
                     mainWindow.gameListBox.SelectedIndex = 0;
                     mainWindow.loadGamesFromDB();
                     this.Close();
-                    csm = new customMessageBox(mainWindow, "Game Successfully Added!", $"{newGame.name} has been added to your library!");
+                    csm = new customMessageBox("Game Successfully Added!", $"{newGame.name} has been added to your library!");
                     mainWindow.Show();
                     csm.ShowDialog();
                 }
                 catch (Exception)
                 {
-                    csm = new customMessageBox(mainWindow, "Failed to add game", $"There was an error trying to add your game to the system. Please make sure no files are open in other processes, or are restricted by any admins, and try again.");
+                    csm = new customMessageBox("Failed to add game", $"There was an error trying to add your game to the system. Please make sure no files are open in other processes, or are restricted by any admins, and try again.");
                     mainWindow.Show();
                     csm.ShowDialog();
                 }
@@ -210,7 +210,7 @@ namespace lightlauncher
             cfd.ShowDialog();
             if (gamePath == null)
             {
-                csm = new customMessageBox(mainWindow, "Error!", "No executable path was selected!");
+                csm = new customMessageBox("Error!", "No executable path was selected!");
                 csm.ShowDialog();
                 gameLocationLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
                 gameLocationLabel.Content = $"No file was selected!";
@@ -234,7 +234,7 @@ namespace lightlauncher
                 }
                 catch (Exception)
                 {
-                    csm = new customMessageBox(mainWindow, "Error!", "An error occured while trying to get the game's executable path!");
+                    csm = new customMessageBox("Error!", "An error occured while trying to get the game's executable path!");
                     csm.ShowDialog();
                 }
                 isCompleted[1] = true;
@@ -251,7 +251,7 @@ namespace lightlauncher
             cfd.ShowDialog();
             if (gameCoverPath == null)
             {
-                csm = new customMessageBox(mainWindow, "Error!", "No image was selected!");
+                csm = new customMessageBox("Error!", "No image was selected!");
                 csm.ShowDialog();
                 gameCoverLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FAFF00"));
                 gameCoverLabel.Content = $"No image was selected!";
@@ -275,7 +275,7 @@ namespace lightlauncher
                 }
                 catch (Exception)
                 {
-                    csm = new customMessageBox(mainWindow, "Error!", "An error occured while trying to get the selected image!");
+                    csm = new customMessageBox("Error!", "An error occured while trying to get the selected image!");
                     csm.ShowDialog();
                 }
                 isCompleted[2] = true;

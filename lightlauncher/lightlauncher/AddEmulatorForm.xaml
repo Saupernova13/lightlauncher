@@ -36,7 +36,6 @@
                                       BorderThickness="0"
                                       Height="260"
                                       Margin="10"
-                                      SelectionChanged="optionsListBox_SelectionChanged"
                                       Grid.Row="0">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -55,7 +54,7 @@
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Center"
                                                     Height="80">
-                                            <TextBox x:Name="gameNameTextBox"
+                                            <TextBox x:Name="emulatorNameTextBox"
                                                      Width="200"
                                                      Height="30"
                                                      Background="#012644"
@@ -76,7 +75,7 @@
                                                     HorizontalAlignment="Center"
                                                     Height="80">
                                             <TextBox x:Name="emulatorExecutablePickButton"
-                                                     Text="Pick Game Location"
+                                                     Text="Pick Emulator Location"
                                                      HorizontalContentAlignment="Center"
                                                      VerticalAlignment="Center"
                                                      HorizontalAlignment="Center"
@@ -86,11 +85,11 @@
                                                      Margin="0,25,0,0"
                                                      Background="#012644"
                                                      Style="{StaticResource RoundedTextBox}"></TextBox>
-                                            <Label  x:Name="gameLocationLabel"
+                                            <Label  x:Name="emulatorLocationLabel"
                                                     Margin="0"
                                                     FontSize="9"
                                                     VerticalAlignment="Center"
-                                                    HorizontalAlignment="Center">Game Executable Location</Label>
+                                                    HorizontalAlignment="Center">Emulator Executable Location</Label>
                                         </StackPanel>
                                     </Border>
                                 </ListBoxItem>
@@ -106,7 +105,7 @@
                                                     HorizontalAlignment="Center"
                                                     Height="80">
                                             <TextBox x:Name="emulatorAddButton"
-                                                     Text="Add New Game"
+                                                     Text="Add New Emulator"
                                                      HorizontalContentAlignment="Center"
                                                      Height="50"
                                                      Width="150"

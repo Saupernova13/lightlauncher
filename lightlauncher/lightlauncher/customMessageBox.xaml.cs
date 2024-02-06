@@ -10,12 +10,10 @@ namespace lightlauncher
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
-        public static MainWindow mainWindow;
         private bool previousStart = false;
-        public customMessageBox(MainWindow mw, string csmTitle, string csmContent)
+        public customMessageBox(string csmTitle, string csmContent)
         {
             InitializeComponent();
-            mainWindow = mw;
             usersController = new Controller(UserIndex.One);
             controllerThread = new Thread(pollControllerState);
             controllerThread.IsBackground = true;
