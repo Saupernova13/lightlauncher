@@ -94,6 +94,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="emulatorMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,6 +120,9 @@
     </Compile>
     <Compile Include="DBContext.cs" />
     <Compile Include="Emulator.cs" />
+    <Compile Include="emulatorMenu.xaml.cs">
+      <DependentUpon>emulatorMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -236,6 +243,9 @@
   <ItemGroup>
     <Resource Include="Images\ControllerUI\Triggers\Button_Trigger_L1_Icon.png" />
     <Resource Include="Images\ControllerUI\Triggers\Button_Trigger_R1_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Checkbox_Checkmark_Checked_Blue.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

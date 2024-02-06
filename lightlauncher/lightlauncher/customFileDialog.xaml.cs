@@ -217,7 +217,7 @@ namespace lightlauncher
                         {
                             AddGameForm.gameCoverPath = selectedItem;
                         }
-                        else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
+                        else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk") || selectedItem.EndsWith(".iso") || selectedItem.EndsWith(".cso"))
                         {
                             AddGameForm.gamePath = selectedItem;
                         }

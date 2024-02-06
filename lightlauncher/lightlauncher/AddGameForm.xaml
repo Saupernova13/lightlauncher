@@ -34,7 +34,7 @@
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                       Background="Transparent"
                                       BorderThickness="0"
-                                      Height="340"
+                                      Height="420"
                                       Margin="10"
                                       SelectionChanged="optionsListBox_SelectionChanged"
                                       Grid.Row="0">
@@ -56,7 +56,7 @@
                                                     HorizontalAlignment="Center"
                                                     Height="80">
                                             <TextBox x:Name="gameNameTextBox"
-                                                     Width="150"
+                                                     Width="200"
                                                      Height="30"
                                                      Background="#012644"
                                                      Margin="0,25,0,0"
@@ -76,9 +76,11 @@
                                                     HorizontalAlignment="Center"
                                                     Height="80">
                                             <TextBox x:Name="gameExecutablePickButton"
-                                                     Text="   Pick Game Location"
+                                                     Text="           Pick Game Location"
+                                                     VerticalAlignment="Center"
+                                                     HorizontalAlignment="Center"
                                                      Height="30"
-                                                     Width="150"
+                                                     Width="200"
                                                      IsReadOnly="True"
                                                      Margin="0,25,0,0"
                                                      Background="#012644"
@@ -103,9 +105,9 @@
                                                     HorizontalAlignment="Center"
                                                     Height="80">
                                             <TextBox x:Name="gameCoverPickButton"
-                                                     Text="   Pick Cover Location"
+                                                     Text="           Pick Cover Location"
                                                      Height="30"
-                                                     Width="150"
+                                                     Width="200"
                                                      VerticalAlignment="Center"
                                                      HorizontalAlignment="Left"
                                                      IsReadOnly="True"
@@ -119,8 +121,51 @@
                                         </StackPanel>
                                     </Border>
                                 </ListBoxItem>
-
-
+                                <ListBoxItem HorizontalAlignment="Center">
+                                    <Grid>
+                                        <Border Panel.ZIndex="1" Margin="105,2,0,0"
+                                                Height="15"
+                                                Width="15"
+                                                CornerRadius="2"
+                                                Background="#044275">
+                                            <Border Margin="0.5"
+                                                    Background="#012644"
+                                                    CornerRadius="2">
+                                                <Image x:Name="checkboxImage"
+                                                       Source="/Images/Checkbox_Checkmark_Checked_Blue.png"
+                                                       Height="13"
+                                                       Width="13"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center"
+                                                       Stretch="Fill" />
+                                            </Border>
+                                            
+                                        </Border>
+                                        <Border CornerRadius="10"
+                                                Background="#044275"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Width="255">
+                                            <StackPanel Grid.Row="1"
+                                                        Grid.Column="0"
+                                                        Height="80">
+                                                <TextBox x:Name="gameNeedsEmulatorCheckButton"
+                                                         Text="            Needs Emulator?"
+                                                         Height="30"
+                                                         Width="200"
+                                                         IsReadOnly="True"
+                                                         Margin="0,25,0,0"
+                                                         Background="#012644"
+                                                         Style="{StaticResource RoundedTextBox}"></TextBox>
+                                                <Label  x:Name="gameNeedsEmulatorLabel"
+                                                        Margin="0"
+                                                        FontSize="9"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center">Does this game need an emulator to launch?</Label>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </ListBoxItem>
                                 <ListBoxItem HorizontalAlignment="Center">
                                     <Border CornerRadius="10"
                                             Background="#044275"

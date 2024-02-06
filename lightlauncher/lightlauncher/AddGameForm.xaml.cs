@@ -14,7 +14,8 @@ namespace lightlauncher
     {
         public Game newGame = new Game();
         public MainWindow mainWindow;
-        int gameCount;
+        private int gameCount;
+        private bool needsEmulator = false;
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
@@ -43,6 +44,7 @@ namespace lightlauncher
                 newGame.ID = gameCount + 1;
             }
             InitializeComponent();
+            checkboxImage.Visibility = Visibility.Hidden;
             optionsListBox.SelectedIndex = 0;
             mainWindow = mw;
             usersController = new Controller(UserIndex.One);
@@ -88,6 +90,9 @@ namespace lightlauncher
                                     getGameCover();
                                     break;
                                 case 3:
+                                    tagGameAsEmulated();
+                                    break;
+                                case 4:
                                     addGameToDB();
                                     break;
                                 default:
@@ -114,6 +119,22 @@ namespace lightlauncher
                 }
             }
         }
+
+        private void tagGameAsEmulated()
+        {
+            switch (checkboxImage.Visibility)
+            {
+                case Visibility.Visible:
+                    checkboxImage.Visibility = Visibility.Hidden;
+                    needsEmulator = false;
+                    break;
+                case Visibility.Hidden:
+                    checkboxImage.Visibility = Visibility.Visible;
+                    needsEmulator = true;
+                    break;
+            }
+        }
+
         public void moveCursorUp()
         {
             if (optionsListBox.SelectedIndex > 0)
@@ -144,6 +165,7 @@ namespace lightlauncher
                 {
                     mainWindow.gameListBox.SelectedIndex = 0;
                     newGame.name = gameNameTextBox.Text;
+                    newGame.needsEmulator = needsEmulator;
                     isCompleted[0] = true;
                     string coverArtFileName = newGame.ID + Path.GetExtension(newGame.imagePath);
                     File.Copy(newGame.imagePath, Path.Combine(MainWindow.folderPath, newGame.ID + Path.GetExtension(newGame.imagePath)), true);
@@ -152,11 +174,12 @@ namespace lightlauncher
                     sqlConnection.Open();
                     SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games ON", sqlConnection);
                     identityInsertCommand.ExecuteNonQuery();
-                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (ID, name, executablePath, imagePath) VALUES (@ID, @Name, @ExecutablePath, @ImagePath)", sqlConnection);
+                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (ID, name, executablePath, imagePath, needsEmulator) VALUES (@ID, @name, @executablePath, @imagePath, @needsEmulator)", sqlConnection);
                     sqlCommand.Parameters.AddWithValue("@ID", newGame.ID);
-                    sqlCommand.Parameters.AddWithValue("@Name", newGame.name);
-                    sqlCommand.Parameters.AddWithValue("@ExecutablePath", newGame.executablePath);
-                    sqlCommand.Parameters.AddWithValue("@ImagePath", newGame.imagePath);
+                    sqlCommand.Parameters.AddWithValue("@name", newGame.name);
+                    sqlCommand.Parameters.AddWithValue("@executablePath", newGame.executablePath);
+                    sqlCommand.Parameters.AddWithValue("@imagePath", newGame.imagePath);
+                    sqlCommand.Parameters.AddWithValue("@needsEmulator", newGame.needsEmulator);
                     sqlCommand.ExecuteNonQuery();
                     identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
                     identityInsertCommand.ExecuteNonQuery();
