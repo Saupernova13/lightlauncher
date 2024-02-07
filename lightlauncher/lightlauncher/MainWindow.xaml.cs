@@ -18,7 +18,7 @@ namespace lightlauncher
     {
         public readonly string programName = "light_launcher";
         //List Of Games To Be Displayed
-        public static List<Game> games = new List<Game>();
+        public  List<Game> games = new List<Game>();
         //Name of currently highlighted game
         public static string currentGameName = "";
         //Name of currently running game or process
@@ -324,8 +324,16 @@ namespace lightlauncher
                     try
                     {
                         gameFound = true;
-                        Process.Start(games[i].executablePath);
                         this.Hide();
+                        if (games[i].needsEmulator==true)
+                        {
+                            SelectEmulatorMenu sem = new SelectEmulatorMenu(this, i);
+                            sem.Show();
+                        }
+                        else
+                        {
+                            Process.Start(games[i].executablePath);
+                        }
                         break;
                     }
                     catch (Win32Exception ex)
@@ -365,6 +373,7 @@ namespace lightlauncher
                 currentGame.name = sqlDataReader["name"].ToString();
                 currentGame.imagePath = sqlDataReader["imagePath"].ToString();
                 currentGame.executablePath = sqlDataReader["executablePath"].ToString();
+                currentGame.needsEmulator = Convert.ToBoolean( sqlDataReader["needsEmulator"]);
                 games.Add(currentGame);
             }
             if (games.Count.Equals(0))

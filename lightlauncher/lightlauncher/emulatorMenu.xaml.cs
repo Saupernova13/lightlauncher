@@ -1,26 +1,36 @@
 ﻿//By Sauraav Jayrajh
+using lightlauncher.Migrations;
 using SharpDX.XInput;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace lightlauncher
 {
     public partial class emulatorMenu : Window
     {
+        private string currentDir = string.Empty;
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
         private bool previousDPadLeftOrUp = false;
         private bool previousDPadRightOrDown = false;
-        private bool previousA = false;
         private bool previousB = false;
+        private bool previousL2 = false;
+        public List<Emulator> emulators = new List<Emulator>();
         private bool previousY = false;
+        public List<Label> listLabels = new List<Label>();
         public MainWindow mainWindow;
         public emulatorMenu(MainWindow mw)
         {
             InitializeComponent();
+            loadEmulatorsFromDB();
             usersController = new Controller(UserIndex.One);
             controllerThread = new Thread(pollControllerState);
             controllerThread.IsBackground = true;
@@ -45,28 +55,28 @@ namespace lightlauncher
                     {
                         Dispatcher.Invoke(moveCursorDown);
                     }
-                    bool aPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A);
-                    if (aPressed && !previousA)
+
+                    bool L2Pressed = false;
+                    if (state.Gamepad.LeftTrigger == 255)
                     {
-                        int selectedIndex = Dispatcher.Invoke(() => optionsListBox.SelectedIndex);
+                        L2Pressed = true;
+                    }
+                    if (L2Pressed && !previousL2)
+                    {
                         Dispatcher.Invoke(() =>
                         {
-                            switch (selectedIndex)
+                            try
                             {
-                                case 0:
-                                    customFileDialog cfd = new customFileDialog(mainWindow, "getEmulatorDetails");
-                                    cfd.ShowDialog();
-                                    break;
-                                case 1:
-                                    break;
-                                case 2:
-                                    break;
-                                case 3:
-                                    break;
-                                case 4:
-                                    break;
-                                default:
-                                    break;
+                                removeGame();
+                                customMessageBox csm = new customMessageBox("Success", $"The emulator you selected has been removed from your library");
+                                csm.ShowDialog();
+                                csm.Close(); ;
+                            }
+                            catch (Exception)
+                            {
+                                customMessageBox csm = new customMessageBox("Error", "You need to have an emulator in your library to remove.");
+                                csm.ShowDialog();
+                                csm.Close(); ;
                             }
                         });
                     }
@@ -84,14 +94,38 @@ namespace lightlauncher
                     }
                     previousDPadLeftOrUp = dPadLeftOrUp;
                     previousDPadRightOrDown = dPadRightOrDown;
-                    previousA = aPressed;
                     previousB = bPressed;
                     previousY = yPressed;
                     Thread.Sleep(120);
                 }
             }
         }
-
+        public void removeGame()
+        {
+            for (int i = 0; i < emulators.Count; i++)
+            {
+                for (int j = 0; j < listLabels.Count; j++)
+                {
+                    if (emulators[i].ID == getEmuIDFromLabelName(listLabels[j].Name.ToString() + ""))
+                    {
+                        if (optionsListBox.SelectedIndex == j)
+                        {
+                            currentDir = emulators[j].executablePath;
+                        }
+                    }
+                }
+            }
+            using (SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True"))
+            {
+                sqlConnection.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("DELETE FROM Emulators WHERE executablePath=@executablePath", sqlConnection))
+                {
+                    sqlCommand.Parameters.AddWithValue("@executablePath", currentDir);
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+            loadEmulatorsFromDB();
+        }
         public void showAddEmulatorWindow()
         {
             AddEmulatorForm addEmulatorForm = new AddEmulatorForm(mainWindow, this);
@@ -120,6 +154,85 @@ namespace lightlauncher
         {
             base.OnClosing(e);
             running = false;
+        }
+        private void populateEmulatorList(Emulator emu)
+        {
+            ListBoxItem listBoxItem = new ListBoxItem();
+            listBoxItem.Name = $"listBoxItem_{emu.ID}";
+            listBoxItem.HorizontalAlignment = HorizontalAlignment.Center;
+            Border border = new Border();
+            border.CornerRadius = new CornerRadius(10);
+            border.Background = new SolidColorBrush(Color.FromRgb(4, 66, 117));
+            border.VerticalAlignment = VerticalAlignment.Center;
+            border.HorizontalAlignment = HorizontalAlignment.Center;
+            border.Width = 590;
+            StackPanel stackPanel = new StackPanel();
+            stackPanel.SetValue(Grid.RowProperty, 0);
+            stackPanel.SetValue(Grid.ColumnProperty, 0);
+            stackPanel.VerticalAlignment = VerticalAlignment.Center;
+            stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            stackPanel.Height = 80;
+            Label gameNeedsEmulatorLabel = new Label();
+            gameNeedsEmulatorLabel.Name = $"LABEL_{emu.ID}";
+            gameNeedsEmulatorLabel.Margin = new Thickness(0);
+            gameNeedsEmulatorLabel.FontSize = 16;
+            gameNeedsEmulatorLabel.VerticalAlignment = VerticalAlignment.Center;
+            gameNeedsEmulatorLabel.HorizontalAlignment = HorizontalAlignment.Center;
+            gameNeedsEmulatorLabel.Foreground = Brushes.White;
+            gameNeedsEmulatorLabel.Content = emu.name;
+            TextBox gameNameTextBox = new TextBox();
+            gameNameTextBox.Name = $"gameNameTextBox_{emu.ID}";
+            gameNameTextBox.Width = 550;
+            gameNameTextBox.Height = 30;
+            gameNameTextBox.Background = new SolidColorBrush(Color.FromRgb(1, 38, 68));
+            gameNameTextBox.Margin = new Thickness(0);
+            gameNameTextBox.IsReadOnly = true;
+            gameNameTextBox.Text = emu.executablePath;
+            gameNameTextBox.HorizontalContentAlignment = HorizontalAlignment.Center;
+            gameNameTextBox.Style = (Style)Application.Current.Resources["RoundedTextBox"];
+            stackPanel.Children.Add(gameNeedsEmulatorLabel);
+            stackPanel.Children.Add(gameNameTextBox);
+            border.Child = stackPanel;
+            listBoxItem.Content = border;
+            optionsListBox.Items.Add(listBoxItem);
+            listLabels.Add(gameNeedsEmulatorLabel);
+        }
+        public void loadEmulatorsFromDB()
+        {
+            emulators.Clear();
+            optionsListBox.Items.Clear();
+            Emulator currentEmulator = null;
+            SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+            sqlConnection.Open();
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Emulators", sqlConnection);
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                currentEmulator = new Emulator();
+                currentEmulator.ID = Convert.ToInt32(sqlDataReader["ID"]);
+                currentEmulator.name = sqlDataReader["name"].ToString();
+                currentEmulator.executablePath = sqlDataReader["executablePath"].ToString();
+                emulators.Add(currentEmulator);
+            }
+            if (emulators.Count.Equals(0))
+            {
+                customMessageBox csm = new customMessageBox("Error", "No emulators were saved in this program.");
+                csm.ShowDialog();
+            }
+            foreach (Emulator emu in emulators)
+            {
+                populateEmulatorList(emu);
+            }
+        }
+        private int getEmuIDFromLabelName(string labelName)
+        {
+            int underscoreIndex = labelName.IndexOf('_');
+            if (underscoreIndex != -1)
+            {
+                labelName = labelName.Substring(underscoreIndex + 1);
+            }
+            int id = int.Parse(labelName);
+            return (id);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿<Window x:Class="lightlauncher.emulatorMenu"
+﻿<Window x:Class="lightlauncher.SelectEmulatorMenu"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lightlauncher"
         mc:Ignorable="d"
-        Title="emulatorMenu"
+        Title="SelectEmulatorMenu"
         Height="800"
         Width="975"
         WindowStartupLocation="CenterScreen"
@@ -32,24 +32,22 @@
                               Margin="5">
                             <Viewbox VerticalAlignment="Top"
                                      HorizontalAlignment="Center">
-                                <ListBox  x:Name="optionsListBox"
+                                <ListBox  x:Name="selectEmulatorListBox"
                                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                           ScrollViewer.CanContentScroll="False"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                           Background="Transparent"
                                           BorderThickness="0"
-                                          Height="420"
-                                          Width="600"
+                                          Height="300"
+                                          Width="300"
                                           Margin="10"
-                                          SelectionChanged="optionsListBox_SelectionChanged"
-                                          Grid.Row="0">
+                                          Grid.Row="0" SelectionChanged="selectEmulatorListBox_SelectionChanged">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Vertical"
                                                         x:Name="optionsStackPanel" />
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
-                                   
                                 </ListBox>
                             </Viewbox>
                         </Grid>
@@ -70,9 +68,9 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="10"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
+                    <Label x:Name="hiddenHelpfulLabel" Content="Hidden" Panel.ZIndex="0" FontSize="0.01"></Label>
                     <StackPanel Grid.Column="1"
                                 VerticalAlignment="Center"
                                 Orientation="Horizontal"
@@ -90,8 +88,8 @@
                                 Margin="3"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
-                        <Image Source="/Images/ControllerUI/Face/Button_Triangle_Icon.png" />
-                        <Label Content=": Add Emulator"
+                        <Image Source="/Images/ControllerUI/Face/Button_Cross_Icon.png" />
+                        <Label Content=": Launch"
                                FontSize="22"
                                Foreground="White"
                                Height="34"
@@ -109,22 +107,8 @@
                                Height="34"
                                Margin="0,0,0,10"></Label>
                     </StackPanel>
-                    <StackPanel Grid.Column="4"
-                                Orientation="Horizontal"
-                                Margin="3"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
-
-                        <Label Content=": Remove"
-                               FontSize="22"
-                               Foreground="White"
-                               Height="34"
-                               Margin="0,0,0,10"></Label>
-                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>
-
     </Viewbox>
 </Window>

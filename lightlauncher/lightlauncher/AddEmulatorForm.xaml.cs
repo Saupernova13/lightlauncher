@@ -19,7 +19,7 @@ namespace lightlauncher
         private bool previousA = false;
         private bool previousB = false;
         public string emulatorPath;
-        public  Emulator newEmulator = new Emulator();
+        public Emulator newEmulator = new Emulator();
         public controllerKeyboard onscreenKeyboard;
         public customMessageBox csm;
         public MainWindow mainWindow;
@@ -129,8 +129,8 @@ namespace lightlauncher
             }
             else
             {
-                //try
-                //{
+                try
+                {
                     EmulatorMenu.optionsListBox.SelectedIndex = 0;
                     newEmulator.name = emulatorNameTextBox.Text;
                     SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
@@ -151,13 +151,13 @@ namespace lightlauncher
                     csm = new customMessageBox("Emulator Successfully Added!", $"{newEmulator.name} has been added to the system!");
                     mainWindow.Show();
                     csm.ShowDialog();
-            //    }
-            //    catch (Exception)
-            //    {
-            //        csm = new customMessageBox("Failed to add emulator", $"There was an error trying to add your emulator to the system. Please make sure no files are open in other processes, or are restricted by any admins, and try again.");
-            //        mainWindow.Show();
-            //        csm.ShowDialog();
-            //    }
+                }
+                catch (Exception)
+                {
+                    csm = new customMessageBox("Failed to add emulator", $"There was an error trying to add your emulator to the system. Please make sure no files are open in other processes, or are restricted by any admins, and try again.");
+                    mainWindow.Show();
+                    csm.ShowDialog();
+                }
             }
         }
         public void getEmulatorPath()
