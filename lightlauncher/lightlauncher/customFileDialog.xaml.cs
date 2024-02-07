@@ -36,7 +36,7 @@ namespace lightlauncher
         private int driveIndex;
         private string instruction;
         public AddEmulatorForm addEmulatorForm;
-        public customFileDialog(MainWindow mw, string instruction, AddEmulatorForm aef=null)
+        public customFileDialog(MainWindow mw, string instruction, AddEmulatorForm aef = null)
         {
             this.Topmost = true;
             InitializeComponent();
@@ -225,7 +225,14 @@ namespace lightlauncher
                                 {
                                     AddGameForm.gameCoverPath = selectedItem;
                                 }
-                                else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk") || selectedItem.EndsWith(".iso") || selectedItem.EndsWith(".cso"))
+                                else if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk") || selectedItem.EndsWith(".iso") ||
+             selectedItem.EndsWith(".gcm") || selectedItem.EndsWith(".cso") || selectedItem.EndsWith(".vpk") ||
+             selectedItem.EndsWith(".n64") || selectedItem.EndsWith(".z64") || selectedItem.EndsWith(".v64") ||
+             selectedItem.EndsWith(".wbfs") || selectedItem.EndsWith(".wud") || selectedItem.EndsWith(".wux") ||
+             selectedItem.EndsWith(".nsp") || selectedItem.EndsWith(".xci") || selectedItem.EndsWith(".rvz") ||
+             selectedItem.EndsWith(".3ds") || selectedItem.EndsWith(".smd") || selectedItem.EndsWith(".gen") ||
+             selectedItem.EndsWith(".md") || selectedItem.EndsWith(".chd") || selectedItem.EndsWith(".cdi") ||
+             selectedItem.EndsWith(".gdi"))
                                 {
                                     AddGameForm.gamePath = selectedItem;
                                 }
