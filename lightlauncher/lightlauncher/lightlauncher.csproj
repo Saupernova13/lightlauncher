@@ -264,6 +264,9 @@
   <ItemGroup>
     <Resource Include="Images\Settings_Gear.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ControllerUI\Button_Select_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -156,7 +156,8 @@
                                                 Margin="3"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center">
-                                        <Image Source="/Images/ControllerUI/Triggers/Button_Trigger_L2_Icon.png" />
+                                        <Image Source="/Images/ControllerUI/Button_Select_Icon.png" />
+
                                         <Label Content=": Remove"
                                                FontSize="22"
                                                Foreground="White"

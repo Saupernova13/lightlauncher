@@ -46,6 +46,8 @@ namespace lightlauncher
         private bool previousComboKill = false;
         private bool previousL2 = false;
         private bool previousR2 = false;
+        private bool previousStart = false;
+        private bool previousSelect = false;
         public MainWindow()
         {
             try
@@ -134,6 +136,8 @@ namespace lightlauncher
                 bool dPadLeft = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft);
                 bool dPadRight = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight);
                 bool yPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y);
+                bool startPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Start);
+                bool selectPressed = state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Back);
                 bool comboKill = rightShoulder && bPressed;
                 if ((leftShoulder && !previousLeftShoulder) && (rightShoulder && !previousRightShoulder) && (leftThumb && !previousLeftThumb) && (rightThumb && !previousRightThumb))
                 {
@@ -152,23 +156,12 @@ namespace lightlauncher
                     {
                         L2Pressed = true;
                     }
-                    if (L2Pressed && !previousL2)
+                    // if (L2Pressed && !previousL2)
+                    if (selectPressed && !previousSelect)
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            try
-                            {
-                                removeGame();
-                                customMessageBox csm = new customMessageBox("Success", $"'{currentGameName}' has been removed from your library");
-                                csm.ShowDialog();
-                                csm.Close(); ;
-                            }
-                            catch (Exception)
-                            {
-                                customMessageBox csm = new customMessageBox("Error", "You need to have a game in your library to remove.");
-                                csm.ShowDialog();
-                                csm.Close(); ;
-                            }
+                                removeGame(); 
                         });
                     }
                     if (state.Gamepad.RightTrigger == 255)
@@ -229,29 +222,43 @@ namespace lightlauncher
                 previousDPadRight = dPadRight;
                 previousY = yPressed;
                 previousComboKill = comboKill;
+                previousSelect = selectPressed;
+                previousStart = startPressed;
                 Thread.Sleep(125);
             }
         }
         public void removeGame()
         {
-            for (int i = 0; i < games.Count; i++)
+            try
             {
-                if (games[i].name.Equals(currentGameName))
+                for (int i = 0; i < games.Count; i++)
                 {
-                    currentDir = games[i].executablePath;
-                    File.Delete(games[i].imagePath);
+                    if (games[i].name.Equals(currentGameName))
+                    {
+                        currentDir = games[i].executablePath;
+                        File.Delete(AppDomain.CurrentDomain.BaseDirectory + games[i].imagePath);
+                    }
                 }
+                using (SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True"))
+                {
+                    sqlConnection.Open();
+                    using (SqlCommand sqlCommand = new SqlCommand("DELETE FROM Games WHERE executablePath=@executablePath", sqlConnection))
+                    {
+                        sqlCommand.Parameters.AddWithValue("@executablePath", currentDir);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                }
+                loadGamesFromDB();
+                customMessageBox csm = new customMessageBox("Success", $"'{currentGameName}' has been removed from your library");
+                csm.ShowDialog();
+                csm.Close();
             }
-            using (SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True"))
+            catch (Exception)
             {
-                sqlConnection.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("DELETE FROM Games WHERE executablePath=@executablePath", sqlConnection))
-                {
-                    sqlCommand.Parameters.AddWithValue("@executablePath", currentDir);
-                    sqlCommand.ExecuteNonQuery();
-                }
+                customMessageBox csm = new customMessageBox("Error", "You need to have a game in your library to remove.");
+                csm.ShowDialog();
+                csm.Close();
             }
-            loadGamesFromDB();
         }
         public void addGameIcon_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

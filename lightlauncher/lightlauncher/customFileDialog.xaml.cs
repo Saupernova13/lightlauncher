@@ -287,7 +287,6 @@ namespace lightlauncher
                             {
                                 selectedItem = Path.Combine(currentDir, currentDirFiles[fileDirectory_listBox.SelectedIndex - currentDirFolders.Count]);
                                 customMessageBox csm = null;
-                                //csm = new customMessageBox(mainWindow, "Success", "The file you selected was: " + selectedItem);
                                 if (selectedItem.EndsWith(".exe") || selectedItem.EndsWith(".lnk"))
                                 {
                                     addEmulatorForm.emulatorPath = selectedItem;
@@ -337,17 +336,23 @@ namespace lightlauncher
             try
             {
                 currentDir = filePathURL_textBox.Text;
-                currentDirFiles = System.IO.Directory.GetFiles(currentDir).ToList();
-                currentDirFolders = System.IO.Directory.GetDirectories(currentDir).ToList();
-                for (int i = 0; i < currentDirFolders.Count; i++)
+                foreach (var directoryPath in System.IO.Directory.GetDirectories(currentDir))
                 {
-                    currentDirFolders[i] = currentDirFolders[i].Replace(currentDir + "\\", string.Empty);
-                    CreateListBoxItem(i, true);
+                    var directoryName = System.IO.Path.GetFileName(directoryPath);
+                    if (!directoryName.StartsWith("."))
+                    {
+                        currentDirFolders.Add(directoryName);
+                        CreateListBoxItem(currentDirFolders.Count - 1, true);
+                    }
                 }
-                for (int i = 0; i < currentDirFiles.Count; i++)
+                foreach (var filePath in Directory.GetFiles(currentDir))
                 {
-                    currentDirFiles[i] = currentDirFiles[i].Replace(currentDir + "\\", string.Empty);
-                    CreateListBoxItem(i, false);
+                    var fileName = System.IO.Path.GetFileName(filePath);
+                    if (!fileName.StartsWith("."))
+                    {
+                        currentDirFiles.Add(fileName);
+                        CreateListBoxItem(currentDirFiles.Count - 1, false);
+                    }
                 }
             }
             catch (Exception)
