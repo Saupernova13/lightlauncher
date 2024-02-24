@@ -126,13 +126,6 @@ namespace lightlauncher
                         key_spacebar_PreviewMouseLeftButtonDown(null, null);
                     });
                 }
-                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.Y))
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        key_spacebar_PreviewMouseLeftButtonDown(null, null);
-                    });
-                }
                 if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
                 {
                     Dispatcher.Invoke(() =>

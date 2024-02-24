@@ -18,7 +18,7 @@ namespace lightlauncher
     {
         public readonly string programName = "light_launcher";
         //List Of Games To Be Displayed
-        public  List<Game> games = new List<Game>();
+        public List<Game> games = new List<Game>();
         //Name of currently highlighted game
         public static string currentGameName = "";
         //Name of currently running game or process
@@ -161,7 +161,7 @@ namespace lightlauncher
                     {
                         Dispatcher.Invoke(() =>
                         {
-                                removeGame(); 
+                            removeGame();
                         });
                     }
                     if (state.Gamepad.RightTrigger == 255)
@@ -332,7 +332,7 @@ namespace lightlauncher
                     {
                         gameFound = true;
                         this.Hide();
-                        if (games[i].needsEmulator==true)
+                        if (games[i].needsEmulator == true)
                         {
                             SelectEmulatorMenu sem = new SelectEmulatorMenu(this, i);
                             sem.Show();
@@ -369,8 +369,30 @@ namespace lightlauncher
             games.Clear();
             gameListBox.Items.Clear();
             Game currentGame = null;
-            SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
-            sqlConnection.Open();
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                sqlConnection.Open();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    sqlConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                    sqlConnection.Open();
+                }
+                catch (Exception)
+                {
+                    customMessageBox csm1 = new customMessageBox("Error", "An error occurred: Could not connect to database");
+                    csm1.ShowDialog();
+                    csm1.Close();
+                }
+                customMessageBox csm = new customMessageBox("Error", "An error occurred: After a secondary attempt, the program could not connect to the database");
+                csm.ShowDialog();
+                csm.Close();
+                killProgram();
+            }
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Games", sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             while (sqlDataReader.Read())
@@ -380,7 +402,7 @@ namespace lightlauncher
                 currentGame.name = sqlDataReader["name"].ToString();
                 currentGame.imagePath = sqlDataReader["imagePath"].ToString();
                 currentGame.executablePath = sqlDataReader["executablePath"].ToString();
-                currentGame.needsEmulator = Convert.ToBoolean( sqlDataReader["needsEmulator"]);
+                currentGame.needsEmulator = Convert.ToBoolean(sqlDataReader["needsEmulator"]);
                 games.Add(currentGame);
             }
             if (games.Count.Equals(0))
@@ -396,6 +418,7 @@ namespace lightlauncher
             {
                 populateGameList(this, game);
             }
+            sqlConnection.Close();
         }
         private void gameListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

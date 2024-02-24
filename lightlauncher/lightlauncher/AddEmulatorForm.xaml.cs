@@ -29,8 +29,30 @@ namespace lightlauncher
         {
 
             this.Topmost = true;
-            SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
-            sqlConnection.Open();
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                sqlConnection.Open();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    sqlConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                    sqlConnection.Open();
+                }
+                catch (Exception)
+                {
+                    customMessageBox csm1 = new customMessageBox("Error", "An error occurred: Could not connect to database");
+                    csm1.ShowDialog();
+                    csm1.Close();
+                }
+                customMessageBox csm = new customMessageBox("Error", "An error occurred: After a secondary attempt, the program could not connect to the database");
+                csm.ShowDialog();
+                csm.Close();
+                killProgram();
+            }
             SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM Emulators", sqlConnection);
             emulatorCount = (int)sqlCommand.ExecuteScalar();
             sqlConnection.Close();
@@ -133,8 +155,30 @@ namespace lightlauncher
                 {
                     EmulatorMenu.optionsListBox.SelectedIndex = 0;
                     newEmulator.name = emulatorNameTextBox.Text;
-                    SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
-                    sqlConnection.Open();
+                    SqlConnection sqlConnection = null;
+                    try
+                    {
+                        sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                        sqlConnection.Open();
+                    }
+                    catch (Exception)
+                    {
+                        try
+                        {
+                            sqlConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                            sqlConnection.Open();
+                        }
+                        catch (Exception)
+                        {
+                            customMessageBox csm1 = new customMessageBox("Error", "An error occurred: Could not connect to database");
+                            csm1.ShowDialog();
+                            csm1.Close();
+                        }
+                        customMessageBox csm = new customMessageBox("Error", "An error occurred: After a secondary attempt, the program could not connect to the database");
+                        csm.ShowDialog();
+                        csm.Close();
+                        killProgram();
+                    }
                     SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Emulators ON", sqlConnection);
                     identityInsertCommand.ExecuteNonQuery();
                     SqlCommand sqlCommand = new SqlCommand("INSERT INTO Emulators (ID, name, executablePath) VALUES (@ID, @name, @executablePath)", sqlConnection);
@@ -196,6 +240,13 @@ namespace lightlauncher
                 }
             }
             cfd.Close();
+        }
+        public void killProgram()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Application.Current.Shutdown();
+            });
         }
         protected override void OnClosing(CancelEventArgs e)
         {

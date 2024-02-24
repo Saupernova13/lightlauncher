@@ -41,8 +41,30 @@ namespace lightlauncher
             emulators.Clear();
             selectEmulatorListBox.Items.Clear();
             Emulator currentEmulator = null;
-            SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
-            sqlConnection.Open();
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                sqlConnection.Open();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    sqlConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                    sqlConnection.Open();
+                }
+                catch (Exception)
+                {
+                    customMessageBox csm1 = new customMessageBox("Error", "An error occurred: Could not connect to database");
+                    csm1.ShowDialog();
+                    csm1.Close();
+                }
+                customMessageBox csm = new customMessageBox("Error", "An error occurred: After a secondary attempt, the program could not connect to the database");
+                csm.ShowDialog();
+                csm.Close();
+                killProgram();
+            }
             SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Emulators", sqlConnection);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             while (sqlDataReader.Read())
@@ -174,6 +196,13 @@ namespace lightlauncher
             }
             int id = int.Parse(labelName);
             return (id);
+        }
+        public void killProgram()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Application.Current.Shutdown();
+            });
         }
     }
 }

@@ -8,6 +8,8 @@ using System;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.ComponentModel;
+using System.Security.Cryptography;
+
 namespace lightlauncher
 {
     public partial class AddGameForm : Window
@@ -28,21 +30,52 @@ namespace lightlauncher
         private bool previousDPadRightOrDown = false;
         private bool previousA = false;
         private bool previousB = false;
+        private bool dbEmpty = true;
         public AddGameForm(MainWindow mw)
         {
-            SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
-            sqlConnection.Open();
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                sqlConnection.Open();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    sqlConnection = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
+                    sqlConnection.Open();
+                }
+                catch (Exception)
+                {
+                    customMessageBox csm1 = new customMessageBox("Error", "An error occurred: Could not connect to database");
+                    csm1.ShowDialog();
+                    csm1.Close();
+                }
+                customMessageBox csm = new customMessageBox("Error", "An error occurred: After a secondary attempt, the program could not connect to the database");
+                csm.ShowDialog();
+                csm.Close();
+                killProgram();
+            }
             SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM Games", sqlConnection);
             gameCount = (int)sqlCommand.ExecuteScalar();
-            sqlConnection.Close();
             if (gameCount == 0)
             {
+                dbEmpty = true;
                 newGame.ID = 1;
             }
             else
             {
-                newGame.ID = gameCount + 1;
+                dbEmpty = false;
+                SqlCommand sqlCommandReadGameID = new SqlCommand("SELECT * FROM Games", sqlConnection);
+                SqlDataReader sqlDataReader = sqlCommandReadGameID.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    newGame.ID=Convert.ToInt32(sqlDataReader["ID"]);
+                }
+                newGame.ID++;
             }
+            sqlConnection.Close();
             InitializeComponent();
             checkboxImage.Visibility = Visibility.Hidden;
             optionsListBox.SelectedIndex = 0;
@@ -172,17 +205,28 @@ namespace lightlauncher
                     newGame.imagePath = coverArtFileName;
                     SqlConnection sqlConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=lightlauncher.DBContext;Integrated Security=True");
                     sqlConnection.Open();
-                    SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games ON", sqlConnection);
-                    identityInsertCommand.ExecuteNonQuery();
-                    SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (ID, name, executablePath, imagePath, needsEmulator) VALUES (@ID, @name, @executablePath, @imagePath, @needsEmulator)", sqlConnection);
-                    sqlCommand.Parameters.AddWithValue("@ID", newGame.ID);
-                    sqlCommand.Parameters.AddWithValue("@name", newGame.name);
-                    sqlCommand.Parameters.AddWithValue("@executablePath", newGame.executablePath);
-                    sqlCommand.Parameters.AddWithValue("@imagePath", newGame.imagePath);
-                    sqlCommand.Parameters.AddWithValue("@needsEmulator", newGame.needsEmulator);
-                    sqlCommand.ExecuteNonQuery();
-                    identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
-                    identityInsertCommand.ExecuteNonQuery();
+                    if (dbEmpty)
+                    {
+                        SqlCommand identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games ON", sqlConnection);
+                        identityInsertCommand.ExecuteNonQuery();
+                        SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (ID, name, executablePath, imagePath, needsEmulator) VALUES (@ID, @name, @executablePath, @imagePath, @needsEmulator)", sqlConnection);
+                        sqlCommand.Parameters.AddWithValue("@ID", newGame.ID);
+                        sqlCommand.Parameters.AddWithValue("@name", newGame.name);
+                        sqlCommand.Parameters.AddWithValue("@executablePath", newGame.executablePath);
+                        sqlCommand.Parameters.AddWithValue("@imagePath", newGame.imagePath);
+                        sqlCommand.Parameters.AddWithValue("@needsEmulator", newGame.needsEmulator);
+                        sqlCommand.ExecuteNonQuery();
+                        identityInsertCommand = new SqlCommand("SET IDENTITY_INSERT Games OFF", sqlConnection);
+                        identityInsertCommand.ExecuteNonQuery();
+                    }
+                    else {
+                        SqlCommand sqlCommand = new SqlCommand("INSERT INTO Games (name, executablePath, imagePath, needsEmulator) VALUES (@name, @executablePath, @imagePath, @needsEmulator)", sqlConnection);
+                        sqlCommand.Parameters.AddWithValue("@name", newGame.name);
+                        sqlCommand.Parameters.AddWithValue("@executablePath", newGame.executablePath);
+                        sqlCommand.Parameters.AddWithValue("@imagePath", newGame.imagePath);
+                        sqlCommand.Parameters.AddWithValue("@needsEmulator", newGame.needsEmulator);
+                        sqlCommand.ExecuteNonQuery();
+                    }
                     sqlConnection.Close();
                     mainWindow.gameListBox.SelectedIndex = 0;
                     mainWindow.loadGamesFromDB();
@@ -294,6 +338,13 @@ namespace lightlauncher
         {
             base.OnClosing(e);
             running = false;
+        }
+        public void killProgram()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Application.Current.Shutdown();
+            });
         }
     }
 }
