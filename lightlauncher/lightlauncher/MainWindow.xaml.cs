@@ -447,10 +447,8 @@ namespace lightlauncher
         }
         public void killProgram()
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Application.Current.Shutdown();
-            });
+                running = false;
+                Environment.Exit(0);
         }
         public string getFileNameFromPath(string path)
         {

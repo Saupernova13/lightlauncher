@@ -1,0 +1,160 @@
+﻿<Window x:Class="lightlauncher.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lightlauncher"
+        mc:Ignorable="d"
+        Title="Register"
+        Height="700"
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStyle="None">
+    <Viewbox Width="300"
+             Height="600">
+        <Border CornerRadius="10"
+                Background="#012644">
+            <Border Margin="2"
+                    Background="#044275"
+                    CornerRadius="10">
+                <Border CornerRadius="10"
+                        Background="#012644"
+                        Margin="4">
+                    <Grid x:Name="registerGrid"
+                          Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="100" />
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <Label Content="Register"
+                                   FontSize="22"
+                                   Foreground="White"
+                                   Height="40"
+                                   Margin="137,0,137,10"></Label>
+                            <ListBox  x:Name="registerOptionsListBox"
+                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                      ScrollViewer.CanContentScroll="False"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      Margin="0,20,0,20">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"
+                                                    x:Name="registerOptionsStackPanel">
+                                        </StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBoxItem HorizontalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#044275"
+                                            Width="255">
+                                        <TextBox x:Name="registerUsernameTextBox"
+                                                 Text="Enter Email Here"
+                                                 HorizontalContentAlignment="Center"
+                                                 Margin="5"
+                                                 Height="50"
+                                                 Background="#012644"
+                                                 Style="{StaticResource RoundedTextBox}" />
+                                    </Border>
+                                </ListBoxItem>
+                                <ListBoxItem HorizontalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#044275"
+                                            Width="255">
+                                        <TextBox x:Name="registerPasswordBox"
+                                                 Text="Enter Password Here"
+                                                 HorizontalContentAlignment="Center"
+                                                 Margin="5"
+                                                 Height="50"
+                                                 Background="#012644"
+                                                 Style="{StaticResource RoundedTextBox}" />
+                                    </Border>
+                                </ListBoxItem>
+                                <ListBoxItem HorizontalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#044275"
+                                            Width="255">
+                                        <TextBox x:Name="confirmPasswordBox"
+                                                 Text="Confirm Password Here"
+                                                 HorizontalContentAlignment="Center"
+                                                 Margin="5"
+                                                 Height="50"
+                                                 Background="#012644"
+                                                 Style="{StaticResource RoundedTextBox}" />
+                                    </Border>
+                                </ListBoxItem>
+                                <ListBoxItem HorizontalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#044275"
+                                            Width="255">
+                                        <TextBox x:Name="registerButton"
+                                                 Text="Register"
+                                                 HorizontalContentAlignment="Center"
+                                                 Margin="5"
+                                                 Height="50"
+                                                 IsReadOnly="True"
+                                                 Background="#012644"
+                                                 Style="{StaticResource RoundedTextBox}" />
+                                    </Border>
+                                </ListBoxItem>
+                                <ListBoxItem HorizontalAlignment="Center">
+                                    <Border CornerRadius="10"
+                                            Background="#044275"
+                                            Width="255">
+                                        <TextBox x:Name="loginButton"
+                                                 Text="Login"
+                                                 HorizontalContentAlignment="Center"
+                                                 Margin="5"
+                                                 Height="50"
+                                                 IsReadOnly="True"
+                                                 Background="#012644"
+                                                 Style="{StaticResource RoundedTextBox}" />
+                                    </Border>
+                                </ListBoxItem>
+                            </ListBox>
+                        </StackPanel>
+                        <Border Grid.Row="1"
+                                Background="#011A2E"
+                                CornerRadius="10"
+                                Margin="5">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="3"
+                                            HorizontalAlignment="Center">
+                                    <Image Source="/Images/ControllerUI/Dpad/Button_Dpad_Up_AND_Down_Icon.png" />
+                                    <Label Content=": Move"
+                                           FontSize="22"
+                                           Foreground="White"
+                                           Height="34"
+                                           Margin="0,0,0,10"></Label>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="3"
+                                            HorizontalAlignment="Center">
+                                    <Image Source="/Images/ControllerUI/Face/Button_Cross_Icon.png" />
+                                    <Label Content=": Select"
+                                           FontSize="22"
+                                           Foreground="White"
+                                           Height="34"
+                                           Margin="0,0,0,10"></Label>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Border>
+        </Border>
+    </Viewbox>
+</Window>
