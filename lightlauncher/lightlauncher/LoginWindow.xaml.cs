@@ -1,21 +1,30 @@
 ﻿// By Sauraav Jayrajh
-using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using SharpDX.XInput;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System;
 
 namespace lightlauncher
 {
     public partial class LoginWindow : Window
     {
+        public static string uuid;
+        public customMessageBox csm;
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
         public controllerKeyboard onscreenKeyboard;
+        private readonly AuthService authService;
+
         public LoginWindow()
         {
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+            var configuration = builder.Build();
+            authService = new AuthService(configuration);
+
             InitializeComponent();
             usersController = new Controller(UserIndex.One);
             if (!usersController.IsConnected)
@@ -109,10 +118,27 @@ namespace lightlauncher
             }
         }
 
-        private void performLogin()
+        private async void performLogin()
         {
-            MessageBox.Show("Log in button pressed!");
+            try
+            {
+                var email = usernameTextBox.Text;
+                var password = passwordBox.Text;
+                var authResponse = await authService.SignInAsync(email, password);
+                uuid = authResponse.LocalId;
+                csm = new customMessageBox("Login Success", $"Logged in as {authResponse.Email}");
+                csm.ShowDialog();
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                csm = new customMessageBox("Login Failure", $"Login failed: {ex.Message}");
+                csm.ShowDialog();
+                this.ShowDialog();
+            }
         }
+
         private void performSignUp()
         {
             RegisterWindow registerWindow = new RegisterWindow();

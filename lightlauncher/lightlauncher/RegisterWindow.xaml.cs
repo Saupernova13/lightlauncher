@@ -1,21 +1,29 @@
 ﻿//By Sauraav Jayrajh
-using SharpDX.XInput;
+using Microsoft.Extensions.Configuration;
 using SharpDX.XInput;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
+using System;
 
 namespace lightlauncher
 {
     public partial class RegisterWindow : Window
     {
+
+        public customMessageBox csm;
         private Controller usersController;
         private Thread controllerThread;
         private volatile bool running = true;
         public controllerKeyboard onscreenKeyboard;
+        private readonly AuthService authService;
 
         public RegisterWindow()
         {
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+            var configuration = builder.Build();
+            authService = new AuthService(configuration);
+
             InitializeComponent();
             usersController = new Controller(UserIndex.One);
             if (!usersController.IsConnected)
@@ -116,14 +124,36 @@ namespace lightlauncher
             }
         }
 
+        private async void performSignUp()
+        {
+            try
+            {
+                var email = registerUsernameTextBox.Text;
+                var password = registerPasswordBox.Text;
+                var confirmPassword = confirmPasswordBox.Text;
+
+                if (password != confirmPassword)
+                {
+                    throw new Exception("Passwords do not match.");
+                }
+
+                var authResponse = await authService.SignUpAsync(email, password);
+                csm = new customMessageBox("Sign Up Success", $"Account created for {authResponse.Email}");
+                csm.ShowDialog();
+                performLogin();
+            }
+            catch (Exception ex)
+            {
+                csm = new customMessageBox("Sign Up Failed", $"Sign up failed: {ex.Message}");
+                csm.ShowDialog();
+                this.ShowDialog();
+            }
+        }
+
         private void performLogin()
         {
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.ShowDialog();
-        }
-        private void performSignUp()
-        {
-            MessageBox.Show("Sign up button pressed!");
         }
 
         private void killProgram()
