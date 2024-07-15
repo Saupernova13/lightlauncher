@@ -14,7 +14,7 @@ An easy, convenient, light-weight solution that allows you to launch your games 
 
 ## Demos:
 
-[Demo of Working Application](https://github.com/Saupernova13/light-launcher/blob/main/docs/SAURAAV_LIGHT_LAUNCHER_DEMO.mp4)
+[Demo of Working Application](https://github.com/Saupernova13/lightlauncher/blob/main/docs/SAURAAV_LIGHT_LAUNCHER_DEMO.mp4)
 
 ---
 
